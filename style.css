@@ -3,7 +3,8 @@ body {
     padding: 0;
     height: 100vh;
     overflow: hidden;
-    background: url('bg-lol.jpg') no-repeat center center/cover; /* Ảnh nền LOL */
+    /* Đã sửa thành .jpg.jpg cho khớp file của bạn */
+    background: url('bg-lol.jpg.jpg') no-repeat center center/cover; 
     font-family: 'Arial', sans-serif;
     color: white;
 }
@@ -15,58 +16,54 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.6); /* Phủ lớp đen mờ lên nền để nổi bật tướng */
+    background-color: rgba(0, 0, 0, 0.6); 
 }
 
 /* --- Cấu hình Tướng --- */
 .champion {
     position: absolute;
-    height: 60vh; /* Chiều cao tướng bằng 60% màn hình */
+    height: 60vh; 
     object-fit: contain;
     transition: all 1s ease-out;
     filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-    z-index: 1; /* Nằm sau cái cúp */
+    z-index: 1; 
 }
 
-/* Ahri đi từ trái dưới lên */
 .ahri-move {
     left: -200px;
     bottom: -100px;
     animation: slideAhri 1.5s forwards;
 }
 
-/* Katarina đi từ phải dưới lên */
 .kat-move {
     right: -200px;
     bottom: -100px;
     animation: slideKat 1.5s forwards;
 }
 
-/* Kaisa đi từ trên xuống (hoặc giữa) */
 .kaisa-move {
     top: -300px;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
-    animation: slideKaisa 1.5s 0.5s forwards; /* Chạy chậm hơn 0.5s */
+    animation: slideKaisa 1.5s 0.5s forwards;
 }
 
 /* --- Cấu hình Cúp --- */
 .trophy-wrapper {
     position: relative;
-    z-index: 10; /* Nằm đè lên tướng */
+    z-index: 10;
     cursor: pointer;
     text-align: center;
-    animation: float 3s ease-in-out infinite; /* Cúp bay bay nhẹ */
+    animation: float 3s ease-in-out infinite;
 }
 
 .trophy {
-    height: 40vh; /* Cúp to vừa phải */
+    height: 40vh;
     filter: drop-shadow(0 0 0px #a200ff);
-    animation: purplePulse 2s infinite; /* Hiệu ứng Aura tím */
+    animation: purplePulse 2s infinite;
 }
 
-/* Chữ hướng dẫn dưới cúp */
 .click-hint {
     font-size: 14px;
     letter-spacing: 2px;
@@ -75,7 +72,7 @@ body {
     animation: blink 1.5s infinite;
 }
 
-/* --- Animations (Chuyển động) --- */
+/* --- Animations --- */
 @keyframes slideAhri {
     to { left: 5%; bottom: 0; }
 }
@@ -88,7 +85,7 @@ body {
 
 @keyframes purplePulse {
     0% { filter: drop-shadow(0 0 10px #a200ff); }
-    50% { filter: drop-shadow(0 0 40px #d68eff); } /* Toả sáng mạnh */
+    50% { filter: drop-shadow(0 0 40px #d68eff); }
     100% { filter: drop-shadow(0 0 10px #a200ff); }
 }
 
