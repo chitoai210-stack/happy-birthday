@@ -3,7 +3,7 @@ body {
     padding: 0;
     height: 100vh;
     overflow: hidden;
-    /* Đã sửa thành .jpg.jpg cho khớp file của bạn */
+    /* Giữ nguyên tên file ảnh nền của bạn */
     background: url('bg-lol.jpg.jpg') no-repeat center center/cover; 
     font-family: 'Arial', sans-serif;
     color: white;
@@ -13,104 +13,104 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.6); 
+    /* Bỏ flex center để tự do sắp xếp vị trí */
+    display: block; 
+    background-color: rgba(0, 0, 0, 0.5); 
 }
 
-/* --- Cấu hình Tướng --- */
+/* --- Cấu hình Ahri (Nhân vật chính) --- */
 .champion {
     position: absolute;
-    height: 60vh; 
-    object-fit: contain;
-    transition: all 1s ease-out;
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
     z-index: 1; 
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
 }
 
-.ahri-move {
-    left: -200px;
-    bottom: -100px;
-    animation: slideAhri 1.5s forwards;
+.ahri-pose {
+    height: 85vh; /* Tăng kích thước Ahri lên cho đẹp */
+    bottom: 0;
+    right: -300px; /* Bắt đầu từ ngoài màn hình bên phải */
+    animation: slideAhriIn 1.5s ease-out forwards;
 }
 
-.kat-move {
-    right: -200px;
-    bottom: -100px;
-    animation: slideKat 1.5s forwards;
-}
-
-.kaisa-move {
-    top: -300px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    animation: slideKaisa 1.5s 0.5s forwards;
-}
-
-/* --- Cấu hình Cúp --- */
+/* --- Cấu hình Cúp (Đặt cạnh Ahri) --- */
 .trophy-wrapper {
-    position: relative;
+    position: absolute;
     z-index: 10;
     cursor: pointer;
     text-align: center;
+    
+    /* VỊ TRÍ MỚI: Nằm bên trái Ahri */
+    bottom: 15%; /* Cách đáy 15% */
+    right: 45%;  /* Cách lề phải 45% (Tức là nằm gần giữa, lệch trái so với Ahri) */
+    
     animation: float 3s ease-in-out infinite;
 }
 
 .trophy {
-    height: 40vh;
+    height: 45vh; /* Cúp to hơn chút */
     filter: drop-shadow(0 0 0px #a200ff);
     animation: purplePulse 2s infinite;
 }
 
 .click-hint {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
     letter-spacing: 2px;
-    margin-top: 10px;
+    margin-top: 15px;
     text-shadow: 0 0 10px #a200ff;
     animation: blink 1.5s infinite;
 }
 
-/* --- Animations --- */
-@keyframes slideAhri {
-    to { left: 5%; bottom: 0; }
-}
-@keyframes slideKat {
-    to { right: 5%; bottom: 0; }
-}
-@keyframes slideKaisa {
-    to { top: 10%; opacity: 1; transform: translateX(-50%); }
+/* --- Hiệu ứng di chuyển --- */
+@keyframes slideAhriIn {
+    to { right: -5%; } /* Ahri trượt vào và dừng ở sát mép phải */
 }
 
 @keyframes purplePulse {
     0% { filter: drop-shadow(0 0 10px #a200ff); }
-    50% { filter: drop-shadow(0 0 40px #d68eff); }
+    50% { filter: drop-shadow(0 0 50px #d68eff); }
     100% { filter: drop-shadow(0 0 10px #a200ff); }
 }
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-20px); }
 }
 
-/* --- Phần nội dung sau khi mở --- */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* --- Phần nội dung sau khi mở (Căn giữa lại cho đẹp) --- */
 .hidden { display: none; }
+
 .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Căn giữa màn hình */
     z-index: 20;
     text-align: center;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     padding: 30px;
     border-radius: 20px;
     border: 2px solid #a200ff;
-    box-shadow: 0 0 30px #a200ff;
-    max-width: 90%;
+    box-shadow: 0 0 50px #a200ff;
+    width: 90%;
+    max-width: 500px;
     animation: zoomIn 0.5s forwards;
 }
+
 .media-placeholder img {
     max-width: 100%;
     border-radius: 10px;
     border: 1px solid white;
 }
-.title { color: #d68eff; text-transform: uppercase; }
-@keyframes zoomIn { from {transform: scale(0);} to {transform: scale(1);} }
+
+.title { color: #d68eff; text-transform: uppercase; margin-top: 0; }
+.message { line-height: 1.6; font-size: 1.1rem; }
+
+@keyframes zoomIn { 
+    to { transform: translate(-50%, -50%) scale(1); } 
+}
