@@ -2,76 +2,118 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
+    overflow: hidden;
+    background: url('bg-lol.jpg') no-repeat center center/cover; /* Ảnh nền LOL */
+    font-family: 'Arial', sans-serif;
+    color: white;
+}
+
+.scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Màu nền nhẹ nhàng */
-    font-family: 'Arial', sans-serif;
-    overflow: hidden; /* Chặn thanh cuộn */
+    background-color: rgba(0, 0, 0, 0.6); /* Phủ lớp đen mờ lên nền để nổi bật tướng */
 }
 
-.container {
-    text-align: center;
-    width: 100%;
-    max-width: 600px; /* Giới hạn chiều rộng trên ipad/laptop cho đẹp */
+/* --- Cấu hình Tướng --- */
+.champion {
+    position: absolute;
+    height: 60vh; /* Chiều cao tướng bằng 60% màn hình */
+    object-fit: contain;
+    transition: all 1s ease-out;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+    z-index: 1; /* Nằm sau cái cúp */
 }
 
-/* Hộp quà */
-.gift-box {
-    font-size: 80px;
-    cursor: pointer;
-    animation: shake 2s infinite; /* Hiệu ứng rung */
-    transition: transform 0.3s;
+/* Ahri đi từ trái dưới lên */
+.ahri-move {
+    left: -200px;
+    bottom: -100px;
+    animation: slideAhri 1.5s forwards;
 }
 
-.gift-box:hover {
-    transform: scale(1.1);
+/* Katarina đi từ phải dưới lên */
+.kat-move {
+    right: -200px;
+    bottom: -100px;
+    animation: slideKat 1.5s forwards;
 }
 
-.guide-text {
-    font-size: 18px;
-    color: #555;
-    margin-top: 10px;
-}
-
-/* Nội dung ẩn */
-.hidden {
-    display: none;
+/* Kaisa đi từ trên xuống (hoặc giữa) */
+.kaisa-move {
+    top: -300px;
+    left: 50%;
+    transform: translateX(-50%);
     opacity: 0;
+    animation: slideKaisa 1.5s 0.5s forwards; /* Chạy chậm hơn 0.5s */
 }
 
+/* --- Cấu hình Cúp --- */
+.trophy-wrapper {
+    position: relative;
+    z-index: 10; /* Nằm đè lên tướng */
+    cursor: pointer;
+    text-align: center;
+    animation: float 3s ease-in-out infinite; /* Cúp bay bay nhẹ */
+}
+
+.trophy {
+    height: 40vh; /* Cúp to vừa phải */
+    filter: drop-shadow(0 0 0px #a200ff);
+    animation: purplePulse 2s infinite; /* Hiệu ứng Aura tím */
+}
+
+/* Chữ hướng dẫn dưới cúp */
+.click-hint {
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-top: 10px;
+    text-shadow: 0 0 10px #a200ff;
+    animation: blink 1.5s infinite;
+}
+
+/* --- Animations (Chuyển động) --- */
+@keyframes slideAhri {
+    to { left: 5%; bottom: 0; }
+}
+@keyframes slideKat {
+    to { right: 5%; bottom: 0; }
+}
+@keyframes slideKaisa {
+    to { top: 10%; opacity: 1; transform: translateX(-50%); }
+}
+
+@keyframes purplePulse {
+    0% { filter: drop-shadow(0 0 10px #a200ff); }
+    50% { filter: drop-shadow(0 0 40px #d68eff); } /* Toả sáng mạnh */
+    100% { filter: drop-shadow(0 0 10px #a200ff); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* --- Phần nội dung sau khi mở --- */
+.hidden { display: none; }
 .content {
-    animation: fadeIn 1s ease-in-out forwards;
+    z-index: 20;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #a200ff;
+    box-shadow: 0 0 30px #a200ff;
+    max-width: 90%;
+    animation: zoomIn 0.5s forwards;
 }
-
-.title {
-    color: #ff4081;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-}
-
 .media-placeholder img {
-    width: 80%;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid white;
 }
-
-.message {
-    margin-top: 20px;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    padding: 0 20px;
-}
-
-/* Hiệu ứng rung lắc */
-@keyframes shake {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(5deg); }
-    50% { transform: rotate(0eg); }
-    75% { transform: rotate(-5deg); }
-    100% { transform: rotate(0deg); }
-}
-
-@keyframes fadeIn {
-    to { opacity: 1; }
-}
+.title { color: #d68eff; text-transform: uppercase; }
+@keyframes zoomIn { from {transform: scale(0);} to {transform: scale(1);} }
