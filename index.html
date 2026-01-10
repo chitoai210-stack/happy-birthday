@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chức mừng sinh nhật</title>
+    <title>The Championship Gift</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div id="gift-box" class="gift-box" onclick="openGift()">
-            🎁
-            <p class="guide-text">Chạm để mở quà nhé!</p>
+    <div class="scene">
+        <div id="intro-screen">
+            <img src="ahri.png" class="champion ahri-move">
+            <img src="katarina.png" class="champion kat-move">
+            <img src="kaisa.png" class="champion kaisa-move">
+            
+            <div class="trophy-wrapper" onclick="openGift()">
+                <img src="cup.png" class="trophy">
+                <div class="aura"></div>
+                <p class="click-hint">CHẠM VÀO CÚP ĐỂ NHẬN QUÀ</p>
+            </div>
         </div>
 
         <div id="content" class="content hidden">
-            <h1 class="title">Happy Birthday!</h1>
+            <h1 class="title">HAPPY BIRTHDAY!</h1>
             <div class="media-placeholder">
-                <img src="anh.jpg" alt="Birthday Image" id="birthday-img">
+                <img src="thumb-1920-1140434.jpg" alt="Birthday Image">
             </div>
-            <p class="message" id="message-text">
-                Chúc bạn tuổi mới rực rỡ!
+            <p class="message">
+                Chào mừng nhà vô địch tuổi mới!<br>
+                Chúc bạn gank tem thành công và luôn giữ vững phong độ Thách Đấu nhé!
             </p>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
-
