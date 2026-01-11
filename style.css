@@ -1,25 +1,28 @@
-/* --- 1. NỀN VŨ TRỤ --- */
+/* --- 1. NỀN VŨ TRỤ TỐI MÀU (DARK UNIVERSE) --- */
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     height: 100vh;
     font-family: 'Montserrat', sans-serif;
-    background-color: #050510;
-    /* Tạo nền sao và vũ trụ bằng gradient */
+    /* Màu nền đen sâu thẳm */
+    background-color: #020205; 
+    
+    /* Các lớp sao và tinh vân tối màu hơn */
     background-image: 
-        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px),
-        radial-gradient(circle at top right, #1a237e, transparent),
-        radial-gradient(circle at bottom left, #006064, transparent);
-    background-size: 550px 550px, 350px 350px, 250px 250px, 100% 100%, 100% 100%;
-    background-position: 0 0, 40px 60px, 130px 270px, 0 0, 0 0;
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1.5px), /* Sao nhỏ */
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1.5px),
+        /* Tinh vân màu xanh đen rất tối */
+        radial-gradient(circle at top right, #0a0f29, transparent), 
+        radial-gradient(circle at bottom left, #03181a, transparent);
+    
+    background-size: 550px 550px, 350px 350px, 100% 100%, 100% 100%;
+    background-position: 0 0, 40px 60px, 0 0, 0 0;
 }
 
-/* --- 2. BỐ CỤC INTRO (50/50) --- */
+/* --- 2. BỐ CỤC INTRO --- */
 #intro-screen {
-    display: flex; /* Chia cột */
+    display: flex;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -29,37 +32,39 @@ body {
 }
 
 .side-left, .side-right {
-    flex: 1; /* Mỗi bên chiếm 50% */
+    flex: 1; /* Chia đều 50% */
     position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center; /* Căn giữa nội dung trong cột */
+    /* Căn giữa toàn bộ nội dung trong khung của nó */
+    justify-content: center; 
+    align-items: center;
 }
 
-/* --- 3. CHIẾC CÚP (BÊN TRÁI - TO LÊN) --- */
+/* --- 3. CHIẾC CÚP (BÊN TRÁI) --- */
 .side-left {
-    cursor: pointer;
+    z-index: 20; /* Đảm bảo cúp bấm được */
 }
 
 .cup-container {
     position: relative;
+    cursor: pointer;
     animation: floatCup 4s ease-in-out infinite;
 }
 
 #world-cup {
-    width: 280px; /* Cúp to lên */
+    width: 280px;
     max-width: 80vw;
     z-index: 20;
-    filter: drop-shadow(0 0 15px rgba(0, 100, 255, 0.8)); /* Bóng xanh đậm */
+    filter: drop-shadow(0 0 20px rgba(0, 80, 255, 0.9)); /* Bóng xanh đậm */
 }
 
-/* Aura Xanh Dương Đậm Mạnh Mẽ */
+/* Aura Cúp */
 .aura-cup {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 120%; height: 120%;
-    background: radial-gradient(circle, rgba(0, 47, 167, 0.7) 0%, rgba(0,0,0,0) 70%); /* Xanh đậm */
+    width: 130%; height: 130%;
+    background: radial-gradient(circle, rgba(0, 20, 100, 0.8) 0%, rgba(0,0,0,0) 70%); /* Xanh rất đậm */
     border-radius: 50%;
     animation: pulseStrong 2s infinite;
     z-index: 10;
@@ -70,91 +75,100 @@ body {
     bottom: -40px;
     width: 100%;
     text-align: center;
-    color: #80deea;
+    color: #5bc0de;
     font-size: 0.9rem;
     animation: blink 1.5s infinite;
 }
 
-/* --- 4. GWEN (BÊN PHẢI - NHỎ LẠI & MỜ ẢO) --- */
+/* --- 4. GWEN (BÊN PHẢI - CĂN GIỮA & TO) --- */
 .side-right {
-    align-items: flex-end; /* Gwen đứng dưới đáy */
-    overflow: hidden; /* Tránh tràn hình ra ngoài */
+    align-items: flex-end; /* Gwen đứng ở đáy màn hình */
+    overflow: visible; /* Cho phép kéo/hiệu ứng tràn ra chút */
 }
 
 #gwen-char {
-    height: 65vh; /* Gwen nhỏ lại (chiếm 65% chiều cao) */
+    height: 70vh; /* Kích thước Gwen */
+    width: auto;
     position: relative;
-    right: -100px; /* Bắt đầu ẩn bên phải */
     
-    /* Hiệu ứng mờ ảo & Aura xanh */
-    filter: drop-shadow(0 0 20px #00e5ff) blur(0.5px); 
-    opacity: 0.9;
+    /* Căn chỉnh lại vị trí Gwen cho cân đối */
+    /* Nếu ảnh bị lệch do cái kéo quá dài, ta dùng transform để kéo lại */
+    transform: translateX(0); 
     
-    /* Hoạt ảnh xuất hiện chậm */
-    animation: gwenEnter 3s ease-out forwards, ghostFloat 4s infinite ease-in-out;
+    z-index: 1; /* Nằm dưới lời thoại */
+    filter: drop-shadow(0 0 15px #00e5ff) blur(0.5px);
+    opacity: 0; /* Ẩn ban đầu để chạy animation */
+    
+    animation: gwenAppear 2s ease-out forwards, ghostFloat 4s infinite ease-in-out 2s;
 }
 
-/* Lời thoại hiện ra từ từ */
+/* --- 5. LỜI THOẠI (CHỈNH SỬA MỚI) --- */
 .dialogue-box {
     position: absolute;
-    top: 30%; /* Vị trí lời thoại */
-    left: 10%; /* Căn chỉnh so với cột phải */
-    width: 200px;
-    background: rgba(0, 20, 40, 0.8);
-    border: 1px solid #00e5ff;
-    padding: 15px;
-    border-radius: 15px 15px 0 15px; /* Bo góc tạo hình bóng thoại */
-    color: #e0f7fa;
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.3rem;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+    /* Đưa lên đỉnh đầu */
+    top: 10%; 
+    left: 50%;
+    transform: translateX(-50%); /* Căn giữa tuyệt đối so với khung bên phải */
     
-    opacity: 0; /* Ẩn ban đầu */
+    width: 300px; /* Rộng hơn để chứa chữ to */
+    background: rgba(0, 10, 20, 0.6); /* Nền tối mờ để dễ đọc */
+    border: 1px solid #00e5ff;
+    padding: 20px;
+    border-radius: 20px;
+    
+    /* Font Time New Roman & Size to */
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.8rem; /* Lớn hơn 50% so với bình thường */
+    font-style: italic; /* Nghiêng cho nghệ thuật */
+    line-height: 1.4;
+    text-align: center;
+    color: #ffffff;
+    
+    z-index: 100; /* QUAN TRỌNG: Luôn nằm trên Gwen và cây kéo */
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+    
+    opacity: 0;
     animation: textFadeIn 2s ease forwards;
-    animation-delay: 2s; /* Hiện ra sau khi Gwen đã vào khung hình 2 giây */
+    animation-delay: 1.5s; /* Hiện sau khi Gwen xuất hiện */
 }
 
 .highlight {
     color: #ffd700;
     font-weight: bold;
+    text-shadow: 0 0 5px #ffd700;
 }
 
-/* --- ANIMATIONS (HOẠT ẢNH) --- */
+/* --- ANIMATIONS --- */
 
-/* Gwen trượt vào chậm rãi */
-@keyframes gwenEnter {
-    to { right: 20px; filter: drop-shadow(0 0 25px #00e5ff) blur(0); opacity: 1; }
+@keyframes gwenAppear {
+    from { transform: translateX(50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
-/* Gwen bồng bềnh mờ ảo */
 @keyframes ghostFloat {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
 
-/* Cúp bay */
 @keyframes floatCup {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
 
-/* Aura cúp đập mạnh */
 @keyframes pulseStrong {
     0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
     50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.4; }
     100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
 }
 
-/* Chữ hiện dần */
 @keyframes textFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
 }
 
 @keyframes blink { 50% { opacity: 0.3; } }
 
-/* --- PHẦN NỘI DUNG SAU KHI CLICK (STYLE CŨ) --- */
+/* --- NỘI DUNG CARD --- */
 #content-screen {
     display: none;
     position: absolute;
@@ -163,7 +177,7 @@ body {
     z-index: 50;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.8); /* Làm tối nền để nổi bật thiệp */
+    background: rgba(0,0,0,0.9);
 }
 
 .card {
@@ -174,10 +188,10 @@ body {
     box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
     max-width: 400px;
     text-align: center;
-    animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: zoomIn 0.8s ease;
 }
 
-.rank-title { color: #ffd700; margin-bottom: 20px; text-shadow: 0 0 10px #ff8c00; }
+.rank-title { color: #ffd700; margin-bottom: 20px; }
 .img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
 .message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
 
