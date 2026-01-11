@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenger Birthday Gift</title>
+    <title>Special Gift</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -21,12 +20,10 @@
                 <feDisplacementMap in="outerBlurred" in2="outerNoise" scale="30" xChannelSelector="R" yChannelSelector="G" result="outerDistorted"/>
                 <feFlood flood-color="#008b8b" flood-opacity="0.6" result="outerColor"/>
                 <feComposite in="outerColor" in2="outerDistorted" operator="in" result="finalOuterAura"/>
-
                 <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="innerBase"/>
                 <feGaussianBlur stdDeviation="3" in="innerBase" result="innerBlurred"/>
                 <feFlood flood-color="#e0ffff" flood-opacity="1.0" result="whiteColor"/>
                 <feComposite in="whiteColor" in2="innerBlurred" operator="in" result="finalWhiteCore"/>
-
                 <feMerge>
                     <feMergeNode in="finalOuterAura"/>
                     <feMergeNode in="finalWhiteCore"/>
@@ -36,8 +33,13 @@
         </defs>
     </svg>
 
-    <div id="intro-screen">
-        
+    <div id="countdown-screen">
+        <div class="countdown-circle">
+            <span id="countdown-number">5</span>
+        </div>
+    </div>
+
+    <div id="intro-screen" style="display: none;">
         <div class="side-left">
             <div class="cup-container" onclick="openGift()">
                 <img src="cup.png.png" id="world-cup" class="white-aura-effect" alt="Cup CKTG">
@@ -50,24 +52,20 @@
                 "Đến và lấy chiếc cúp của bạn đi,<br> 
                 bạn <span class="highlight">Sandwich GM</span> dễ thương!"
             </div>
-            
             <div class="gwen-container">
                 <img src="gwen.png" id="gwen-char" class="white-aura-effect" alt="Gwen">
             </div>
         </div>
     </div>
 
+    <div id="white-overlay"></div>
+
     <div id="content-screen">
-        <div class="card">
-            <h1 class="rank-title">CHÚC MỪNG SINH NHẬT</h1>
-            <div class="img-container">
-                <img src="thumb-1920-1140434.jpg" alt="My Photo">
-            </div>
-            <p class="message">
-                Chúc mừng "người chơi hệ Thách Đấu"! <br>
-                Tuổi mới gank đâu thắng đó, <br>
-                Mọi dự định đều "Cắt và Xén" thành công!
-            </p>
+        <div class="video-container">
+            <video id="gojo-video" controls playsinline>
+                <source src="gojo.mp4" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ thẻ video.
+            </video>
         </div>
     </div>
 
