@@ -34,34 +34,49 @@ body {
     align-items: center;
 }
 
-/* --- 3. HIỆU ỨNG AURA ĐA SẮC CHUYỂN ĐỘNG (CHAKRA) --- */
-.chakra-aura {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    z-index: 5; /* Nằm dưới vật thể chính */
-    filter: blur(20px);
-    opacity: 0.7;
-    /* Gradient đa sắc giống hình mẫu: Tím, Xanh Dương, Xanh Lá, Vàng, Đỏ */
-    background: conic-gradient(
-        from 0deg, 
-        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000
-    );
-    /* Kết hợp 2 animation: Xoay vòng và Gợn sóng tỏa ra */
-    animation: rotateAura 4s linear infinite, pulseWave 3s ease-in-out infinite;
+/* --- 3. HIỆU ỨNG AURA GOKU SUPER SAIYAN BLUE --- */
+.goku-aura-effect {
+    /* Áp dụng hoạt ảnh aura khí rực cháy */
+    animation: superSaiyanBlue 1.5s infinite alternate;
 }
 
-/* Aura cho Cúp */
-.cup-aura {
-    width: 350px; height: 350px;
+@keyframes superSaiyanBlue {
+    0% {
+        filter: 
+            drop-shadow(0 0 10px #00bfff) 
+            drop-shadow(0 0 20px #1e90ff) 
+            drop-shadow(0 0 30px #0000ff);
+    }
+    25% {
+        filter: 
+            drop-shadow(0 0 15px #1e90ff) 
+            drop-shadow(0 0 30px #0000ff) 
+            drop-shadow(0 0 45px #00bfff);
+    }
+    50% {
+        filter: 
+            drop-shadow(0 0 20px #0000ff) 
+            drop-shadow(0 0 40px #00bfff) 
+            drop-shadow(0 0 60px #add8e6);
+        transform: scale(1.02); /* Rung nhẹ tạo cảm giác năng lượng */
+    }
+    75% {
+        filter: 
+            drop-shadow(0 0 15px #1e90ff) 
+            drop-shadow(0 0 30px #0000ff) 
+            drop-shadow(0 0 45px #00bfff);
+    }
+    100% {
+        filter: 
+            drop-shadow(0 0 10px #00bfff) 
+            drop-shadow(0 0 20px #1e90ff) 
+            drop-shadow(0 0 35px #0000ff);
+        transform: scale(1);
+    }
 }
 
-/* Aura cho Gwen (To hơn) */
-.gwen-aura {
-    width: 80vh; height: 80vh;
-    top: 40%; /* Điều chỉnh vị trí tâm aura cho khớp với Gwen */
-}
+/* Xóa bỏ các class chakra-aura cũ không dùng nữa */
+/* .chakra-aura, .cup-aura, .gwen-aura { display: none; } */
 
 /* --- 4. CHIẾC CÚP (BÊN TRÁI) --- */
 .side-left {
@@ -78,8 +93,7 @@ body {
     width: 280px;
     max-width: 80vw;
     z-index: 20;
-    /* Loại bỏ animation cháy viền cũ */
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)); 
+    /* Hiệu ứng aura đã được áp dụng qua class .goku-aura-effect */
 }
 
 .click-hint {
@@ -93,8 +107,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    /* Chữ phát sáng đa sắc nhẹ */
-    text-shadow: 0 0 10px #00e5ff, 0 0 20px #ffff00;
+    text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
 }
 
 /* --- 5. GWEN (BÊN PHẢI) --- */
@@ -104,7 +117,6 @@ body {
     padding-bottom: 60px; 
 }
 
-/* Container mới để gói Gwen và Aura */
 .gwen-container {
     position: relative;
     display: flex;
@@ -117,11 +129,11 @@ body {
     position: relative;
     z-index: 10; 
     opacity: 0; 
-    /* Loại bỏ animation cháy viền cũ */
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+    /* Kết hợp animation xuất hiện với animation aura */
     animation: 
         gwenAppear 2s ease-out forwards, 
-        ghostFloat 4s infinite ease-in-out 2s;
+        ghostFloat 4s infinite ease-in-out 2s,
+        superSaiyanBlue 1.5s infinite alternate 2s; /* Bắt đầu aura sau khi xuất hiện */
 }
 
 /* --- 6. LỜI THOẠI (GIỮ NGUYÊN) --- */
@@ -155,20 +167,7 @@ body {
 }
 
 /* --- ANIMATIONS --- */
-
-/* Aura xoay vòng */
-@keyframes rotateAura {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Aura gợn sóng tỏa ra */
-@keyframes pulseWave {
-    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.5; }
-    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; filter: blur(25px); }
-    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.5; }
-}
-
+/* (Các animation cũ giữ nguyên, chỉ thêm superSaiyanBlue ở trên) */
 @keyframes gwenAppear {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
