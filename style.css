@@ -1,4 +1,4 @@
-/* --- 1. NỀN VŨ TRỤ TỐI MÀU (GIỮ NGUYÊN) --- */
+/* --- 1. NỀN VŨ TRỤ TỐI MÀU --- */
 body {
     margin: 0;
     padding: 0;
@@ -34,36 +34,34 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS AURA THẦN THÁNH (GOD MODE) --- */
+/* --- 3. CLASS AURA THẦN THÁNH --- */
 .god-mode-aura {
-    /* Đây là mấu chốt: Gọi bộ lọc SVG đã viết trong HTML */
-    filter: url('#blue-fire-filter') drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+    /* SVG Filter + Drop Shadow rộng hơn (20px) */
+    filter: url('#blue-fire-filter') drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
     
-    /* Vẫn giữ hiệu ứng rung nhẹ để tăng độ "chiến" */
-    animation: powerSurge 2s infinite ease-in-out;
+    /* Animation rung nhẹ chậm rãi hơn */
+    animation: powerSurge 4s infinite ease-in-out;
 }
 
-/* Hiệu ứng rung nhẹ toàn thân nhân vật */
 @keyframes powerSurge {
     0% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-5px) scale(1.01); }
+    50% { transform: translateY(-8px) scale(1.02); } /* Rung biên độ lớn hơn xíu */
     100% { transform: translateY(0) scale(1); }
 }
 
-/* --- 4. CHIẾC CÚP (BÊN TRÁI) --- */
+/* --- 4. CHIẾC CÚP --- */
 .side-left { z-index: 20; }
 
 .cup-container {
     position: relative;
     cursor: pointer;
-    animation: floatCup 3s ease-in-out infinite; 
+    animation: floatCup 4s ease-in-out infinite; 
 }
 
 #world-cup {
     width: 280px;
     max-width: 80vw;
     z-index: 20;
-    /* Aura đã được xử lý bởi class .god-mode-aura */
 }
 
 .click-hint {
@@ -76,15 +74,15 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
-    animation: blink 0.5s infinite alternate;
+    animation: blink 0.8s infinite alternate;
     text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
 }
 
-/* --- 5. GWEN (BÊN PHẢI) --- */
+/* --- 5. GWEN --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
-    padding-bottom: 60px; /* Giữ khoảng cách chân */
+    padding-bottom: 60px; 
 }
 
 .gwen-container {
@@ -99,19 +97,19 @@ body {
     position: relative;
     z-index: 10; 
     opacity: 0; 
-    
-    /* Animation xuất hiện + Aura */
     animation: 
         gwenAppear 2s ease-out forwards, 
-        powerSurge 2s infinite ease-in-out 2s; /* Bắt đầu rung sau khi hiện xong */
+        powerSurge 4s infinite ease-in-out 2s; 
 }
 
-/* --- 6. LỜI THOẠI --- */
+/* --- 6. LỜI THOẠI (ĐÃ CHỈNH SỬA VỊ TRÍ) --- */
 .dialogue-box {
     position: absolute;
-    top: 10%; 
+    /* Đẩy lên cao hơn (5%) */
+    top: 5%; 
     left: 50%;
     transform: translateX(-50%); 
+    
     width: 320px;
     background: rgba(0, 10, 20, 0.7); 
     border: 2px solid #00e5ff;
@@ -123,8 +121,10 @@ body {
     line-height: 1.4;
     text-align: center;
     color: #ffffff;
+    
     z-index: 100; 
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+    
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
     animation-delay: 1.5s;
@@ -157,7 +157,7 @@ body {
     to { opacity: 0.6; }
 }
 
-/* --- NỘI DUNG CARD (GIỮ NGUYÊN) --- */
+/* --- CARD --- */
 #content-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; justify-content: center; align-items: center; background: rgba(0,0,0,0.9); }
 .card { background: rgba(12, 28, 45, 0.95); border: 2px solid #00e5ff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(0, 229, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
 .rank-title { color: #ffd700; margin-bottom: 20px; }
