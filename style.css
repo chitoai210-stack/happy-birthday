@@ -1,4 +1,4 @@
-/* --- 1. THIẾT LẬP NỀN (GIỮ NGUYÊN) --- */
+/* --- 1. THIẾT LẬP NỀN CHUNG --- */
 body {
     margin: 0;
     padding: 0;
@@ -6,174 +6,161 @@ body {
     height: 100vh;
     font-family: 'Montserrat', sans-serif;
     background-color: #020205; 
+    /* Nền vũ trụ dùng chung cho cả lúc đếm ngược và intro */
     background-image: url('nen.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
 }
 
-/* --- 2. BỐ CỤC INTRO --- */
-#intro-screen {
-    display: flex;
-    width: 100%;
-    height: 100%;
+/* --- MỚI: MÀN HÌNH ĐẾM NGƯỢC --- */
+#countdown-screen {
     position: absolute;
     top: 0; left: 0;
-    z-index: 10;
-    transition: opacity 1s ease;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* Nằm trên cùng lúc đầu */
+    background: rgba(0, 0, 0, 0.3); /* Phủ tối nhẹ nền một chút */
+}
+
+.countdown-circle {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 5px solid #00e5ff; /* Viền xanh cyan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+    animation: pulseCircle 1s infinite alternate;
+}
+
+#countdown-number {
+    font-family: 'Orbitron', sans-serif; /* Font số điện tử */
+    font-size: 5rem;
+    color: #ffffff;
+    text-shadow: 0 0 20px #00e5ff;
+}
+
+@keyframes pulseCircle {
+    from { transform: scale(1); box-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+    to { transform: scale(1.1); box-shadow: 0 0 40px rgba(0, 229, 255, 0.8); }
+}
+
+/* --- MỚI: MÀN TRẮNG XÓA --- */
+#white-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: white;
+    z-index: 999; /* Cao nhất khi xuất hiện */
+    opacity: 0;
+    pointer-events: none; /* Không chặn click khi ẩn */
+    transition: opacity 0.5s ease; /* Hiện ra nhanh */
+}
+
+/* --- 2. BỐ CỤC INTRO (ĐIỀU CHỈNH) --- */
+#intro-screen {
+    display: flex; /* Sẽ được JS bật lại thành flex */
+    width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; z-index: 10;
 }
 
 .side-left, .side-right {
     flex: 1; 
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative; display: flex;
+    justify-content: center; align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG AURA XANH NGỌC (Tên class giữ nguyên) --- */
+/* --- CLASS HIỆU ỨNG AURA (GIỮ NGUYÊN) --- */
 .white-aura-effect {
-    filter: url('#white-power-aura') 
-            /* ĐỔI MÀU: Bóng đổ xanh cyan sáng */
-            drop-shadow(0 0 20px rgba(0, 229, 255, 0.8));
-    
-    animation: powerSurge 3s infinite ease-in-out;
+    filter: url('#white-power-aura') drop-shadow(0 0 20px rgba(0, 229, 255, 0.8));
+    /* Chỉ chạy animation rung khi đã xuất hiện xong */
+    .start-animations & {
+         animation: powerSurge 3s infinite ease-in-out;
+    }
 }
-
 @keyframes powerSurge {
-    0% { transform: translateY(0) scale(1); }
+    0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-5px) scale(1.01); }
-    100% { transform: translateY(0) scale(1); }
 }
 
-/* --- 4. CHIẾC CÚP (CÓ ANIMATION MỚI) --- */
+/* --- CHIẾC CÚP (ĐIỀU CHỈNH ANIMATION) --- */
 .side-left { z-index: 20; }
-
-.cup-container {
-    position: relative;
-    cursor: pointer;
-    /* Loại bỏ animation float ở đây, chuyển vào #world-cup */
-}
+.cup-container { position: relative; cursor: pointer; }
 
 #world-cup {
-    width: 280px;
-    max-width: 80vw;
-    z-index: 20;
-    opacity: 0; /* Ẩn ban đầu */
-    /* Animation chuỗi: Xuất hiện từ trái (2s) -> sau đó bay bồng bềnh */
-    animation: 
-        cupAppear 2s ease-out forwards,
-        floatCup 4s ease-in-out infinite 2s; /* Bắt đầu float sau 2s */
+    width: 280px; max-width: 80vw; z-index: 20;
+    opacity: 0; /* Ẩn lúc đầu */
+}
+/* Chỉ chạy animation xuất hiện khi có class kích hoạt từ JS */
+.start-animations #world-cup {
+    animation: cupAppear 2s ease-out forwards, floatCup 4s ease-in-out infinite 2s;
 }
 
 .click-hint {
-    position: absolute;
-    bottom: -60px;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-size: 1.3rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    animation: blink 0.8s infinite alternate;
-    /* ĐỔI MÀU: Phát sáng xanh cyan */
+    position: absolute; bottom: -60px; width: 100%; text-align: center;
+    color: #fff; font-size: 1.3rem; font-weight: bold; text-transform: uppercase;
+    letter-spacing: 2px; opacity: 0; /* Ẩn lúc đầu */
     text-shadow: 0 0 10px #00e5ff, 0 0 25px #e0ffff;
 }
-
-/* --- 5. GWEN --- */
-.side-right {
-    align-items: flex-end; 
-    overflow: visible; 
-    padding-bottom: 60px; 
+.start-animations .click-hint {
+     animation: blink 0.8s infinite alternate 2s; /* Hiện sau 2s */
 }
 
-.gwen-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 100%;
-}
+/* --- GWEN (ĐIỀU CHỈNH ANIMATION) --- */
+.side-right { align-items: flex-end; overflow: visible; padding-bottom: 60px; }
+.gwen-container { position: relative; display: flex; justify-content: center; align-items: flex-end; height: 100%; }
 
 #gwen-char {
-    height: 55vh; 
-    width: auto;
-    position: relative;
-    z-index: 10; 
-    opacity: 0; 
-    /* Gwen xuất hiện từ phải (giữ nguyên) */
-    animation: 
-        gwenAppear 2s ease-out forwards, 
-        powerSurge 3s infinite ease-in-out 2s;
+    height: 55vh; width: auto; position: relative; z-index: 10; opacity: 0;
+}
+.start-animations #gwen-char {
+    animation: gwenAppear 2s ease-out forwards, powerSurge 3s infinite ease-in-out 2s;
 }
 
-/* --- 6. LỜI THOẠI --- */
+/* --- LỜI THOẠI (ĐIỀU CHỈNH ANIMATION) --- */
 .dialogue-box {
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%); 
-    width: 320px;
-    background: rgba(0, 20, 40, 0.8); /* Nền xanh tối */
-    /* ĐỔI MÀU: Viền xanh cyan */
-    border: 2px solid #00e5ff;
-    padding: 20px;
-    border-radius: 20px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 1.8rem;
-    font-style: italic;
-    line-height: 1.4;
-    text-align: center;
-    color: #ffffff;
-    z-index: 100; 
-    /* ĐỔI MÀU: Bóng khung thoại xanh cyan */
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+    position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+    width: 320px; background: rgba(0, 20, 40, 0.8); border: 2px solid #00e5ff;
+    padding: 20px; border-radius: 20px; font-family: 'Times New Roman', Times, serif;
+    font-size: 1.8rem; font-style: italic; line-height: 1.4; text-align: center;
+    color: #ffffff; z-index: 100; box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
     opacity: 0;
-    animation: textFadeIn 2s ease forwards;
-    animation-delay: 1.5s;
 }
-
-.highlight {
-    color: #e0ffff; /* Màu chữ highlight sáng */
-    font-weight: bold;
-    text-shadow: 0 0 15px #00e5ff; /* Phát sáng xanh */
+.start-animations .dialogue-box {
+    animation: textFadeIn 2s ease forwards 1.5s;
 }
+.highlight { color: #e0ffff; font-weight: bold; text-shadow: 0 0 15px #00e5ff; }
 
 /* --- ANIMATIONS CHUNG --- */
+@keyframes cupAppear { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes gwenAppear { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes floatCup { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes textFadeIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes blink { from { opacity: 1; } to { opacity: 0.7; } }
 
-/* Animation mới cho Cúp: Xuất hiện từ bên TRÁI */
-@keyframes cupAppear {
-    from { transform: translateX(-100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+/* --- MÀN HÌNH VIDEO (MỚI) --- */
+#content-screen {
+    display: none;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 50;
+    justify-content: center; align-items: center;
+    background: black; /* Nền đen cho video */
 }
 
-/* Animation cho Gwen: Xuất hiện từ bên PHẢI */
-@keyframes gwenAppear {
-    from { transform: translateX(50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+.video-container {
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 0 50px rgba(0, 229, 255, 0.3);
 }
 
-@keyframes floatCup {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+video {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid #00e5ff;
+    display: block;
 }
-
-@keyframes textFadeIn {
-    from { opacity: 0; transform: translate(-50%, 20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
-}
-
-@keyframes blink { 
-    from { opacity: 1; }
-    to { opacity: 0.7; }
-}
-
-/* --- NỘI DUNG CARD (Cập nhật màu viền cho đồng bộ) --- */
-#content-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; justify-content: center; align-items: center; background: rgba(0,0,0,0.9); }
-/* ĐỔI MÀU: Viền và bóng card sang xanh cyan */
-.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #00e5ff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(0, 229, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
-.rank-title { color: #ffd700; margin-bottom: 20px; }
-.img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
-.message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
-@keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
