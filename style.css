@@ -34,54 +34,24 @@ body {
     align-items: center;
 }
 
-/* --- 3. HIỆU ỨNG AURA GOKU SUPER SAIYAN BLUE --- */
-.goku-aura-effect {
-    /* Áp dụng hoạt ảnh aura khí rực cháy */
-    animation: superSaiyanBlue 1.5s infinite alternate;
+/* --- 3. CLASS AURA THẦN THÁNH (GOD MODE) --- */
+.god-mode-aura {
+    /* Đây là mấu chốt: Gọi bộ lọc SVG đã viết trong HTML */
+    filter: url('#blue-fire-filter') drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+    
+    /* Vẫn giữ hiệu ứng rung nhẹ để tăng độ "chiến" */
+    animation: powerSurge 2s infinite ease-in-out;
 }
 
-@keyframes superSaiyanBlue {
-    0% {
-        filter: 
-            drop-shadow(0 0 10px #00bfff) 
-            drop-shadow(0 0 20px #1e90ff) 
-            drop-shadow(0 0 30px #0000ff);
-    }
-    25% {
-        filter: 
-            drop-shadow(0 0 15px #1e90ff) 
-            drop-shadow(0 0 30px #0000ff) 
-            drop-shadow(0 0 45px #00bfff);
-    }
-    50% {
-        filter: 
-            drop-shadow(0 0 20px #0000ff) 
-            drop-shadow(0 0 40px #00bfff) 
-            drop-shadow(0 0 60px #add8e6);
-        transform: scale(1.02); /* Rung nhẹ tạo cảm giác năng lượng */
-    }
-    75% {
-        filter: 
-            drop-shadow(0 0 15px #1e90ff) 
-            drop-shadow(0 0 30px #0000ff) 
-            drop-shadow(0 0 45px #00bfff);
-    }
-    100% {
-        filter: 
-            drop-shadow(0 0 10px #00bfff) 
-            drop-shadow(0 0 20px #1e90ff) 
-            drop-shadow(0 0 35px #0000ff);
-        transform: scale(1);
-    }
+/* Hiệu ứng rung nhẹ toàn thân nhân vật */
+@keyframes powerSurge {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.01); }
+    100% { transform: translateY(0) scale(1); }
 }
-
-/* Xóa bỏ các class chakra-aura cũ không dùng nữa */
-/* .chakra-aura, .cup-aura, .gwen-aura { display: none; } */
 
 /* --- 4. CHIẾC CÚP (BÊN TRÁI) --- */
-.side-left {
-    z-index: 20;
-}
+.side-left { z-index: 20; }
 
 .cup-container {
     position: relative;
@@ -93,7 +63,7 @@ body {
     width: 280px;
     max-width: 80vw;
     z-index: 20;
-    /* Hiệu ứng aura đã được áp dụng qua class .goku-aura-effect */
+    /* Aura đã được xử lý bởi class .god-mode-aura */
 }
 
 .click-hint {
@@ -106,7 +76,7 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
-    animation: blink 0.8s infinite alternate;
+    animation: blink 0.5s infinite alternate;
     text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
 }
 
@@ -114,7 +84,7 @@ body {
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
-    padding-bottom: 60px; 
+    padding-bottom: 60px; /* Giữ khoảng cách chân */
 }
 
 .gwen-container {
@@ -129,14 +99,14 @@ body {
     position: relative;
     z-index: 10; 
     opacity: 0; 
-    /* Kết hợp animation xuất hiện với animation aura */
+    
+    /* Animation xuất hiện + Aura */
     animation: 
         gwenAppear 2s ease-out forwards, 
-        ghostFloat 4s infinite ease-in-out 2s,
-        superSaiyanBlue 1.5s infinite alternate 2s; /* Bắt đầu aura sau khi xuất hiện */
+        powerSurge 2s infinite ease-in-out 2s; /* Bắt đầu rung sau khi hiện xong */
 }
 
-/* --- 6. LỜI THOẠI (GIỮ NGUYÊN) --- */
+/* --- 6. LỜI THOẠI --- */
 .dialogue-box {
     position: absolute;
     top: 10%; 
@@ -166,16 +136,10 @@ body {
     text-shadow: 0 0 10px #ffd700;
 }
 
-/* --- ANIMATIONS --- */
-/* (Các animation cũ giữ nguyên, chỉ thêm superSaiyanBlue ở trên) */
+/* --- ANIMATIONS CHUNG --- */
 @keyframes gwenAppear {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes ghostFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
 }
 
 @keyframes floatCup {
