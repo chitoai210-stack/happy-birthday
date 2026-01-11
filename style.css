@@ -1,21 +1,28 @@
-/* --- 1. NỀN VŨ TRỤ TỐI MÀU (GIỮ NGUYÊN) --- */
+/* --- 1. THIẾT LẬP NỀN MỚI (SỬ DỤNG FILE NEN.JPG) --- */
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     height: 100vh;
     font-family: 'Montserrat', sans-serif;
+    
+    /* Màu nền dự phòng (hiện khi ảnh đang tải) */
     background-color: #020205; 
-    background-image: 
-        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1.5px),
-        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1.5px),
-        radial-gradient(circle at top right, #0a0f29, transparent), 
-        radial-gradient(circle at bottom left, #03181a, transparent);
-    background-size: 550px 550px, 350px 350px, 100% 100%, 100% 100%;
-    background-position: 0 0, 40px 60px, 0 0, 0 0;
+
+    /* --- QUAN TRỌNG: ĐƯỜNG DẪN ĐẾN FILE ẢNH NỀN --- */
+    background-image: url('nen.jpg');
+
+    /* Đảm bảo ảnh phủ kín toàn bộ màn hình, không bị méo */
+    background-size: cover;
+
+    /* Căn giữa ảnh nền */
+    background-position: center center;
+
+    /* Không lặp lại ảnh */
+    background-repeat: no-repeat;
 }
 
-/* --- 2. BỐ CỤC INTRO --- */
+/* --- 2. BỐ CỤC INTRO (GIỮ NGUYÊN) --- */
 #intro-screen {
     display: flex;
     width: 100%;
@@ -34,14 +41,10 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG NĂNG LƯỢNG TRẮNG (MỚI) --- */
+/* --- 3. CLASS HIỆU ỨNG NĂNG LƯỢNG TRẮNG (GIỮ NGUYÊN) --- */
 .white-aura-effect {
-    /* Áp dụng bộ lọc SVG 2 lớp */
     filter: url('#white-power-aura') 
-            /* Thêm bóng trắng sáng bên ngoài để tăng độ rực rỡ */
             drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-    
-    /* Animation rung nhẹ, uy lực */
     animation: powerSurge 3s infinite ease-in-out;
 }
 
@@ -51,7 +54,7 @@ body {
     100% { transform: translateY(0) scale(1); }
 }
 
-/* --- 4. CHIẾC CÚP --- */
+/* --- 4. CHIẾC CÚP (GIỮ NGUYÊN) --- */
 .side-left { z-index: 20; }
 
 .cup-container {
@@ -77,11 +80,10 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    /* Chữ phát sáng Trắng mạnh mẽ */
     text-shadow: 0 0 10px #ffffff, 0 0 25px #ffffff;
 }
 
-/* --- 5. GWEN --- */
+/* --- 5. GWEN (GIỮ NGUYÊN) --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
@@ -107,16 +109,14 @@ body {
         powerSurge 3s infinite ease-in-out 2s;
 }
 
-/* --- 6. LỜI THOẠI --- */
+/* --- 6. LỜI THOẠI (GIỮ NGUYÊN) --- */
 .dialogue-box {
     position: absolute;
     top: 15%;
     left: 50%;
     transform: translateX(-50%); 
-    
     width: 320px;
     background: rgba(20, 20, 40, 0.8);
-    /* Viền trắng sáng */
     border: 2px solid #ffffff;
     padding: 20px;
     border-radius: 20px;
@@ -126,20 +126,17 @@ body {
     line-height: 1.4;
     text-align: center;
     color: #ffffff;
-    
     z-index: 100; 
-    /* Bóng khung thoại màu trắng tím */
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-    
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
     animation-delay: 1.5s;
 }
 
 .highlight {
-    color: #ffffff; /* Chữ highlight màu trắng */
+    color: #ffffff; 
     font-weight: bold;
-    text-shadow: 0 0 15px #ffffff; /* Phát sáng trắng */
+    text-shadow: 0 0 15px #ffffff; 
 }
 
 /* --- ANIMATIONS CHUNG --- */
