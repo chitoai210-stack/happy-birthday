@@ -13,14 +13,15 @@
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
             <filter id="blue-fire-filter" x="-50%" y="-50%" width="200%" height="200%">
-                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="expanded"/>
+                <feMorphology operator="dilate" radius="6" in="SourceAlpha" result="expanded"/>
+                
                 <feGaussianBlur stdDeviation="5" in="expanded" result="blurred"/>
                 
-                <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise">
-                    <animate attributeName="baseFrequency" values="0.02;0.03;0.02" dur="0.2s" repeatCount="indefinite"/>
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="3" result="noise">
+                    <animate attributeName="baseFrequency" values="0.01 0.05; 0.01 0.09; 0.01 0.05" dur="3s" repeatCount="indefinite"/>
                 </feTurbulence>
                 
-                <feDisplacementMap in="blurred" in2="noise" scale="15" result="distortedEdge"/>
+                <feDisplacementMap in="blurred" in2="noise" scale="25" result="distortedEdge"/>
                 
                 <feFlood flood-color="#00ffff" result="colorCyan"/>
                 <feComposite in="colorCyan" in2="distortedEdge" operator="in" result="fireCyan"/>
@@ -29,7 +30,10 @@
                 <feComposite in="colorBlue" in2="distortedEdge" operator="in" result="fireBlue"/>
 
                 <feMerge>
-                    <feMergeNode in="fireBlue"/> <feMergeNode in="fireCyan"/> <feMergeNode in="SourceGraphic"/> </feMerge>
+                    <feMergeNode in="fireBlue"/>
+                    <feMergeNode in="fireCyan"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
             </filter>
         </defs>
     </svg>
