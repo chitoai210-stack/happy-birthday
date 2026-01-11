@@ -34,10 +34,12 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG LỬA GOKU (MỚI) --- */
-.goku-fire-effect {
-    /* Áp dụng bộ lọc SVG tạo viền lửa */
-    filter: url('#blue-fire-aura') drop-shadow(0 0 10px #00bfff);
+/* --- 3. CLASS HIỆU ỨNG GOKU VÔ CỰC (MỚI) --- */
+.mui-aura-effect {
+    /* Áp dụng bộ lọc SVG 2 lớp (Bạc trong + Tím ngoài rộng) */
+    filter: url('#ultra-instinct-wide-aura') 
+            /* Thêm drop-shadow CSS để tăng độ rực cho lớp khí tím ngoài cùng */
+            drop-shadow(0 0 20px rgba(138, 43, 226, 0.5));
     
     /* Animation rung nhẹ */
     animation: powerSurge 3s infinite ease-in-out;
@@ -75,7 +77,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
+    /* Chữ phát sáng Trắng/Tím */
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #8a2be2;
 }
 
 /* --- 5. GWEN --- */
@@ -113,7 +116,8 @@ body {
     
     width: 320px;
     background: rgba(0, 10, 20, 0.7); 
-    border: 2px solid #00e5ff;
+    /* Đổi màu viền khung thoại sang tím/bạc cho hợp tone */
+    border: 2px solid #8a2be2;
     padding: 20px;
     border-radius: 20px;
     font-family: 'Times New Roman', Times, serif;
@@ -124,7 +128,7 @@ body {
     color: #ffffff;
     
     z-index: 100; 
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
     
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
@@ -160,7 +164,7 @@ body {
 
 /* --- NỘI DUNG CARD (GIỮ NGUYÊN) --- */
 #content-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; justify-content: center; align-items: center; background: rgba(0,0,0,0.9); }
-.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #00e5ff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(0, 229, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
+.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #8a2be2; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(138, 43, 226, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
 .rank-title { color: #ffd700; margin-bottom: 20px; }
 .img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
 .message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
