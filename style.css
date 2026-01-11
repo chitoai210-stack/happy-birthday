@@ -1,4 +1,4 @@
-/* --- 1. NỀN VŨ TRỤ TỐI MÀU (GIỮ NGUYÊN) --- */
+/* --- CÁC PHẦN GIỮ NGUYÊN (BODY, BỐ CỤC) --- */
 body {
     margin: 0;
     padding: 0;
@@ -15,7 +15,6 @@ body {
     background-position: 0 0, 40px 60px, 0 0, 0 0;
 }
 
-/* --- 2. BỐ CỤC INTRO --- */
 #intro-screen {
     display: flex;
     width: 100%;
@@ -42,7 +41,6 @@ body {
 .cup-container {
     position: relative;
     cursor: pointer;
-    /* Cúp cũng bay nhẹ và có hiệu ứng cháy */
     animation: floatCup 3s ease-in-out infinite; 
 }
 
@@ -50,43 +48,43 @@ body {
     width: 280px;
     max-width: 80vw;
     z-index: 20;
-    /* Áp dụng hiệu ứng cháy năng lượng cho viền Cúp */
-    animation: energyBurn 0.8s infinite alternate; 
+    /* Loại bỏ hiệu ứng energyBurn để tập trung vào aura nền */
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.5)); 
 }
 
-/* Aura Lửa cháy phía sau Cúp */
+/* Aura Sóng Năng Lượng Đa Sắc */
 .aura-fire-cup {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%; height: 100%;
+    /* Kích thước ban đầu nhỏ */
+    width: 100px; height: 100px; 
     border-radius: 50%;
-    /* Hiệu ứng sóng tỏa ra liên tục */
-    box-shadow: 0 0 30px #00e5ff;
-    animation: rippleFire 1s linear infinite;
+    /* Không dùng nền, chỉ dùng box-shadow */
+    background: transparent; 
     z-index: 10;
-    opacity: 0.6;
+    /* Animation sóng tỏa ra liên tục */
+    animation: multiColorRipple 2s linear infinite; 
 }
 
 .click-hint {
     position: absolute;
-    bottom: -50px; /* Đẩy chữ xuống thấp hơn chút để không dính cúp */
+    bottom: -50px;
     width: 100%;
     text-align: center;
     color: #5bc0de;
-    font-size: 1.1rem; /* Chữ to hơn xíu */
+    font-size: 1.1rem;
     font-weight: bold;
-    text-transform: uppercase; /* Chữ in hoa cho mạnh mẽ */
+    text-transform: uppercase;
     letter-spacing: 2px;
-    animation: blink 0.5s infinite alternate; /* Nhấp nháy nhanh hơn */
+    animation: blink 0.5s infinite alternate;
     text-shadow: 0 0 10px #00e5ff;
 }
 
-/* --- 4. GWEN (BÊN PHẢI) --- */
+/* --- 4. GWEN (GIỮ NGUYÊN) --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
-    /* QUAN TRỌNG: Thêm padding đáy để đẩy Gwen lên cao cho rõ chân */
     padding-bottom: 60px; 
 }
 
@@ -96,38 +94,32 @@ body {
     position: relative;
     transform: translateX(0); 
     z-index: 1; 
-    
     opacity: 0; 
-    /* Kết hợp 3 hiệu ứng: Hiện ra + Bay nhẹ + Lửa cháy viền */
     animation: 
         gwenAppear 2s ease-out forwards, 
         ghostFloat 4s infinite ease-in-out 2s,
-        energyBurn 1s infinite alternate 2s; /* Cháy viền sau khi hiện xong */
+        energyBurn 1s infinite alternate 2s; 
 }
 
-/* --- 5. LỜI THOẠI (GIỮ NGUYÊN VỊ TRÍ TỐT) --- */
+/* --- 5. LỜI THOẠI (GIỮ NGUYÊN) --- */
 .dialogue-box {
     position: absolute;
     top: 10%; 
     left: 50%;
     transform: translateX(-50%); 
-    
     width: 320px;
     background: rgba(0, 10, 20, 0.7); 
-    border: 2px solid #00e5ff; /* Viền sáng hơn */
+    border: 2px solid #00e5ff;
     padding: 20px;
     border-radius: 20px;
-    
     font-family: 'Times New Roman', Times, serif;
     font-size: 1.8rem;
     font-style: italic;
     line-height: 1.4;
     text-align: center;
     color: #ffffff;
-    
     z-index: 100; 
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
-    
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
     animation-delay: 1.5s;
@@ -139,51 +131,61 @@ body {
     text-shadow: 0 0 10px #ffd700;
 }
 
-/* --- ANIMATIONS (HIỆU ỨNG MỚI) --- */
+/* --- ANIMATIONS MỚI --- */
 
-/* 1. Hiệu ứng Lửa cháy từ viền (Dùng cho cả Cúp và Gwen) */
+/* Hiệu ứng Sóng Năng Lượng Đa Sắc tỏa ra */
+@keyframes multiColorRipple {
+    0% {
+        /* Bắt đầu từ trung tâm, nhỏ và rõ */
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+        /* Tạo nhiều lớp màu: Tím, Xanh dương, Xanh lơ, Vàng */
+        box-shadow: 
+            0 0 0 0px rgba(148, 0, 211, 0.8),  /* Tím */
+            0 0 0 10px rgba(0, 0, 255, 0.6),   /* Xanh dương */
+            0 0 0 20px rgba(0, 229, 255, 0.4), /* Xanh lơ */
+            0 0 0 30px rgba(255, 215, 0, 0.2); /* Vàng */
+    }
+    100% {
+        /* Tỏa ra rất lớn và mờ dần */
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+        /* Các lớp màu lan rộng ra và mờ đi */
+        box-shadow: 
+            0 0 0 50px rgba(148, 0, 211, 0),
+            0 0 0 100px rgba(0, 0, 255, 0),
+            0 0 0 150px rgba(0, 229, 255, 0),
+            0 0 0 200px rgba(255, 215, 0, 0);
+    }
+}
+
+/* Các animation cũ giữ nguyên */
 @keyframes energyBurn {
-    0% { 
-        filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5)); 
-    }
-    100% { 
-        /* Tăng độ nhòe và độ sáng cực đại */
-        filter: drop-shadow(0 0 25px rgba(0, 255, 255, 1)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); 
-    }
+    0% { filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5)); }
+    100% { filter: drop-shadow(0 0 25px rgba(0, 255, 255, 1)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); }
 }
-
-/* 2. Hiệu ứng sóng năng lượng tỏa ra (Cho background aura cúp) */
-@keyframes rippleFire {
-    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; box-shadow: 0 0 10px #00e5ff; }
-    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; box-shadow: 0 0 50px #00008b; }
-}
-
 @keyframes gwenAppear {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
-
 @keyframes ghostFloat {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
-
 @keyframes floatCup {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
-
 @keyframes textFadeIn {
     from { opacity: 0; transform: translate(-50%, 20px); }
     to { opacity: 1; transform: translate(-50%, 0); }
 }
-
 @keyframes blink { 
     from { opacity: 1; }
     to { opacity: 0.5; text-shadow: 0 0 20px #00e5ff; }
 }
 
-/* --- NỘI DUNG CARD --- */
+/* --- NỘI DUNG CARD (GIỮ NGUYÊN) --- */
 #content-screen {
     display: none;
     position: absolute;
@@ -194,7 +196,6 @@ body {
     align-items: center;
     background: rgba(0,0,0,0.9);
 }
-
 .card {
     background: rgba(12, 28, 45, 0.95);
     border: 2px solid #00e5ff;
@@ -205,11 +206,9 @@ body {
     text-align: center;
     animation: zoomIn 0.8s ease;
 }
-
 .rank-title { color: #ffd700; margin-bottom: 20px; }
 .img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
 .message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
-
 @keyframes zoomIn {
     from { transform: scale(0.5); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
