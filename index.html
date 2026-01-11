@@ -12,25 +12,24 @@
 
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
-            <filter id="ssb-aura-filter" x="-50%" y="-50%" width="200%" height="200%">
-                <feMorphology operator="dilate" radius="8" in="SourceAlpha" result="fireBase"/>
-                
-                <feTurbulence type="fractalNoise" baseFrequency="0.02 0.08" numOctaves="5" seed="1" result="fireNoise">
-                    <animate attributeName="seed" values="1;50;100;50;1" dur="0.3s" repeatCount="indefinite"/>
+            <filter id="sjw-shadow-filter" x="-100%" y="-100%" width="300%" height="300%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02 0.08" numOctaves="4" result="smokeNoise">
+                    <animateTransform attributeName="transform" type="translate" from="0 0" to="0 -100" dur="8s" repeatCount="indefinite"/>
                 </feTurbulence>
-                
-                <feDisplacementMap in="fireBase" in2="fireNoise" scale="20" xChannelSelector="R" yChannelSelector="G" result="distortedFire"/>
-                
-                <feFlood flood-color="#00bfff" flood-opacity="0.9" result="fireColor"/>
-                <feComposite in="fireColor" in2="distortedFire" operator="in" result="finalElectricFire"/>
 
-                <feMorphology operator="dilate" radius="3" in="SourceAlpha" result="coreBase"/>
-                <feGaussianBlur stdDeviation="2" in="coreBase" result="coreBlurred"/>
-                <feFlood flood-color="#e0ffff" flood-opacity="1" result="coreColor"/>
-                <feComposite in="coreColor" in2="coreBlurred" operator="in" result="finalInnerCore"/>
+                <feMorphology operator="dilate" radius="15" in="SourceAlpha" result="expandedAlpha"/>
+                
+                <feDisplacementMap in="expandedAlpha" in2="smokeNoise" scale="40" xChannelSelector="R" yChannelSelector="G" result="distortedShadow"/>
+                
+                <feGaussianBlur stdDeviation="10" in="distortedShadow" result="blurredShadow"/>
+
+                <feFlood flood-color="#1a0033" flood-opacity="0.95" result="shadowColor"/>
+                <feComposite in="shadowColor" in2="blurredShadow" operator="in" result="finalShadowBase"/>
+
+                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#4d4dff" flood-opacity="1" in="finalShadowBase" result="electricEdge"/>
 
                 <feMerge>
-                    <feMergeNode in="finalElectricFire"/> <feMergeNode in="finalInnerCore"/>    <feMergeNode in="SourceGraphic"/>     </feMerge>
+                    <feMergeNode in="electricEdge"/>   <feMergeNode in="finalShadowBase"/> <feMergeNode in="SourceGraphic"/>   </feMerge>
             </filter>
         </defs>
     </svg>
@@ -39,7 +38,7 @@
         
         <div class="side-left">
             <div class="cup-container" onclick="openGift()">
-                <img src="cup.png.png" id="world-cup" class="ssb-aura-effect" alt="Cup CKTG">
+                <img src="cup.png.png" id="world-cup" class="sjw-aura-effect" alt="Cup CKTG">
                 <p class="click-hint">ĐỒNG Ý !</p>
             </div>
         </div>
@@ -51,7 +50,7 @@
             </div>
             
             <div class="gwen-container">
-                <img src="gwen.png" id="gwen-char" class="ssb-aura-effect" alt="Gwen">
+                <img src="gwen.png" id="gwen-char" class="sjw-aura-effect" alt="Gwen">
             </div>
         </div>
     </div>
