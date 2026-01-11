@@ -34,14 +34,14 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG SUNG JIN WOO (MỚI) --- */
-.sjw-aura-effect {
-    /* Áp dụng bộ lọc SVG Shadow Monarch */
-    filter: url('#sjw-shadow-filter') 
-            /* Thêm bóng đen rộng bên ngoài để tăng độ tối tăm huyền bí */
-            drop-shadow(0 0 50px rgba(0, 0, 0, 0.9));
+/* --- 3. CLASS HIỆU ỨNG NĂNG LƯỢNG TRẮNG (MỚI) --- */
+.white-aura-effect {
+    /* Áp dụng bộ lọc SVG 2 lớp */
+    filter: url('#white-power-aura') 
+            /* Thêm bóng trắng sáng bên ngoài để tăng độ rực rỡ */
+            drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
     
-    /* Animation rung chậm rãi, uy lực */
+    /* Animation rung nhẹ, uy lực */
     animation: powerSurge 3s infinite ease-in-out;
 }
 
@@ -77,8 +77,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    /* Chữ phát sáng Tím/Xanh điện */
-    text-shadow: 0 0 10px #4d4dff, 0 0 20px #4b0082;
+    /* Chữ phát sáng Trắng mạnh mẽ */
+    text-shadow: 0 0 10px #ffffff, 0 0 25px #ffffff;
 }
 
 /* --- 5. GWEN --- */
@@ -115,9 +115,9 @@ body {
     transform: translateX(-50%); 
     
     width: 320px;
-    background: rgba(5, 0, 15, 0.8); /* Nền tối hơn, ám tím */
-    /* Đổi màu viền khung thoại sang Tím than */
-    border: 2px solid #4b0082;
+    background: rgba(20, 20, 40, 0.8);
+    /* Viền trắng sáng */
+    border: 2px solid #ffffff;
     padding: 20px;
     border-radius: 20px;
     font-family: 'Times New Roman', Times, serif;
@@ -128,8 +128,8 @@ body {
     color: #ffffff;
     
     z-index: 100; 
-    /* Bóng khung thoại màu tím đậm */
-    box-shadow: 0 0 30px rgba(75, 0, 130, 0.6);
+    /* Bóng khung thoại màu trắng tím */
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
     
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
@@ -137,9 +137,9 @@ body {
 }
 
 .highlight {
-    color: #ffd700; /* Giữ màu vàng cho nổi bật hoặc đổi sang tím nhạt nếu thích */
+    color: #ffffff; /* Chữ highlight màu trắng */
     font-weight: bold;
-    text-shadow: 0 0 10px #4b0082;
+    text-shadow: 0 0 15px #ffffff; /* Phát sáng trắng */
 }
 
 /* --- ANIMATIONS CHUNG --- */
@@ -160,12 +160,12 @@ body {
 
 @keyframes blink { 
     from { opacity: 1; }
-    to { opacity: 0.6; }
+    to { opacity: 0.7; }
 }
 
 /* --- NỘI DUNG CARD (GIỮ NGUYÊN) --- */
 #content-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; justify-content: center; align-items: center; background: rgba(0,0,0,0.9); }
-.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #4b0082; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(75, 0, 130, 0.5); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
+.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
 .rank-title { color: #ffd700; margin-bottom: 20px; }
 .img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
 .message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
