@@ -1,116 +1,130 @@
+/* --- CÀI ĐẶT CHUNG (TÔNG XANH SƯƠNG LAM) --- */
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
     overflow: hidden;
-    /* Giữ nguyên tên file ảnh nền của bạn */
-    background: url('bg-lol.jpg.jpg') no-repeat center center/cover; 
-    font-family: 'Arial', sans-serif;
+    background: radial-gradient(circle at center, #0b3d42 0%, #020b14 100%); /* Xanh cổ vịt tối */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.scene {
-    position: relative;
+/* --- PHẦN INTRO --- */
+#intro-screen {
+    position: absolute;
     width: 100%;
     height: 100%;
-    /* Bỏ flex center để tự do sắp xếp vị trí */
-    display: block; 
-    background-color: rgba(0, 0, 0, 0.5); 
-}
-
-/* --- Cấu hình Ahri (Nhân vật chính) --- */
-.champion {
-    position: absolute;
-    z-index: 1; 
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-}
-
-.ahri-pose {
-    height: 85vh; /* Tăng kích thước Ahri lên cho đẹp */
-    bottom: 0;
-    right: -300px; /* Bắt đầu từ ngoài màn hình bên phải */
-    animation: slideAhriIn 1.5s ease-out forwards;
-}
-
-/* --- Cấu hình Cúp (Đặt cạnh Ahri) --- */
-.trophy-wrapper {
-    position: absolute;
+    top: 0; left: 0;
     z-index: 10;
+    transition: opacity 1s ease;
+}
+
+/* 1. Gwen (Bên Phải) */
+#gwen-char {
+    position: absolute;
+    bottom: 0;
+    right: -50px; /* Bắt đầu hơi ẩn */
+    height: 95vh; /* Cao gần hết màn hình */
+    z-index: 1;
+    animation: slideIn 1.5s ease-out forwards;
+    filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.4)); /* Bóng xanh sáng */
+}
+
+@keyframes slideIn {
+    to { right: 0; }
+}
+
+/* 2. Cúp (Bên Trái - Gần Gwen) */
+#cup-wrapper {
+    position: absolute;
+    bottom: 30%; /* Cao độ */
+    left: 25%;   /* Vị trí ngang: Chỉnh số này để gần/xa Gwen */
+    width: 160px;
+    z-index: 20;
     cursor: pointer;
-    text-align: center;
-    
-    /* VỊ TRÍ MỚI: Nằm bên trái Ahri */
-    bottom: 15%; /* Cách đáy 15% */
-    right: 45%;  /* Cách lề phải 45% (Tức là nằm gần giữa, lệch trái so với Ahri) */
-    
-    animation: float 3s ease-in-out infinite;
+    animation: floatCup 3s infinite ease-in-out;
 }
 
-.trophy {
-    height: 45vh; /* Cúp to hơn chút */
-    filter: drop-shadow(0 0 0px #a200ff);
-    animation: purplePulse 2s infinite;
+#world-cup {
+    width: 100%;
+    filter: drop-shadow(0 0 15px #ffd700);
 }
 
-.click-hint {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-top: 15px;
-    text-shadow: 0 0 10px #a200ff;
-    animation: blink 1.5s infinite;
+/* Hào quang (Aura) màu Xanh Lam của Gwen */
+.aura {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140%; height: 140%;
+    background: radial-gradient(circle, rgba(0, 255, 234, 0.5) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
 }
 
-/* --- Hiệu ứng di chuyển --- */
-@keyframes slideAhriIn {
-    to { right: -5%; } /* Ahri trượt vào và dừng ở sát mép phải */
-}
-
-@keyframes purplePulse {
-    0% { filter: drop-shadow(0 0 10px #a200ff); }
-    50% { filter: drop-shadow(0 0 50px #d68eff); }
-    100% { filter: drop-shadow(0 0 10px #a200ff); }
-}
-
-@keyframes float {
+@keyframes floatCup {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-20px); }
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
 }
 
-/* --- Phần nội dung sau khi mở (Căn giữa lại cho đẹp) --- */
-.hidden { display: none; }
-
-.content {
+.guide-text {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0); /* Căn giữa màn hình */
-    z-index: 20;
+    bottom: 10%;
+    left: 20%;
+    font-size: 1.2rem;
+    color: #00ffe5;
+    text-shadow: 0 0 10px #00ffe5;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink { 50% { opacity: 0.5; } }
+
+/* --- PHẦN NỘI DUNG THIỆP --- */
+#content-screen {
+    display: none; /* Ẩn lúc đầu */
+    z-index: 5;
     text-align: center;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 30px;
+}
+
+.card {
+    background: rgba(0, 20, 30, 0.9);
+    border: 2px solid #00ffe5; /* Viền xanh Gwen */
     border-radius: 20px;
-    border: 2px solid #a200ff;
-    box-shadow: 0 0 50px #a200ff;
-    width: 90%;
-    max-width: 500px;
-    animation: zoomIn 0.5s forwards;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0, 255, 229, 0.5);
+    max-width: 400px;
+    animation: zoomIn 0.8s ease;
 }
 
-.media-placeholder img {
-    max-width: 100%;
+.rank-title {
+    color: #ffd700;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #ff8c00;
+    margin-bottom: 20px;
+}
+
+.img-container img {
+    width: 100%;
     border-radius: 10px;
-    border: 1px solid white;
+    border: 3px solid #ffd700;
 }
 
-.title { color: #d68eff; text-transform: uppercase; margin-top: 0; }
-.message { line-height: 1.6; font-size: 1.1rem; }
+.message {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #e0f7fa;
+}
 
-@keyframes zoomIn { 
-    to { transform: translate(-50%, -50%) scale(1); } 
+@keyframes zoomIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
