@@ -19,16 +19,19 @@
                     <animate attributeName="baseFrequency" values="0.01 0.02; 0.01 0.04; 0.01 0.02" dur="8s" repeatCount="indefinite"/>
                 </feTurbulence>
                 <feDisplacementMap in="outerBlurred" in2="outerNoise" scale="30" xChannelSelector="R" yChannelSelector="G" result="outerDistorted"/>
-                <feFlood flood-color="#9370db" flood-opacity="0.6" result="outerColor"/>
+                <feFlood flood-color="#008b8b" flood-opacity="0.6" result="outerColor"/>
                 <feComposite in="outerColor" in2="outerDistorted" operator="in" result="finalOuterAura"/>
 
                 <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="innerBase"/>
                 <feGaussianBlur stdDeviation="3" in="innerBase" result="innerBlurred"/>
-                <feFlood flood-color="#ffffff" flood-opacity="1.0" result="whiteColor"/>
+                <feFlood flood-color="#e0ffff" flood-opacity="1.0" result="whiteColor"/>
                 <feComposite in="whiteColor" in2="innerBlurred" operator="in" result="finalWhiteCore"/>
 
                 <feMerge>
-                    <feMergeNode in="finalOuterAura"/> <feMergeNode in="finalWhiteCore"/> <feMergeNode in="SourceGraphic"/>  </feMerge>
+                    <feMergeNode in="finalOuterAura"/>
+                    <feMergeNode in="finalWhiteCore"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
             </filter>
         </defs>
     </svg>
