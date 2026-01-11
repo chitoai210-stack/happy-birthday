@@ -1,28 +1,18 @@
-/* --- 1. THIẾT LẬP NỀN MỚI (SỬ DỤNG FILE NEN.JPG) --- */
+/* --- 1. THIẾT LẬP NỀN (GIỮ NGUYÊN) --- */
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     height: 100vh;
     font-family: 'Montserrat', sans-serif;
-    
-    /* Màu nền dự phòng (hiện khi ảnh đang tải) */
     background-color: #020205; 
-
-    /* --- QUAN TRỌNG: ĐƯỜNG DẪN ĐẾN FILE ẢNH NỀN --- */
     background-image: url('nen.jpg');
-
-    /* Đảm bảo ảnh phủ kín toàn bộ màn hình, không bị méo */
     background-size: cover;
-
-    /* Căn giữa ảnh nền */
     background-position: center center;
-
-    /* Không lặp lại ảnh */
     background-repeat: no-repeat;
 }
 
-/* --- 2. BỐ CỤC INTRO (GIỮ NGUYÊN) --- */
+/* --- 2. BỐ CỤC INTRO --- */
 #intro-screen {
     display: flex;
     width: 100%;
@@ -41,10 +31,12 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG NĂNG LƯỢNG TRẮNG (GIỮ NGUYÊN) --- */
+/* --- 3. CLASS HIỆU ỨNG AURA XANH NGỌC (Tên class giữ nguyên) --- */
 .white-aura-effect {
     filter: url('#white-power-aura') 
-            drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+            /* ĐỔI MÀU: Bóng đổ xanh cyan sáng */
+            drop-shadow(0 0 20px rgba(0, 229, 255, 0.8));
+    
     animation: powerSurge 3s infinite ease-in-out;
 }
 
@@ -54,19 +46,24 @@ body {
     100% { transform: translateY(0) scale(1); }
 }
 
-/* --- 4. CHIẾC CÚP (GIỮ NGUYÊN) --- */
+/* --- 4. CHIẾC CÚP (CÓ ANIMATION MỚI) --- */
 .side-left { z-index: 20; }
 
 .cup-container {
     position: relative;
     cursor: pointer;
-    animation: floatCup 4s ease-in-out infinite; 
+    /* Loại bỏ animation float ở đây, chuyển vào #world-cup */
 }
 
 #world-cup {
     width: 280px;
     max-width: 80vw;
     z-index: 20;
+    opacity: 0; /* Ẩn ban đầu */
+    /* Animation chuỗi: Xuất hiện từ trái (2s) -> sau đó bay bồng bềnh */
+    animation: 
+        cupAppear 2s ease-out forwards,
+        floatCup 4s ease-in-out infinite 2s; /* Bắt đầu float sau 2s */
 }
 
 .click-hint {
@@ -80,10 +77,11 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    text-shadow: 0 0 10px #ffffff, 0 0 25px #ffffff;
+    /* ĐỔI MÀU: Phát sáng xanh cyan */
+    text-shadow: 0 0 10px #00e5ff, 0 0 25px #e0ffff;
 }
 
-/* --- 5. GWEN (GIỮ NGUYÊN) --- */
+/* --- 5. GWEN --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
@@ -104,20 +102,22 @@ body {
     position: relative;
     z-index: 10; 
     opacity: 0; 
+    /* Gwen xuất hiện từ phải (giữ nguyên) */
     animation: 
         gwenAppear 2s ease-out forwards, 
         powerSurge 3s infinite ease-in-out 2s;
 }
 
-/* --- 6. LỜI THOẠI (GIỮ NGUYÊN) --- */
+/* --- 6. LỜI THOẠI --- */
 .dialogue-box {
     position: absolute;
     top: 15%;
     left: 50%;
     transform: translateX(-50%); 
     width: 320px;
-    background: rgba(20, 20, 40, 0.8);
-    border: 2px solid #ffffff;
+    background: rgba(0, 20, 40, 0.8); /* Nền xanh tối */
+    /* ĐỔI MÀU: Viền xanh cyan */
+    border: 2px solid #00e5ff;
     padding: 20px;
     border-radius: 20px;
     font-family: 'Times New Roman', Times, serif;
@@ -127,19 +127,28 @@ body {
     text-align: center;
     color: #ffffff;
     z-index: 100; 
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    /* ĐỔI MÀU: Bóng khung thoại xanh cyan */
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
     opacity: 0;
     animation: textFadeIn 2s ease forwards;
     animation-delay: 1.5s;
 }
 
 .highlight {
-    color: #ffffff; 
+    color: #e0ffff; /* Màu chữ highlight sáng */
     font-weight: bold;
-    text-shadow: 0 0 15px #ffffff; 
+    text-shadow: 0 0 15px #00e5ff; /* Phát sáng xanh */
 }
 
 /* --- ANIMATIONS CHUNG --- */
+
+/* Animation mới cho Cúp: Xuất hiện từ bên TRÁI */
+@keyframes cupAppear {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animation cho Gwen: Xuất hiện từ bên PHẢI */
 @keyframes gwenAppear {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
@@ -160,9 +169,10 @@ body {
     to { opacity: 0.7; }
 }
 
-/* --- NỘI DUNG CARD (GIỮ NGUYÊN) --- */
+/* --- NỘI DUNG CARD (Cập nhật màu viền cho đồng bộ) --- */
 #content-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; justify-content: center; align-items: center; background: rgba(0,0,0,0.9); }
-.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #ffffff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
+/* ĐỔI MÀU: Viền và bóng card sang xanh cyan */
+.card { background: rgba(12, 28, 45, 0.95); border: 2px solid #00e5ff; border-radius: 20px; padding: 30px; box-shadow: 0 0 40px rgba(0, 229, 255, 0.4); max-width: 400px; text-align: center; animation: zoomIn 0.8s ease; }
 .rank-title { color: #ffd700; margin-bottom: 20px; }
 .img-container img { width: 100%; border-radius: 10px; border: 3px solid #ffd700; }
 .message { color: #fff; margin-top: 20px; font-size: 1.1rem; line-height: 1.5; }
