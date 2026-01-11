@@ -2,15 +2,11 @@ function openGift() {
     const intro = document.getElementById('intro-screen');
     const content = document.getElementById('content-screen');
 
-    // 1. Mờ dần màn hình Intro
     intro.style.opacity = '0';
 
     setTimeout(() => {
-        // 2. Ẩn Intro, Hiện Card
         intro.style.display = 'none';
-        content.style.display = 'flex'; // Sử dụng flex để căn giữa card
-
-        // 3. Bắn pháo hoa (Màu: Xanh dương, Xanh lơ, Vàng)
+        content.style.display = 'flex';
         shootConfetti();
     }, 1000);
 }
@@ -20,7 +16,6 @@ function shootConfetti() {
     var end = Date.now() + duration;
 
     (function frame() {
-        // Màu sắc: Xanh đậm, Xanh sáng, Vàng kim
         var colors = ['#00008b', '#00e5ff', '#ffd700']; 
 
         confetti({
