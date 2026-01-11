@@ -12,28 +12,22 @@
 
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
-            <filter id="blue-fire-filter" x="-50%" y="-50%" width="200%" height="200%">
-                <feMorphology operator="dilate" radius="6" in="SourceAlpha" result="expanded"/>
-                
-                <feGaussianBlur stdDeviation="5" in="expanded" result="blurred"/>
-                
-                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.05" numOctaves="3" result="noise">
-                    <animate attributeName="baseFrequency" values="0.01 0.05; 0.01 0.09; 0.01 0.05" dur="3s" repeatCount="indefinite"/>
+            <filter id="ultra-instinct-filter" x="-50%" y="-50%" width="200%" height="200%">
+                <feMorphology operator="dilate" radius="2" in="SourceAlpha" result="whiteBorder"/>
+                <feGaussianBlur stdDeviation="2" in="whiteBorder" result="blurredWhite"/>
+                <feFlood flood-color="#ffffff" flood-opacity="1" result="whiteColor"/>
+                <feComposite in="whiteColor" in2="blurredWhite" operator="in" result="whiteGlow"/>
+
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" result="purpleNoise">
+                    <animate attributeName="baseFrequency" values="0.015;0.02;0.015" dur="4s" repeatCount="indefinite"/>
                 </feTurbulence>
-                
-                <feDisplacementMap in="blurred" in2="noise" scale="25" result="distortedEdge"/>
-                
-                <feFlood flood-color="#00ffff" result="colorCyan"/>
-                <feComposite in="colorCyan" in2="distortedEdge" operator="in" result="fireCyan"/>
-                
-                <feFlood flood-color="#0000ff" result="colorBlue"/>
-                <feComposite in="colorBlue" in2="distortedEdge" operator="in" result="fireBlue"/>
+                <feDisplacementMap in="SourceAlpha" in2="purpleNoise" scale="30" result="displacedAlpha"/>
+                <feGaussianBlur stdDeviation="15" in="displacedAlpha" result="blurredPurple"/>
+                <feFlood flood-color="#8a2be2" flood-opacity="0.8" result="purpleColor"/>
+                <feComposite in="purpleColor" in2="blurredPurple" operator="in" result="purpleAura"/>
 
                 <feMerge>
-                    <feMergeNode in="fireBlue"/>
-                    <feMergeNode in="fireCyan"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
+                    <feMergeNode in="purpleAura"/> <feMergeNode in="whiteGlow"/>  <feMergeNode in="SourceGraphic"/> </feMerge>
             </filter>
         </defs>
     </svg>
@@ -42,7 +36,7 @@
         
         <div class="side-left">
             <div class="cup-container" onclick="openGift()">
-                <img src="cup.png.png" id="world-cup" class="god-mode-aura" alt="Cup CKTG">
+                <img src="cup.png.png" id="world-cup" class="ultra-instinct-aura" alt="Cup CKTG">
                 <p class="click-hint">Đồng ý !</p>
             </div>
         </div>
@@ -54,7 +48,7 @@
             </div>
             
             <div class="gwen-container">
-                <img src="gwen.png" id="gwen-char" class="god-mode-aura" alt="Gwen">
+                <img src="gwen.png" id="gwen-char" class="ultra-instinct-aura" alt="Gwen">
             </div>
         </div>
     </div>
