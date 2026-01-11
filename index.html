@@ -3,35 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Championship Gift</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <title>Chúc Mừng Sinh Nhật - Gwen Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-</head>
-<body>
-    <div class="scene">
-        <div id="intro-screen">
-            
-            <img src="ahri.png.png" class="champion ahri-pose">
-            
-            <div class="trophy-wrapper" onclick="openGift()">
-                <img src="cup.png.png" class="trophy">
-                <div class="aura"></div>
-                <p class="click-hint">CHẠM VÀO CÚP</p>
-            </div>
-        </div>
+    <style>
+        /* --- CÀI ĐẶT CHUNG --- */
+        :root {
+            /* Định nghĩa bộ màu mới của Gwen: Xanh Lam Ngọc */
+            --primary-color: #00ced1; /* Màu xanh ngọc sáng */
+            --secondary-color: #40e0d0; /* Màu xanh turquoise */
+            --bg-dark: #051224; /* Nền xanh tối */
+            --bg-light: #0f354f; /* Nền xanh sáng hơn */
+            --text-glow: #afeeee; /* Màu chữ phát sáng */
+        }
 
-        <div id="content" class="content hidden">
-            <h1 class="title">HAPPY BIRTHDAY!</h1>
-            <div class="media-placeholder">
-                <img src="thumb-1920-1140434.jpg" alt="Birthday Image">
-            </div>
-            <p class="message">
-                Chào mừng nhà vô địch tuổi mới!<br>
-                Chúc bạn gank tem thành công và luôn giữ vững phong độ Thách Đấu nhé!
-            </p>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Nền chuyển sang tông xanh tối phù hợp với Gwen */
+            background: radial-gradient(circle at center, var(--bg-light) 0%, var(--bg-dark) 100%);
+            color: #fff;
+        }
 
+        /* --- MÀN HÌNH INTRO (GWEN & CÚP) --- */
+        #intro-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center;     /* Căn giữa theo chiều dọc */
+            z-index: 100;
+            transition: opacity 1s ease-out; /* Hiệu ứng mờ dần khi tắt */
+        }
+        
+        /* Hình nền vũ trụ (giữ nguyên hoặc đổi nếu muốn) */
+        .bg-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('bg-lol.jpg.jpg'); /* Đảm bảo tên file đúng */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* Giảm độ sáng nền để làm nổi nhân vật */
+            z-index: -1;
+            filter: hue-rotate(180deg); /* Mẹo nhỏ: Đổi tông màu ảnh nền sang xanh */
+        }
+
+        /* NHÂN VẬT GWEN (Bên Phải) */
+        #gwen-char {
+            position: absolute;
+            bottom: 0;
+            right: -50px; /* Bắt đầu hơi ẩn bên phải */
+            height: 85vh; /* Chiều cao Gwen */
+            z-index: 10;
+            /* Hiệu ứng bóng sáng màu xanh ngọc */
+            filter: drop-shadow(0 0 15px var(--secondary-color));
+            animation: slideInGwen 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes slideInGwen {
+            to { right: 5%; } /* Điểm dừng cuối cùng của Gwen */
+        }
+
+        /* CHIẾC CÚP (Bên Trái - Cạnh Gwen) */
+        #cup-wrapper {
+            position: absolute;
+            /* VỊ TRÍ CÚP MỚI: Căn chỉnh để nằm cạnh Gwen */
+            bottom: 20%; 
+            left: 30%;   
+            
+            width: 160px; /* Kích thước cúp */
+            z-index: 20;
+            cursor: pointer;
+            /* Hiệu ứng bay bồng bềnh */
+            animation: floatCup 3s ease-in-out infinite;
+        }
+
+        #world-cup {
+            width: 100%;
+            /* Bóng vàng kim loại giữ nguyên để nổi bật */
+            filter: drop-shadow(0 0 20px #ffd700);
+            transition: transform 0.3s;
+        }
+        
+        #cup-wrapper:hover #world-cup {
+             transform: scale(1.1); /* Phóng to nhẹ khi di chuột vào */
+        }
+
+        /* Hào quang (Aura) quanh cúp - ĐỔI SANG MÀU XANH GWEN */
+        .aura {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%; height: 140%;
+            /* Gradient xanh ngọc */
+            background: radial-gradient(circle, rgba(0, 206, 209, 0.5) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: pulseAuraBlue 2s infinite;
+        }
+
+        @keyframes floatCup {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+
+        @keyframes pulseAuraBlue {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.2; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+        }
+
+        .guide-text {
+            position: absolute;
+            bottom: 10%;
+            font-size: 1.2rem;
+            color: var(--text-glow);
+            text-shadow: 0 0 10px var(--primary-color);
+            animation: blink 2s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* --- MÀN HÌNH NỘI DUNG (THIỆP CHÚC MỪNG) --- */
+        #content-screen {
+            display: none; /* Ẩn đi lúc đầu */
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            justify-content: center;
+            align-items: center;
+            z-index: 90;
+            background: rgba(5, 18, 36, 0.8); /* Nền mờ xanh tối */
+        }
+
+        .card-container {
+            background: linear-gradient(145deg, #1a2a3a, #0a1520);
+            /* Viền phát sáng màu xanh ngọc */
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 30px rgba(0, 206,
