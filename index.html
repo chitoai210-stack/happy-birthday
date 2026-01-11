@@ -12,24 +12,23 @@
 
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
-            <filter id="sjw-shadow-filter" x="-100%" y="-100%" width="300%" height="300%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.02 0.08" numOctaves="4" result="smokeNoise">
-                    <animateTransform attributeName="transform" type="translate" from="0 0" to="0 -100" dur="8s" repeatCount="indefinite"/>
+            <filter id="white-power-aura" x="-100%" y="-100%" width="300%" height="300%">
+                <feMorphology operator="dilate" radius="15" in="SourceAlpha" result="outerBase"/>
+                <feGaussianBlur stdDeviation="10" in="outerBase" result="outerBlurred"/>
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="3" result="outerNoise">
+                    <animate attributeName="baseFrequency" values="0.01 0.02; 0.01 0.04; 0.01 0.02" dur="8s" repeatCount="indefinite"/>
                 </feTurbulence>
+                <feDisplacementMap in="outerBlurred" in2="outerNoise" scale="30" xChannelSelector="R" yChannelSelector="G" result="outerDistorted"/>
+                <feFlood flood-color="#9370db" flood-opacity="0.6" result="outerColor"/>
+                <feComposite in="outerColor" in2="outerDistorted" operator="in" result="finalOuterAura"/>
 
-                <feMorphology operator="dilate" radius="15" in="SourceAlpha" result="expandedAlpha"/>
-                
-                <feDisplacementMap in="expandedAlpha" in2="smokeNoise" scale="40" xChannelSelector="R" yChannelSelector="G" result="distortedShadow"/>
-                
-                <feGaussianBlur stdDeviation="10" in="distortedShadow" result="blurredShadow"/>
-
-                <feFlood flood-color="#1a0033" flood-opacity="0.95" result="shadowColor"/>
-                <feComposite in="shadowColor" in2="blurredShadow" operator="in" result="finalShadowBase"/>
-
-                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#4d4dff" flood-opacity="1" in="finalShadowBase" result="electricEdge"/>
+                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="innerBase"/>
+                <feGaussianBlur stdDeviation="3" in="innerBase" result="innerBlurred"/>
+                <feFlood flood-color="#ffffff" flood-opacity="1.0" result="whiteColor"/>
+                <feComposite in="whiteColor" in2="innerBlurred" operator="in" result="finalWhiteCore"/>
 
                 <feMerge>
-                    <feMergeNode in="electricEdge"/>   <feMergeNode in="finalShadowBase"/> <feMergeNode in="SourceGraphic"/>   </feMerge>
+                    <feMergeNode in="finalOuterAura"/> <feMergeNode in="finalWhiteCore"/> <feMergeNode in="SourceGraphic"/>  </feMerge>
             </filter>
         </defs>
     </svg>
@@ -38,7 +37,7 @@
         
         <div class="side-left">
             <div class="cup-container" onclick="openGift()">
-                <img src="cup.png.png" id="world-cup" class="sjw-aura-effect" alt="Cup CKTG">
+                <img src="cup.png.png" id="world-cup" class="white-aura-effect" alt="Cup CKTG">
                 <p class="click-hint">ĐỒNG Ý !</p>
             </div>
         </div>
@@ -50,7 +49,7 @@
             </div>
             
             <div class="gwen-container">
-                <img src="gwen.png" id="gwen-char" class="sjw-aura-effect" alt="Gwen">
+                <img src="gwen.png" id="gwen-char" class="white-aura-effect" alt="Gwen">
             </div>
         </div>
     </div>
