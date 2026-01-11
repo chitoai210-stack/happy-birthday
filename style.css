@@ -34,12 +34,12 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG LỬA CHÁY (MỚI) --- */
-.burning-aura-effect {
-    /* Áp dụng bộ lọc SVG để tạo hiệu ứng lửa gồ ghề */
-    filter: url('#burning-fire-filter') drop-shadow(0 0 15px #00e5ff);
+/* --- 3. CLASS HIỆU ỨNG LỬA GOKU (MỚI) --- */
+.goku-fire-effect {
+    /* Áp dụng bộ lọc SVG tạo viền lửa */
+    filter: url('#blue-fire-aura') drop-shadow(0 0 10px #00bfff);
     
-    /* Animation rung nhẹ để tăng cảm giác năng lượng */
+    /* Animation rung nhẹ */
     animation: powerSurge 3s infinite ease-in-out;
 }
 
@@ -55,7 +55,6 @@ body {
 .cup-container {
     position: relative;
     cursor: pointer;
-    /* Cúp bay nhẹ, hiệu ứng lửa đã có trong class .burning-aura-effect */
     animation: floatCup 4s ease-in-out infinite; 
 }
 
@@ -76,11 +75,10 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    /* Chữ phát sáng xanh */
     text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
 }
 
-/* --- 5. GWEN (ĐÃ CHỈNH SỬA KÍCH THƯỚC) --- */
+/* --- 5. GWEN --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
@@ -91,27 +89,25 @@ body {
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Đảm bảo Gwen đứng ở đáy container */
-    height: 100%; /* Chiều cao container */
+    align-items: flex-end;
+    height: 100%;
 }
 
 #gwen-char {
-    /* GIẢM KÍCH THƯỚC GWEN (Từ 70vh xuống 55vh) */
     height: 55vh; 
     width: auto;
     position: relative;
     z-index: 10; 
     opacity: 0; 
-    /* Animation xuất hiện và hiệu ứng lửa */
     animation: 
         gwenAppear 2s ease-out forwards, 
-        powerSurge 3s infinite ease-in-out 2s; /* Bắt đầu rung sau khi hiện xong */
+        powerSurge 3s infinite ease-in-out 2s;
 }
 
 /* --- 6. LỜI THOẠI --- */
 .dialogue-box {
     position: absolute;
-    top: 15%; /* Điều chỉnh lại vị trí cho phù hợp với Gwen nhỏ hơn */
+    top: 15%;
     left: 50%;
     transform: translateX(-50%); 
     
