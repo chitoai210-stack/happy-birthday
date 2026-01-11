@@ -34,20 +34,18 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS AURA ULTRA INSTINCT (BẢN NĂNG VÔ CỰC) --- */
-.ultra-instinct-aura {
-    /* SVG Filter + Drop Shadow kép (Trắng & Tím) */
-    filter: url('#ultra-instinct-filter') 
-            drop-shadow(0 0 10px #ffffff) /* Viền trắng sáng */
-            drop-shadow(0 0 40px #8a2be2); /* Khí tím lan tỏa */
+/* --- 3. CLASS HIỆU ỨNG LỬA CHÁY (MỚI) --- */
+.burning-aura-effect {
+    /* Áp dụng bộ lọc SVG để tạo hiệu ứng lửa gồ ghề */
+    filter: url('#burning-fire-filter') drop-shadow(0 0 15px #00e5ff);
     
-    /* Animation rung mạnh mẽ */
-    animation: powerSurge 4s infinite ease-in-out;
+    /* Animation rung nhẹ để tăng cảm giác năng lượng */
+    animation: powerSurge 3s infinite ease-in-out;
 }
 
 @keyframes powerSurge {
     0% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-8px) scale(1.02); } 
+    50% { transform: translateY(-5px) scale(1.01); }
     100% { transform: translateY(0) scale(1); }
 }
 
@@ -57,6 +55,7 @@ body {
 .cup-container {
     position: relative;
     cursor: pointer;
+    /* Cúp bay nhẹ, hiệu ứng lửa đã có trong class .burning-aura-effect */
     animation: floatCup 4s ease-in-out infinite; 
 }
 
@@ -77,11 +76,11 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     animation: blink 0.8s infinite alternate;
-    /* Chữ phát sáng trắng tím */
-    text-shadow: 0 0 10px #ffffff, 0 0 20px #8a2be2;
+    /* Chữ phát sáng xanh */
+    text-shadow: 0 0 10px #00e5ff, 0 0 20px #00bfff;
 }
 
-/* --- 5. GWEN --- */
+/* --- 5. GWEN (ĐÃ CHỈNH SỬA KÍCH THƯỚC) --- */
 .side-right {
     align-items: flex-end; 
     overflow: visible; 
@@ -92,23 +91,27 @@ body {
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: flex-end; /* Đảm bảo Gwen đứng ở đáy container */
+    height: 100%; /* Chiều cao container */
 }
 
 #gwen-char {
-    height: 70vh; 
+    /* GIẢM KÍCH THƯỚC GWEN (Từ 70vh xuống 55vh) */
+    height: 55vh; 
     width: auto;
     position: relative;
     z-index: 10; 
     opacity: 0; 
+    /* Animation xuất hiện và hiệu ứng lửa */
     animation: 
         gwenAppear 2s ease-out forwards, 
-        powerSurge 4s infinite ease-in-out 2s; 
+        powerSurge 3s infinite ease-in-out 2s; /* Bắt đầu rung sau khi hiện xong */
 }
 
 /* --- 6. LỜI THOẠI --- */
 .dialogue-box {
     position: absolute;
-    top: 5%; 
+    top: 15%; /* Điều chỉnh lại vị trí cho phù hợp với Gwen nhỏ hơn */
     left: 50%;
     transform: translateX(-50%); 
     
