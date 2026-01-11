@@ -34,12 +34,12 @@ body {
     align-items: center;
 }
 
-/* --- 3. CLASS HIỆU ỨNG GOKU VÔ CỰC (MỚI) --- */
-.mui-aura-effect {
-    /* Áp dụng bộ lọc SVG 2 lớp (Bạc trong + Tím ngoài rộng) */
-    filter: url('#ultra-instinct-wide-aura') 
-            /* Thêm drop-shadow CSS để tăng độ rực cho lớp khí tím ngoài cùng */
-            drop-shadow(0 0 20px rgba(138, 43, 226, 0.5));
+/* --- 3. CLASS HIỆU ỨNG CỰC QUANG (MỚI) --- */
+.aurora-effect {
+    /* Áp dụng bộ lọc SVG Cực quang */
+    filter: url('#aurora-filter') 
+            /* Thêm bóng đổ tím nhẹ bên ngoài để tăng độ lan tỏa */
+            drop-shadow(0 0 30px rgba(138, 43, 226, 0.4));
     
     /* Animation rung nhẹ */
     animation: powerSurge 3s infinite ease-in-out;
