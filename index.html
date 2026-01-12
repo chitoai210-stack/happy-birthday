@@ -28,7 +28,12 @@
         </defs>
     </svg>
 
-    <div id="start-overlay">
+    <div id="device-warning">
+        <p>Hãy đảm bảo thiết bị của bạn đang dùng để xem món quà này là thiết bị tốt nhất<br>
+        (do thiết kế trên Laptop, nên nếu dùng Laptop để xem thì sẽ đong đầy cảm xúc nhất ! Thân gửi đến bạn!)</p>
+    </div>
+
+    <div id="start-overlay" style="display: none;">
         <p>Nhấp vào đây để bắt đầu...</p>
     </div>
 
@@ -39,20 +44,17 @@
     </div>
 
     <div id="intro-screen" style="display: none;">
-        <div class="side-left">
-            <div class="cup-container" onclick="openGift()">
-                <img src="cup.png.png" id="world-cup" class="white-aura-effect" alt="Cup CKTG">
-                <p class="click-hint">ĐỒNG Ý !</p>
-            </div>
+        <div class="dialogue-box">
+            <span id="dialogue-text"></span>
         </div>
 
-        <div class="side-right">
-            <div class="dialogue-box">
-                <span id="dialogue-text"></span>
-            </div>
-            <div class="gwen-container">
-                <img src="gwen.png" id="gwen-char" class="white-aura-effect" alt="Gwen">
-            </div>
+        <div class="gwen-wrapper">
+            <img src="gwen.png" id="gwen-char" class="white-aura-effect" alt="Gwen">
+        </div>
+
+        <div class="cup-wrapper" onclick="openGift()">
+            <img src="cup.png.png" id="world-cup" class="white-aura-effect" alt="Cup CKTG">
+            <p class="click-hint">ĐỒNG Ý !</p>
         </div>
     </div>
 
@@ -79,7 +81,6 @@
 
     <div id="final-screen" style="display: none;">
         <img src="kp.jpg" id="kp-img" alt="Ket Qua">
-        
         <div id="final-fade-overlay"></div>
     </div>
 
