@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
+    // Preload âm thanh click để đảm bảo không bị trễ
+    const clickSound = document.getElementById('sound-click');
+    clickSound.load();
+
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
         runCountdownSequence();
@@ -29,21 +33,18 @@ function runCountdownSequence() {
         count--;
         
         if (count > 0) {
-            // Còn đếm: hiện số và kêu
             countdownElement.textContent = count;
             playTick(); 
         } 
         else if (count === 0) {
-            // Hết giờ: hiện số 0, NGẮT NGAY âm thanh
             countdownElement.textContent = count;
             
-            // --- FIX QUAN TRỌNG: Ngắt tiếng beep ngay lập tức ---
+            // Ngắt tiếng beep ngay lập tức
             beepSound.pause(); 
             beepSound.currentTime = 0;
             
             clearInterval(interval);
             
-            // Chờ 1 giây ở số 0 rồi chuyển cảnh
             setTimeout(() => {
                 transitionToIntro();
             }, 1000);
@@ -70,17 +71,16 @@ function transitionToIntro() {
         
         // Kịch bản Lời thoại
         setTimeout(() => {
-            // Thoại 1
-            dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen";
+            // Thoại 1 (Thêm dấu !)
+            dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen!";
             dialogueBox.classList.add('show'); 
 
-            // Đổi sang Thoại 2
             setTimeout(() => {
                 dialogueBox.classList.remove('show'); 
 
                 setTimeout(() => {
-                    // Thoại 2
-                    dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi";
+                    // Thoại 2 (Thêm dấu !)
+                    dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!";
                     dialogueBox.classList.add('show'); 
                 }, 500);
 
@@ -92,17 +92,23 @@ function transitionToIntro() {
 }
 
 function openGift() {
+    // Lấy âm thanh
+    const clickSound = document.getElementById('sound-click');
+    const cuteMusic = document.getElementById('sound-cute');
+    
+    // --- FIX QUAN TRỌNG: CLICK SOUND ---
+    // Đặt lại thời gian về 0 và phát ngay lập tức ở dòng đầu tiên của hàm
+    clickSound.currentTime = 0;
+    clickSound.play();
+    
+    // Giảm nhạc nền
+    cuteMusic.pause();
+
     const intro = document.getElementById('intro-screen');
     const content = document.getElementById('content-screen');
     const whiteOverlay = document.getElementById('white-overlay');
     const trollContainer = document.getElementById('troll-container');
     const video = document.getElementById('gojo-video');
-    
-    const clickSound = document.getElementById('sound-click');
-    const cuteMusic = document.getElementById('sound-cute');
-
-    clickSound.play();
-    cuteMusic.pause();
 
     whiteOverlay.style.opacity = '1';
 
@@ -114,7 +120,10 @@ function openGift() {
             trollContainer.style.display = 'none';
             content.style.display = 'flex';
             whiteOverlay.style.opacity = '0';
+            
             video.play();
+            // Kích hoạt hàm theo dõi phụ đề
+            handleVideoSubtitles(video);
 
             setTimeout(() => {
                 whiteOverlay.style.display = 'none';
@@ -123,4 +132,38 @@ function openGift() {
         }, 3500); 
 
     }, 500); 
+}
+
+// --- HÀM XỬ LÝ PHỤ ĐỀ VIDEO (MỚI) ---
+function handleVideoSubtitles(video) {
+    const subtitleDiv = document.getElementById('video-subtitles');
+    
+    // BẠN CẦN CHỈNH SỐ GIÂY Ở ĐÂY CHO KHỚP VỚI VIDEO CỦA BẠN
+    const subtitles = [
+        { 
+            start: 2.0, // Bắt đầu hiện ở giây thứ 2
+            end: 4.5,   // Kết thúc ở giây 4.5
+            text: "Hư Thức, TỬ !" 
+        },
+        { 
+            start: 5.0, // Bắt đầu hiện ở giây thứ 5
+            end: 8.0,   // Kết thúc ở giây 8
+            // Thêm dòng just kidding nhỏ bên dưới
+            text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" 
+        }
+    ];
+
+    video.addEventListener('timeupdate', () => {
+        const currentTime = video.currentTime;
+        let activeSubtitle = "";
+
+        // Kiểm tra xem thời gian hiện tại có nằm trong khoảng nào không
+        subtitles.forEach(sub => {
+            if (currentTime >= sub.start && currentTime <= sub.end) {
+                activeSubtitle = sub.text;
+            }
+        });
+
+        subtitleDiv.innerHTML = activeSubtitle;
+    });
 }
