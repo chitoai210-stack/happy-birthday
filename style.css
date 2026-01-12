@@ -118,7 +118,7 @@ video {
     width: 100%; height: 100%; object-fit: cover;
 }
 
-/* --- BƯỚC 6: FINAL SCREEN (ĐÃ SỬA) --- */
+/* --- BƯỚC 6: FINAL SCREEN (ĐÃ SỬA TÊN FILE NỀN) --- */
 #final-screen {
     display: none;
     position: fixed; top: 0; left: 0; 
@@ -126,9 +126,8 @@ video {
     z-index: 70;
     overflow: hidden;
     
-    /* GỌI ẢNH NỀN TẠI ĐÂY */
-    /* Hãy chắc chắn file ảnh tên là yourname1.jpg và nằm cùng thư mục */
-    background-image: url('yourname1.jpg');
+    /* GỌI ẢNH NỀN TẠI ĐÂY - ĐỔI THÀNH urname.jpg */
+    background-image: url('urname.jpg');
     background-size: cover; /* Quan trọng: Phủ kín màn hình */
     background-position: center center; /* Căn giữa ảnh */
     background-repeat: no-repeat;
