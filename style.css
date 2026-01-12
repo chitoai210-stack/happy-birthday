@@ -118,23 +118,20 @@ video {
     width: 100%; height: 100%; object-fit: cover;
 }
 
-/* --- BƯỚC 6: FINAL SCREEN (ĐÃ CẬP NHẬT HÌNH NỀN) --- */
+/* --- BƯỚC 6: FINAL SCREEN (ĐÃ SỬA) --- */
 #final-screen {
     display: none;
     position: fixed; top: 0; left: 0; 
     width: 100vw; height: 100vh;
     z-index: 70;
     overflow: hidden;
-    background: black; /* Màu nền dự phòng */
-}
-
-/* CSS cho hình nền yourname1.jpg để full màn hình */
-#final-bg-img {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; /* Quan trọng: lấp đầy màn hình không bị méo */
-    z-index: 1; /* Nằm dưới cùng */
+    
+    /* GỌI ẢNH NỀN TẠI ĐÂY */
+    /* Hãy chắc chắn file ảnh tên là yourname1.jpg và nằm cùng thư mục */
+    background-image: url('yourname1.jpg');
+    background-size: cover; /* Quan trọng: Phủ kín màn hình */
+    background-position: center center; /* Căn giữa ảnh */
+    background-repeat: no-repeat;
 }
 
 #kp-img {
@@ -143,8 +140,10 @@ video {
     transform: translate(-50%, -50%);
     height: 60vh; 
     width: auto;
-    z-index: 10; /* Nằm trên hình nền */
+    z-index: 10;
     opacity: 0; 
+
+    /* Giữ hiệu ứng bóng cho ảnh KP */
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 12px;
 }
