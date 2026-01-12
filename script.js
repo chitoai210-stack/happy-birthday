@@ -1,59 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Lưu ý: Một số trình duyệt chặn tự phát âm thanh nếu người dùng chưa tương tác.
-    // Nếu beep không kêu ngay lập tức, hãy click chuột vào màn hình 1 cái.
-    startCountdown();
+    // Bắt sự kiện click vào màn hình đen ban đầu để mở khóa âm thanh
+    const startOverlay = document.getElementById('start-overlay');
+    
+    startOverlay.addEventListener('click', () => {
+        // Ẩn màn hình Start
+        startOverlay.style.display = 'none';
+        // Bắt đầu đếm ngược
+        runCountdownSequence();
+    });
 });
 
-function startCountdown() {
-    let timeLeft = 5;
-    const countdownElement = document.getElementById('countdown-number');
+function runCountdownSequence() {
     const countdownScreen = document.getElementById('countdown-screen');
-    const introScreen = document.getElementById('intro-screen');
-    
-    // Âm thanh
+    const countdownElement = document.getElementById('countdown-number');
     const beepSound = document.getElementById('sound-beep');
-    const cuteMusic = document.getElementById('sound-cute');
-    cuteMusic.volume = 0.5; // Chỉnh nhạc nền vừa phải
 
-    // Hàm phát tiếng beep ngắn gọn
-    const playBeep = () => {
-        beepSound.currentTime = 0; // Tua về đầu để phát ngay lập tức
-        beepSound.play().catch(e => console.log("Cần tương tác để phát beep"));
+    // Hiển thị màn hình đếm ngược
+    countdownScreen.style.display = 'flex';
+
+    // Hàm phát tiếng beep (Cắt âm thanh để chỉ lấy tiếng "bíp" đầu tiên)
+    const playTick = () => {
+        beepSound.pause();
+        beepSound.currentTime = 0; // Tua lại từ đầu
+        beepSound.play().catch(e => console.log("Lỗi âm thanh:", e));
     };
 
-    // Phát beep đầu tiên ngay khi vào (số 5)
-    playBeep();
+    let count = 5;
 
-    const timerId = setInterval(() => {
-        timeLeft--;
+    // --- NHỊP ĐẦU TIÊN (SỐ 5) ---
+    countdownElement.textContent = count;
+    playTick(); // Bíp số 5 ngay lập tức
+
+    // --- VÒNG LẶP CHO CÁC SỐ CÒN LẠI (4,3,2,1,0) ---
+    const interval = setInterval(() => {
+        count--;
         
-        if (timeLeft > 0) {
-            countdownElement.textContent = timeLeft;
-            playBeep(); // Phát tiếng beep mỗi khi nhảy số
-        } else {
-            // Khi về 0
-            playBeep();
-            clearInterval(timerId);
-            countdownElement.textContent = "0";
-
-            setTimeout(() => {
-                // 1. Ẩn màn đếm ngược
-                countdownScreen.style.display = 'none';
-                
-                // 2. Hiện màn Intro
-                introScreen.style.display = 'flex';
-                
-                // 3. Phát nhạc nền Cute
-                cuteMusic.play().catch(e => console.log("Cần tương tác để phát nhạc"));
-                
-                // 4. Kích hoạt Animation
-                setTimeout(() => {
-                     introScreen.classList.add('start-animations');
-                }, 100);
-
-            }, 500);
+        if (count >= 0) {
+            // Cập nhật số và kêu Bíp
+            countdownElement.textContent = count;
+            playTick(); 
         }
-    }, 1000);
+
+        if (count === 0) {
+            // Dừng đếm ngược
+            clearInterval(interval);
+            
+            // Chờ 1 giây ở số 0 rồi chuyển cảnh
+            setTimeout(() => {
+                transitionToIntro();
+            }, 1000);
+        }
+    }, 1000); // Mỗi 1 giây (1000ms)
+}
+
+function transitionToIntro() {
+    const countdownScreen = document.getElementById('countdown-screen');
+    const introScreen = document.getElementById('intro-screen');
+    const cuteMusic = document.getElementById('sound-cute');
+
+    // Ẩn đếm ngược, hiện Intro
+    countdownScreen.style.display = 'none';
+    introScreen.style.display = 'flex';
+
+    // Phát nhạc nền Gwen
+    cuteMusic.volume = 0.5;
+    cuteMusic.currentTime = 0;
+    cuteMusic.play();
+
+    // Kích hoạt animation trượt vào
+    setTimeout(() => {
+        introScreen.classList.add('start-animations');
+    }, 100);
 }
 
 function openGift() {
@@ -63,52 +80,43 @@ function openGift() {
     const trollContainer = document.getElementById('troll-container');
     const video = document.getElementById('gojo-video');
     
-    // Âm thanh
     const clickSound = document.getElementById('sound-click');
     const cuteMusic = document.getElementById('sound-cute');
 
-    // 1. Hiệu ứng Click & Tắt nhạc nền
+    // 1. Âm thanh Click & Tắt nhạc nền
     clickSound.play();
-    
-    // Fade out nhạc nền từ từ cho mượt
-    let fadeAudio = setInterval(() => {
-        if (cuteMusic.volume > 0.05) {
-            cuteMusic.volume -= 0.05;
-        } else {
-            clearInterval(fadeAudio);
-            cuteMusic.pause();
-        }
-    }, 50);
+    cuteMusic.pause();
 
-    // 2. Màn hình trắng xóa
+    // 2. Bật màn trắng (Flash)
     whiteOverlay.style.opacity = '1';
 
-    // 3. Logic hiển thị Troll -> Video
+    // 3. LOGIC HIỂN THỊ TROLL -> VIDEO
+    // Đợi 0.5s cho màn trắng hiện hẳn
     setTimeout(() => {
-        // Hiện dòng chữ Troll trên nền trắng
+        // Hiện chữ Troll
         trollContainer.style.display = 'flex';
         
-        // Giữ dòng chữ Troll trong khoảng 3 giây để đọc
+        // Đợi 3.5s để người xem đọc chữ "Muốn lấy à..."
         setTimeout(() => {
-            // Ẩn tất cả Intro và Troll
+            // Ẩn Intro và Troll đi
             intro.style.display = 'none';
             trollContainer.style.display = 'none';
             
-            // Hiện màn hình Video
+            // Hiện Video
             content.style.display = 'flex';
             
             // Tắt màn trắng từ từ
             whiteOverlay.style.opacity = '0';
             
-            // Chơi Video
+            // Phát Video
             video.play();
 
-            // Dọn dẹp màn trắng
+            // Dọn dẹp overlay
             setTimeout(() => {
                 whiteOverlay.style.display = 'none';
             }, 500);
 
-        }, 3000); // Thời gian đọc chữ Troll (3s)
+        }, 3500); // Thời gian đọc chữ troll
 
-    }, 800); // Thời gian chờ màn hình trắng hiện lên hẳn (0.8s)
+    }, 500); // Thời gian chờ flash trắng
 }
