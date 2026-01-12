@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Hiện cảnh báo ngay khi load
+    const deviceWarning = document.getElementById('device-warning');
     const startOverlay = document.getElementById('start-overlay');
+    
+    // Đợi 12 giây đọc thông báo
+    setTimeout(() => {
+        deviceWarning.style.display = 'none'; // Ẩn cảnh báo
+        startOverlay.style.display = 'flex';  // Hiện nút Start
+    }, 12000); // 12000ms = 12 giây
+
+    // Click Start
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
         runCountdownSequence();
@@ -43,13 +53,19 @@ function transitionToIntro() {
     const cuteMusic = document.getElementById('sound-cute');
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
+    
+    // Lấy Element để animation
+    const gwenWrapper = document.querySelector('.gwen-wrapper');
+    const cupWrapper = document.querySelector('.cup-wrapper');
 
     countdownScreen.style.display = 'none';
-    introScreen.style.display = 'flex';
+    introScreen.style.display = 'flex'; // Dùng block vì ta position absolute con
     cuteMusic.volume = 0.5; cuteMusic.currentTime = 0; cuteMusic.play();
 
     setTimeout(() => {
-        introScreen.classList.add('start-animations');
+        introScreen.classList.add('start-animations'); // Gwen hiện ra ở giữa
+        
+        // --- CHUỖI HỘI THOẠI ---
         setTimeout(() => {
             dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen!";
             dialogueBox.classList.add('show'); 
@@ -68,6 +84,16 @@ function transitionToIntro() {
                                 setTimeout(() => {
                                     dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!";
                                     dialogueBox.classList.add('show'); 
+                                    
+                                    // --- LOGIC MỚI: SAU KHI THOẠI HIỆN, DI CHUYỂN GWEN VÀ HIỆN CÚP ---
+                                    setTimeout(() => {
+                                        // 1. Gwen trượt sang trái
+                                        gwenWrapper.classList.add('move-left');
+                                        
+                                        // 2. Cúp hiện ra bên phải
+                                        cupWrapper.classList.add('show-cup');
+                                    }, 1000); // Đợi 1s sau khi thoại hiện lên thì di chuyển
+
                                 }, 500); 
                             }, 3000); 
                         }, 500); 
@@ -87,8 +113,6 @@ function openGift() {
     const whiteOverlay = document.getElementById('white-overlay');
     const trollContainer = document.getElementById('troll-container');
     const video = document.getElementById('gojo-video');
-    
-    // Elements cho phần kết thúc
     const explosionScreen = document.getElementById('explosion-screen');
     const notungVideo = document.getElementById('notung-video');
     const explosionSound = document.getElementById('sound-explosion');
@@ -109,39 +133,21 @@ function openGift() {
             video.play();
             handleVideoSubtitles(video);
 
-            // KHI GOJO VIDEO KẾT THÚC
             video.addEventListener('ended', () => {
-                content.style.display = 'none'; // Ẩn Gojo
-                explosionScreen.style.display = 'block'; // Hiện màn hình nổ
-                
-                // Phát nổ
-                notungVideo.currentTime = 0;
-                notungVideo.play();
-                explosionSound.currentTime = 0;
-                explosionSound.play();
+                content.style.display = 'none'; 
+                explosionScreen.style.display = 'block'; 
+                notungVideo.currentTime = 0; notungVideo.play();
+                explosionSound.currentTime = 0; explosionSound.play();
 
-                // KHI VIDEO NỔ KẾT THÚC
                 notungVideo.addEventListener('ended', () => {
                     explosionScreen.style.display = 'none'; 
                     finalScreen.style.display = 'block'; 
-                    
-                    // Fade In màn hình cuối
-                    setTimeout(() => {
-                        fadeOverlay.style.opacity = '0';
-                    }, 50);
-
-                    // Chạy ảnh KP
-                    setTimeout(() => {
-                        kpImg.classList.add('move-left');
-                    }, 500);
+                    setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
+                    setTimeout(() => { kpImg.classList.add('move-left'); }, 500);
                 }, { once: true });
-
             }, { once: true });
 
-            setTimeout(() => {
-                whiteOverlay.style.display = 'none';
-            }, 500);
-
+            setTimeout(() => { whiteOverlay.style.display = 'none'; }, 500);
         }, 3500); 
     }, 500); 
 }
@@ -149,8 +155,8 @@ function openGift() {
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     const subtitles = [
-        { start: 3.5, end: 5.0, text: "Hư Thức, TỬ !" },
-        { start: 7.5, end: 9.5, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        { start: 2.0, end: 4.5, text: "Hư Thức, TỬ !" },
+        { start: 5.0, end: 8.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
