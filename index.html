@@ -11,7 +11,6 @@
 
     <audio id="sound-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="sound-cute" src="cute.mp3" loop preload="auto"></audio>
-    <audio id="sound-click" src="click.mp3" preload="auto"></audio>
 
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
@@ -64,11 +63,15 @@
     <div id="content-screen">
         <div class="video-container">
             <video id="gojo-video" playsinline>
-                <source src="gojo.mp4" type="video/mp4">
+                <source src="gojo3.mp4" type="video/mp4">
                 Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
             <div id="video-subtitles"></div>
         </div>
+    </div>
+
+    <div id="end-screen">
+        <div class="purple-boom"></div>
     </div>
 
     <script src="script.js"></script>
