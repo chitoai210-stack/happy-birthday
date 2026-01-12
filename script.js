@@ -20,25 +20,19 @@ function runCountdownSequence() {
     };
 
     let count = 5;
-
     countdownElement.textContent = count;
     playTick();
 
     const interval = setInterval(() => {
         count--;
-        
         if (count > 0) {
             countdownElement.textContent = count;
             playTick(); 
-        } 
-        else if (count === 0) {
+        } else if (count === 0) {
             countdownElement.textContent = count;
-            beepSound.pause(); 
-            beepSound.currentTime = 0;
+            beepSound.pause(); beepSound.currentTime = 0;
             clearInterval(interval);
-            setTimeout(() => {
-                transitionToIntro();
-            }, 1000);
+            setTimeout(() => { transitionToIntro(); }, 1000);
         }
     }, 1000);
 }
@@ -52,57 +46,35 @@ function transitionToIntro() {
 
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
-
-    cuteMusic.volume = 0.5;
-    cuteMusic.currentTime = 0;
-    cuteMusic.play();
+    cuteMusic.volume = 0.5; cuteMusic.currentTime = 0; cuteMusic.play();
 
     setTimeout(() => {
         introScreen.classList.add('start-animations');
-        
-        // --- CHUỖI HỘI THOẠI 4 BƯỚC ---
         setTimeout(() => {
-            // Câu 1
             dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen!";
             dialogueBox.classList.add('show'); 
-
             setTimeout(() => {
                 dialogueBox.classList.remove('show'); 
-
                 setTimeout(() => {
-                    // Câu 2 (MỚI)
                     dialogueText.innerHTML = "Dẫu cho có nhiều chuyện vui buồn";
                     dialogueBox.classList.add('show'); 
-
                     setTimeout(() => {
                         dialogueBox.classList.remove('show'); 
-
                         setTimeout(() => {
-                            // Câu 3 (MỚI)
                             dialogueText.innerHTML = "thì hôm nay vẫn là ngày tuyệt vời của bạn";
                             dialogueBox.classList.add('show'); 
-
                             setTimeout(() => {
                                 dialogueBox.classList.remove('show'); 
-
                                 setTimeout(() => {
-                                    // Câu 4 (CUỐI)
                                     dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!";
                                     dialogueBox.classList.add('show'); 
-                                }, 500); // Chờ hiện câu 4
-
-                            }, 3000); // Đọc câu 3
-
-                        }, 500); // Chờ hiện câu 3
-
-                    }, 3000); // Đọc câu 2
-
-                }, 500); // Chờ hiện câu 2
-
-            }, 3000); // Đọc câu 1
-
-        }, 1500); // Chờ Gwen xuất hiện
-
+                                }, 500); 
+                            }, 3000); 
+                        }, 500); 
+                    }, 3000); 
+                }, 500); 
+            }, 3000); 
+        }, 1500); 
     }, 100);
 }
 
@@ -115,13 +87,19 @@ function openGift() {
     const whiteOverlay = document.getElementById('white-overlay');
     const trollContainer = document.getElementById('troll-container');
     const video = document.getElementById('gojo-video');
-    const endScreen = document.getElementById('end-screen');
+    
+    // Elements cho phần kết thúc
+    const explosionScreen = document.getElementById('explosion-screen');
+    const notungVideo = document.getElementById('notung-video');
+    const explosionSound = document.getElementById('sound-explosion');
+    const finalScreen = document.getElementById('final-screen');
+    const kpImg = document.getElementById('kp-img');
+    const fadeOverlay = document.getElementById('final-fade-overlay');
 
     whiteOverlay.style.opacity = '1';
 
     setTimeout(() => {
         trollContainer.style.display = 'flex';
-        
         setTimeout(() => {
             intro.style.display = 'none';
             trollContainer.style.display = 'none';
@@ -131,13 +109,33 @@ function openGift() {
             video.play();
             handleVideoSubtitles(video);
 
-            // KHI VIDEO KẾT THÚC
+            // --- SỰ KIỆN: KHI GOJO VIDEO KẾT THÚC ---
             video.addEventListener('ended', () => {
-                content.style.display = 'none';
-                endScreen.style.display = 'block'; // Dùng block để chứa các phần tử con
+                content.style.display = 'none'; // Ẩn Gojo
+                explosionScreen.style.display = 'block'; // Hiện màn hình nổ
                 
-                // Kích hoạt hiệu ứng nổ tung
-                triggerPurpleBoom(endScreen);
+                // Phát video nổ và âm thanh nổ
+                notungVideo.currentTime = 0;
+                notungVideo.play();
+                explosionSound.currentTime = 0;
+                explosionSound.play();
+
+                // --- SỰ KIỆN: KHI VIDEO NỔ KẾT THÚC ---
+                notungVideo.addEventListener('ended', () => {
+                    explosionScreen.style.display = 'none'; // Ẩn màn hình nổ
+                    finalScreen.style.display = 'block'; // Hiện màn hình cuối
+                    
+                    // Hiệu ứng Fade In (Làm mờ lớp phủ đen)
+                    // setTimeout nhỏ để browser kịp render display:block
+                    setTimeout(() => {
+                        fadeOverlay.style.opacity = '0'; // Lớp đen biến mất -> Lộ hình nền
+                    }, 50);
+
+                    // Animation KP chạy sang trái
+                    setTimeout(() => {
+                        kpImg.classList.add('move-left');
+                    }, 500); // Chờ 0.5s sau khi nền hiện rồi mới chạy ảnh
+                }, { once: true });
 
             }, { once: true });
 
@@ -146,72 +144,15 @@ function openGift() {
             }, 500);
 
         }, 3500); 
-
     }, 500); 
 }
 
-// --- HÀM TẠO HIỆU ỨNG NỔ TUNG (STARBURST) ---
-function triggerPurpleBoom(container) {
-    // 1. Tạo các tia năng lượng (Spikes)
-    const spikeCount = 40;
-    for (let i = 0; i < spikeCount; i++) {
-        const spike = document.createElement('div');
-        spike.classList.add('boom-spike');
-        
-        // Random góc xoay
-        const angle = Math.random() * 360;
-        // Random độ dài
-        const height = 100 + Math.random() * 300; // 100px -> 400px
-        const width = 2 + Math.random() * 4; // 2px -> 6px
-        
-        spike.style.setProperty('--angle', `${angle}deg`);
-        spike.style.height = `${height}px`;
-        spike.style.width = `${width}px`;
-        
-        // Animation
-        spike.style.animation = `spikeExplode 0.8s ease-out forwards`;
-        
-        container.appendChild(spike);
-    }
-
-    // 2. Tạo các hạt bụi nổ (Particles)
-    const particleCount = 60;
-    for (let i = 0; i < particleCount; i++) {
-        const p = document.createElement('div');
-        p.classList.add('boom-particle');
-        
-        // Random vị trí bay đến
-        const angle = Math.random() * 360 * (Math.PI / 180); // Radian
-        const distance = 200 + Math.random() * 500; // Bay xa từ 200px đến 700px
-        const tx = Math.cos(angle) * distance;
-        const ty = Math.sin(angle) * distance;
-        
-        // Random kích thước hạt
-        const size = 5 + Math.random() * 10;
-        
-        p.style.width = `${size}px`;
-        p.style.height = `${size}px`;
-        p.style.setProperty('--tx', `${tx}px`);
-        p.style.setProperty('--ty', `${ty}px`);
-        
-        // Animation ngẫu nhiên tốc độ
-        const duration = 0.5 + Math.random() * 0.5;
-        p.style.animation = `particleFly ${duration}s ease-out forwards`;
-        
-        container.appendChild(p);
-    }
-}
-
-// --- SUBTITLES ---
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
-    
-    // Bạn nhớ chỉnh lại số giây cho khớp file video nhé
     const subtitles = [
         { start: 2.0, end: 4.5, text: "Hư Thức, TỬ !" },
         { start: 5.0, end: 8.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
-
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
         let activeSubtitle = "";
