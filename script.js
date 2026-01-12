@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
-    // Preload âm thanh click để đảm bảo không bị trễ
-    const clickSound = document.getElementById('sound-click');
-    clickSound.load();
+    // (Đã bỏ đoạn preload clickSound)
 
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
@@ -71,7 +69,6 @@ function transitionToIntro() {
         
         // Kịch bản Lời thoại
         setTimeout(() => {
-            // Thoại 1 (Thêm dấu !)
             dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen!";
             dialogueBox.classList.add('show'); 
 
@@ -79,7 +76,6 @@ function transitionToIntro() {
                 dialogueBox.classList.remove('show'); 
 
                 setTimeout(() => {
-                    // Thoại 2 (Thêm dấu !)
                     dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!";
                     dialogueBox.classList.add('show'); 
                 }, 500);
@@ -92,14 +88,9 @@ function transitionToIntro() {
 }
 
 function openGift() {
-    // Lấy âm thanh
-    const clickSound = document.getElementById('sound-click');
     const cuteMusic = document.getElementById('sound-cute');
     
-    // --- FIX QUAN TRỌNG: CLICK SOUND ---
-    // Đặt lại thời gian về 0 và phát ngay lập tức ở dòng đầu tiên của hàm
-    clickSound.currentTime = 0;
-    clickSound.play();
+    // (Đã bỏ logic phát tiếng click ở đây)
     
     // Giảm nhạc nền
     cuteMusic.pause();
@@ -109,6 +100,7 @@ function openGift() {
     const whiteOverlay = document.getElementById('white-overlay');
     const trollContainer = document.getElementById('troll-container');
     const video = document.getElementById('gojo-video');
+    const endScreen = document.getElementById('end-screen');
 
     whiteOverlay.style.opacity = '1';
 
@@ -122,8 +114,20 @@ function openGift() {
             whiteOverlay.style.opacity = '0';
             
             video.play();
-            // Kích hoạt hàm theo dõi phụ đề
             handleVideoSubtitles(video);
+
+            // --- LOGIC MỚI: XỬ LÝ KHI VIDEO KẾT THÚC ---
+            video.addEventListener('ended', () => {
+                // Ẩn màn hình video
+                content.style.display = 'none';
+                // Hiện màn hình kết thúc
+                endScreen.style.display = 'flex';
+                // Kích hoạt animation bùng nổ
+                // Sử dụng setTimeout nhỏ để đảm bảo trình duyệt nhận style display:flex trước khi thêm class animation
+                setTimeout(() => {
+                    endScreen.classList.add('trigger-explosion');
+                }, 50);
+            }, { once: true }); // { once: true } để đảm bảo sự kiện chỉ chạy 1 lần
 
             setTimeout(() => {
                 whiteOverlay.style.display = 'none';
@@ -134,21 +138,20 @@ function openGift() {
     }, 500); 
 }
 
-// --- HÀM XỬ LÝ PHỤ ĐỀ VIDEO (MỚI) ---
+// --- HÀM XỬ LÝ PHỤ ĐỀ VIDEO ---
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     
-    // BẠN CẦN CHỈNH SỐ GIÂY Ở ĐÂY CHO KHỚP VỚI VIDEO CỦA BẠN
+    // LƯU Ý: Bạn hãy kiểm tra lại file gojo3.mp4 và chỉnh lại số giây (start/end) ở đây cho khớp nhé!
     const subtitles = [
         { 
-            start: 3.5, // Bắt đầu hiện ở giây 3.5
-            end: 4.5,   // Kết thúc ở giây 4.5
+            start: 2.0, 
+            end: 4.5,   
             text: "Hư Thức, TỬ !" 
         },
         { 
-            start: 7.5, // Bắt đầu hiện ở giây 7.5
-            end: 8.0,   // Kết thúc ở giây 9
-            // Thêm dòng just kidding nhỏ bên dưới
+            start: 5.0, 
+            end: 8.0,   
             text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" 
         }
     ];
@@ -157,7 +160,6 @@ function handleVideoSubtitles(video) {
         const currentTime = video.currentTime;
         let activeSubtitle = "";
 
-        // Kiểm tra xem thời gian hiện tại có nằm trong khoảng nào không
         subtitles.forEach(sub => {
             if (currentTime >= sub.start && currentTime <= sub.end) {
                 activeSubtitle = sub.text;
