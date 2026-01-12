@@ -5,10 +5,10 @@ body {
     overflow: hidden;
     height: 100vh;
     font-family: 'Montserrat', sans-serif;
-    background-color: black; /* Nền gốc là màu đen */
+    background-color: black;
 }
 
-/* --- MÀN HÌNH ĐẾM NGƯỢC (NỀN ĐEN TUYỀN) --- */
+/* --- MÀN HÌNH ĐẾM NGƯỢC --- */
 #countdown-screen {
     position: absolute;
     top: 0; left: 0;
@@ -17,7 +17,7 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 100;
-    background-color: black; /* Đảm bảo đen tuyền */
+    background-color: black;
 }
 
 .countdown-circle {
@@ -43,13 +43,11 @@ body {
     to { transform: scale(1.1); box-shadow: 0 0 40px rgba(0, 229, 255, 0.8); }
 }
 
-/* --- MÀN HÌNH INTRO (NỀN VŨ TRỤ) --- */
+/* --- MÀN HÌNH INTRO --- */
 #intro-screen {
-    display: flex; /* Được JS bật lại */
+    display: flex;
     width: 100%; height: 100%;
     position: absolute; top: 0; left: 0; z-index: 10;
-    
-    /* CHUYỂN ẢNH NỀN VÀO ĐÂY */
     background-image: url('nen.jpg');
     background-size: cover;
     background-position: center center;
@@ -62,7 +60,7 @@ body {
     justify-content: center; align-items: center;
 }
 
-/* --- CLASS HIỆU ỨNG AURA (GIỮ NGUYÊN) --- */
+/* --- CLASS HIỆU ỨNG AURA --- */
 .white-aura-effect {
     filter: url('#white-power-aura') drop-shadow(0 0 20px rgba(0, 229, 255, 0.8));
     .start-animations & {
@@ -74,7 +72,7 @@ body {
     50% { transform: translateY(-5px) scale(1.01); }
 }
 
-/* --- CHIẾC CÚP (GIỮ NGUYÊN) --- */
+/* --- CHIẾC CÚP --- */
 .side-left { z-index: 20; }
 .cup-container { position: relative; cursor: pointer; }
 
@@ -95,7 +93,7 @@ body {
      animation: blink 0.8s infinite alternate 2s;
 }
 
-/* --- GWEN (GIỮ NGUYÊN) --- */
+/* --- GWEN --- */
 .side-right { align-items: flex-end; overflow: visible; padding-bottom: 60px; }
 .gwen-container { position: relative; display: flex; justify-content: center; align-items: flex-end; height: 100%; }
 
@@ -106,7 +104,7 @@ body {
     animation: gwenAppear 2s ease-out forwards, powerSurge 3s infinite ease-in-out 2s;
 }
 
-/* --- LỜI THOẠI (GIỮ NGUYÊN) --- */
+/* --- LỜI THOẠI --- */
 .dialogue-box {
     position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
     width: 320px; background: rgba(0, 20, 40, 0.8); border: 2px solid #00e5ff;
@@ -120,14 +118,27 @@ body {
 }
 .highlight { color: #e0ffff; font-weight: bold; text-shadow: 0 0 15px #00e5ff; }
 
-/* --- MÀN TRẮNG --- */
+/* --- MÀN TRẮNG & TROLL --- */
 #white-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: white; z-index: 999; opacity: 0; pointer-events: none;
+    background-color: white; z-index: 998; opacity: 0; pointer-events: none;
     transition: opacity 0.5s ease;
 }
 
-/* --- MÀN HÌNH VIDEO (CHỈNH SỬA TOÀN MÀN HÌNH) --- */
+#troll-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 999; 
+    display: none; /* Mặc định ẩn */
+    justify-content: center; align-items: center;
+}
+
+.troll-text {
+    font-size: 2.5rem; color: #000; font-weight: bold;
+    text-align: center;
+    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- MÀN HÌNH VIDEO --- */
 #content-screen {
     display: none;
     position: absolute; top: 0; left: 0;
@@ -136,23 +147,12 @@ body {
     background: black;
 }
 
-.video-container {
-    /* Mở rộng container ra toàn màn hình */
-    width: 100%;
-    height: 100%;
-    box-shadow: none; /* Xóa bóng */
-}
+.video-container { width: 100%; height: 100%; }
 
 video {
-    /* Video chiếm toàn bộ container */
-    width: 100%;
-    height: 100%;
-    /* object-fit: cover giúp video tràn màn hình (có thể cắt nhẹ 2 bên nếu tỷ lệ không khớp) */
-    /* Nếu muốn thấy hết video mà chấp nhận viền đen, đổi 'cover' thành 'contain' */
+    width: 100%; height: 100%;
     object-fit: cover; 
-    border: none; /* Xóa viền */
-    border-radius: 0; /* Xóa bo góc */
-    display: block;
+    border: none; display: block;
 }
 
 /* --- ANIMATIONS CHUNG --- */
