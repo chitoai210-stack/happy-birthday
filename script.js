@@ -1,72 +1,88 @@
-// Chạy chức năng đếm ngược ngay khi trang web tải xong
-document.addEventListener('DOMContentLoaded', () => {
-    startCountdown();
-});
-
-function startCountdown() {
-    let timeLeft = 5;
-    const countdownElement = document.getElementById('countdown-number');
+document.addEventListener("DOMContentLoaded", () => {
+    // Lấy các element DOM
     const countdownScreen = document.getElementById('countdown-screen');
+    const timerElement = document.getElementById('timer');
     const introScreen = document.getElementById('intro-screen');
+    const cupWrapper = document.getElementById('cup-wrapper');
+    const flashOverlay = document.getElementById('flash-overlay');
+    const trollText = document.getElementById('troll-text');
+    const videoScreen = document.getElementById('video-screen');
+    const mainVideo = document.getElementById('main-video');
 
-    const timerId = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-            countdownElement.textContent = timeLeft;
+    // Lấy Audio Element
+    const sfxBeep = document.getElementById('sfx-beep');
+    const bgmCute = document.getElementById('bgm-cute');
+    const sfxClick = document.getElementById('sfx-click');
+
+    // Cài đặt âm lượng (tùy chọn)
+    bgmCute.volume = 0.5; // Nhạc nền vừa phải
+    sfxBeep.volume = 0.8;
+
+    // --- BƯỚC 1: LOGIC ĐẾM NGƯỢC ---
+    let count = 5;
+    
+    const countdownInterval = setInterval(() => {
+        // Cố gắng phát tiếng beep (có thể bị trình duyệt chặn nếu chưa tương tác)
+        sfxBeep.currentTime = 0;
+        sfxBeep.play().catch(e => console.log("Cần tương tác để phát âm thanh"));
+
+        count--;
+        if (count >= 0) {
+            timerElement.textContent = count;
         } else {
-            // Khi đếm về 0
-            clearInterval(timerId);
-            countdownElement.textContent = "0"; // Hoặc "START!" tùy bạn
-
-            setTimeout(() => {
-                // 1. Ẩn màn hình đếm ngược
-                countdownScreen.style.display = 'none';
-                
-                // 2. Hiện màn hình Intro
-                introScreen.style.display = 'flex';
-                
-                // 3. Kích hoạt animation (trượt vào) cho Gwen và Cúp
-                // Bằng cách thêm class 'start-animations' vào cha của chúng
-                setTimeout(() => {
-                     introScreen.classList.add('start-animations');
-                }, 100); // Delay nhẹ để đảm bảo display:flex đã ăn
-
-            }, 500); // Đợi 0.5s ở số 0 rồi mới chuyển
+            // Kết thúc đếm ngược
+            clearInterval(countdownInterval);
+            startIntro();
         }
-    }, 1000); // Đếm mỗi giây
-}
+    }, 1000);
 
-
-function openGift() {
-    const intro = document.getElementById('intro-screen');
-    const content = document.getElementById('content-screen');
-    const whiteOverlay = document.getElementById('white-overlay');
-    const video = document.getElementById('gojo-video');
-
-    // 1. Kích hoạt màn trắng xóa (Flashbang!)
-    whiteOverlay.style.opacity = '1';
-
-    // 2. Đợi 2 giây (2000ms) trong trạng thái trắng xóa
-    setTimeout(() => {
-        // Ẩn màn hình intro đi
-        intro.style.display = 'none';
+    // --- BƯỚC 2: CHUYỂN SANG INTRO ---
+    function startIntro() {
+        countdownScreen.classList.add('hidden');
+        introScreen.classList.remove('hidden');
         
-        // Hiện màn hình chứa video
-        content.style.display = 'flex';
-        
-        // Tắt màn trắng từ từ
-        whiteOverlay.style.opacity = '0';
+        // Phát nhạc nền dễ thương
+        bgmCute.play().catch(e => console.log("Autoplay blocked"));
+    }
 
-        // 3. Phát video (Trình duyệt cho phép vì người dùng đã click)
-        video.play().catch(error => {
-            console.log("Tự động phát video bị chặn, cần người dùng bấm play trên video:", error);
-            // Một số trình duyệt khó tính vẫn có thể chặn, nhưng thường click là đủ.
-        });
+    // --- BƯỚC 3 & 4: TƯƠNG TÁC CÚP & TROLL & VIDEO ---
+    cupWrapper.addEventListener('click', () => {
+        // 1. Âm thanh click & Dừng nhạc nền
+        sfxClick.play();
+        fadeAudioOut(bgmCute); // Hiệu ứng nhỏ dần nhạc
 
-        // Sau khi màn trắng tắt hẳn thì ẩn nó đi để không che video
+        // 2. Hiện màn hình trắng (White Flash)
+        flashOverlay.classList.add('active');
+
+        // 3. Hiện dòng chữ Troll sau 0.8 giây (khi màn hình đã trắng hẳn)
         setTimeout(() => {
-            whiteOverlay.style.display = 'none';
-        }, 500);
+            trollText.classList.add('show');
+        }, 800);
 
-    }, 2000); // Thời gian chờ trắng xóa
-}
+        // 4. Giữ màn hình troll khoảng 3 giây, sau đó chuyển Video
+        setTimeout(() => {
+            // Ẩn Intro và Flash
+            introScreen.classList.add('hidden');
+            flashOverlay.classList.remove('active'); // Mờ dần màn hình trắng
+            
+            // Hiện màn hình Video
+            videoScreen.classList.remove('hidden');
+            
+            // Chơi video
+            mainVideo.play();
+        }, 3800); // 800ms (hiện chữ) + 3000ms (đọc chữ) = 3800ms
+    });
+
+    // Hàm phụ trợ: Giảm âm lượng từ từ
+    function fadeAudioOut(audioElement) {
+        const fadeAudio = setInterval(() => {
+            if (audioElement.volume > 0.1) {
+                audioElement.volume -= 0.1;
+            } else {
+                clearInterval(fadeAudio);
+                audioElement.pause();
+                audioElement.currentTime = 0;
+            }
+        }, 100); // Giảm mỗi 100ms
+    }
+});
