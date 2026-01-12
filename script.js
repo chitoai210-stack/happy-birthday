@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Hiện cảnh báo ngay khi load
     const deviceWarning = document.getElementById('device-warning');
     const startOverlay = document.getElementById('start-overlay');
     
     // Đợi 12 giây đọc thông báo
     setTimeout(() => {
-        deviceWarning.style.display = 'none'; // Ẩn cảnh báo
-        startOverlay.style.display = 'flex';  // Hiện nút Start
-    }, 12000); // 12000ms = 12 giây
+        deviceWarning.style.display = 'none';
+        startOverlay.style.display = 'flex';
+    }, 12000); 
 
-    // Click Start
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
         runCountdownSequence();
@@ -20,27 +18,38 @@ function runCountdownSequence() {
     const countdownScreen = document.getElementById('countdown-screen');
     const countdownElement = document.getElementById('countdown-number');
     const beepSound = document.getElementById('sound-beep');
+    
+    // Đảm bảo âm lượng tối đa
+    beepSound.volume = 1.0;
 
     countdownScreen.style.display = 'flex';
 
+    // Hàm phát tiếng beep an toàn
     const playTick = () => {
         beepSound.pause();
         beepSound.currentTime = 0;
-        beepSound.play().catch(e => console.log("Lỗi âm thanh:", e));
+        // Bắt lỗi nếu trình duyệt chặn (dù đã click rồi thì thường không sao)
+        beepSound.play().catch(e => console.error("Lỗi âm thanh:", e));
     };
 
     let count = 5;
+    
+    // Phát ngay lập tức cho số 5
     countdownElement.textContent = count;
     playTick();
 
     const interval = setInterval(() => {
         count--;
+        
         if (count > 0) {
             countdownElement.textContent = count;
             playTick(); 
         } else if (count === 0) {
             countdownElement.textContent = count;
-            beepSound.pause(); beepSound.currentTime = 0;
+            // Ở số 0: Im lặng
+            beepSound.pause(); 
+            beepSound.currentTime = 0;
+            
             clearInterval(interval);
             setTimeout(() => { transitionToIntro(); }, 1000);
         }
@@ -54,18 +63,17 @@ function transitionToIntro() {
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
     
-    // Lấy Element để animation
     const gwenWrapper = document.querySelector('.gwen-wrapper');
     const cupWrapper = document.querySelector('.cup-wrapper');
 
     countdownScreen.style.display = 'none';
-    introScreen.style.display = 'flex'; // Dùng block vì ta position absolute con
+    introScreen.style.display = 'flex';
     cuteMusic.volume = 0.5; cuteMusic.currentTime = 0; cuteMusic.play();
 
     setTimeout(() => {
-        introScreen.classList.add('start-animations'); // Gwen hiện ra ở giữa
+        introScreen.classList.add('start-animations');
         
-        // --- CHUỖI HỘI THOẠI ---
+        // Chuỗi hội thoại
         setTimeout(() => {
             dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen!";
             dialogueBox.classList.add('show'); 
@@ -85,14 +93,11 @@ function transitionToIntro() {
                                     dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!";
                                     dialogueBox.classList.add('show'); 
                                     
-                                    // --- LOGIC MỚI: SAU KHI THOẠI HIỆN, DI CHUYỂN GWEN VÀ HIỆN CÚP ---
+                                    // Gwen trượt, Cúp hiện
                                     setTimeout(() => {
-                                        // 1. Gwen trượt sang trái
                                         gwenWrapper.classList.add('move-left');
-                                        
-                                        // 2. Cúp hiện ra bên phải
                                         cupWrapper.classList.add('show-cup');
-                                    }, 1000); // Đợi 1s sau khi thoại hiện lên thì di chuyển
+                                    }, 1000); 
 
                                 }, 500); 
                             }, 3000); 
