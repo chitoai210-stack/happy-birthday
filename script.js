@@ -1,11 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Bắt sự kiện click vào màn hình đen ban đầu để mở khóa âm thanh
     const startOverlay = document.getElementById('start-overlay');
-    
     startOverlay.addEventListener('click', () => {
-        // Ẩn màn hình Start
         startOverlay.style.display = 'none';
-        // Bắt đầu đếm ngược
         runCountdownSequence();
     });
 });
@@ -15,34 +11,31 @@ function runCountdownSequence() {
     const countdownElement = document.getElementById('countdown-number');
     const beepSound = document.getElementById('sound-beep');
 
-    // Hiển thị màn hình đếm ngược
     countdownScreen.style.display = 'flex';
 
-    // Hàm phát tiếng beep (Cắt âm thanh để chỉ lấy tiếng "bíp" đầu tiên)
     const playTick = () => {
         beepSound.pause();
-        beepSound.currentTime = 0; // Tua lại từ đầu
+        beepSound.currentTime = 0;
         beepSound.play().catch(e => console.log("Lỗi âm thanh:", e));
     };
 
     let count = 5;
 
-    // --- NHỊP ĐẦU TIÊN (SỐ 5) ---
+    // Nhịp đầu tiên (Số 5)
     countdownElement.textContent = count;
-    playTick(); // Bíp số 5 ngay lập tức
+    playTick();
 
-    // --- VÒNG LẶP CHO CÁC SỐ CÒN LẠI (4,3,2,1,0) ---
     const interval = setInterval(() => {
         count--;
         
-        if (count >= 0) {
-            // Cập nhật số và kêu Bíp
+        // Yêu cầu 2: Chỉ beep khi số > 0 (4, 3, 2, 1)
+        if (count > 0) {
             countdownElement.textContent = count;
             playTick(); 
-        }
-
-        if (count === 0) {
-            // Dừng đếm ngược
+        } 
+        // Khi về 0 thì chỉ hiện số, không beep
+        else if (count === 0) {
+            countdownElement.textContent = count;
             clearInterval(interval);
             
             // Chờ 1 giây ở số 0 rồi chuyển cảnh
@@ -50,29 +43,55 @@ function runCountdownSequence() {
                 transitionToIntro();
             }, 1000);
         }
-    }, 1000); // Mỗi 1 giây (1000ms)
+    }, 1000);
 }
 
 function transitionToIntro() {
     const countdownScreen = document.getElementById('countdown-screen');
     const introScreen = document.getElementById('intro-screen');
     const cuteMusic = document.getElementById('sound-cute');
+    // Lấy các phần tử khung thoại
+    const dialogueBox = document.querySelector('.dialogue-box');
+    const dialogueText = document.getElementById('dialogue-text');
 
-    // Ẩn đếm ngược, hiện Intro
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
 
-    // Phát nhạc nền Gwen
     cuteMusic.volume = 0.5;
     cuteMusic.currentTime = 0;
     cuteMusic.play();
 
-    // Kích hoạt animation trượt vào
+    // Kích hoạt animation nhân vật trượt vào
     setTimeout(() => {
         introScreen.classList.add('start-animations');
+        
+        // --- Yêu cầu 4: Kịch bản Lời thoại ---
+        
+        // Chờ 1.5s sau khi nhân vật bắt đầu xuất hiện thì hiện thoại 1
+        setTimeout(() => {
+            // Thoại 1
+            dialogueText.innerHTML = "Chào Sandwich GM, mình là Gwen";
+            dialogueBox.classList.add('show'); // Hiện khung thoại
+
+            // Chờ 3s để đọc thoại 1, sau đó đổi sang thoại 2
+            setTimeout(() => {
+                dialogueBox.classList.remove('show'); // Ẩn tạm thời
+
+                // Chờ 0.5s cho hiệu ứng ẩn chạy xong rồi đổi chữ và hiện lại
+                setTimeout(() => {
+                    // Thoại 2
+                    dialogueText.innerHTML = "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi";
+                    dialogueBox.classList.add('show'); // Hiện lại khung thoại
+                }, 500);
+
+            }, 3000); // Thời gian đọc thoại 1
+
+        }, 1500); // Thời gian chờ nhân vật xuất hiện
+
     }, 100);
 }
 
+// Hàm mở quà (Giữ nguyên logic cũ)
 function openGift() {
     const intro = document.getElementById('intro-screen');
     const content = document.getElementById('content-screen');
@@ -83,40 +102,26 @@ function openGift() {
     const clickSound = document.getElementById('sound-click');
     const cuteMusic = document.getElementById('sound-cute');
 
-    // 1. Âm thanh Click & Tắt nhạc nền
     clickSound.play();
     cuteMusic.pause();
 
-    // 2. Bật màn trắng (Flash)
     whiteOverlay.style.opacity = '1';
 
-    // 3. LOGIC HIỂN THỊ TROLL -> VIDEO
-    // Đợi 0.5s cho màn trắng hiện hẳn
     setTimeout(() => {
-        // Hiện chữ Troll
         trollContainer.style.display = 'flex';
         
-        // Đợi 3.5s để người xem đọc chữ "Muốn lấy à..."
         setTimeout(() => {
-            // Ẩn Intro và Troll đi
             intro.style.display = 'none';
             trollContainer.style.display = 'none';
-            
-            // Hiện Video
             content.style.display = 'flex';
-            
-            // Tắt màn trắng từ từ
             whiteOverlay.style.opacity = '0';
-            
-            // Phát Video
             video.play();
 
-            // Dọn dẹp overlay
             setTimeout(() => {
                 whiteOverlay.style.display = 'none';
             }, 500);
 
-        }, 3500); // Thời gian đọc chữ troll
+        }, 3500); 
 
-    }, 500); // Thời gian chờ flash trắng
+    }, 500); 
 }
