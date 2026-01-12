@@ -51,7 +51,7 @@ body {
     justify-content: center; align-items: center; 
 }
 
-/* Hiệu ứng Aura */
+/* Aura */
 .white-aura-effect {
     filter: url('#white-power-aura') drop-shadow(0 0 15px #00e5ff);
 }
@@ -82,10 +82,9 @@ body {
 }
 .start-animations #gwen-char { animation: slideInRight 1.5s ease-out forwards; }
 
-/* Lời thoại (Đã chỉnh sửa vị trí) */
+/* Lời thoại */
 .dialogue-box {
     position: absolute; 
-    /* Đẩy lên cao hơn để tránh đè vào đầu Gwen */
     top: 5%; 
     left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
@@ -95,9 +94,7 @@ body {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
-.dialogue-box.show {
-    opacity: 1;
-}
+.dialogue-box.show { opacity: 1; }
 
 .highlight { color: #00e5ff; font-weight: bold; }
 
@@ -119,8 +116,33 @@ body {
     display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 50; background: black;
 }
-.video-container { width: 100%; height: 100%; }
+.video-container { 
+    width: 100%; height: 100%; position: relative; 
+}
 video { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- PHỤ ĐỀ (SUBTITLES) --- */
+#video-subtitles {
+    position: absolute;
+    bottom: 10%; 
+    left: 0; width: 100%;
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    pointer-events: none; /* Để bấm xuyên qua nếu cần */
+    z-index: 60;
+}
+.sub-small {
+    display: block;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 400;
+    color: #e0e0e0;
+    margin-top: 5px;
+}
 
 /* --- ANIMATIONS --- */
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
