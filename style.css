@@ -8,76 +8,56 @@ body, html {
     user-select: none;
 }
 
-/* --- BƯỚC 0: START OVERLAY --- */
+/* --- CÁC PHẦN CŨ (GIỮ NGUYÊN) --- */
 #start-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 9999;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
+    display: flex; justify-content: center; align-items: center; cursor: pointer;
 }
 #start-overlay p {
-    color: #fff;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 3rem; 
+    color: #fff; font-family: 'Times New Roman', Times, serif; font-size: 3rem; 
     animation: blinkText 1s infinite;
 }
 
-/* --- BƯỚC 1: ĐẾM NGƯỢC --- */
 #countdown-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
     z-index: 100; background-color: black;
 }
 .countdown-circle {
-    width: 150px; height: 150px; border-radius: 50%;
-    border: 5px solid #00e5ff;
+    width: 150px; height: 150px; border-radius: 50%; border: 5px solid #00e5ff;
     display: flex; justify-content: center; align-items: center;
     box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
     animation: pulseCircle 0.5s infinite alternate;
 }
 #countdown-number {
-    font-family: 'Orbitron', sans-serif; font-size: 5rem;
-    color: #ffffff; text-shadow: 0 0 20px #00e5ff;
+    font-family: 'Orbitron', sans-serif; font-size: 5rem; color: #ffffff; text-shadow: 0 0 20px #00e5ff;
 }
 
-/* --- BƯỚC 2: INTRO --- */
 #intro-screen {
     width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 10;
-    background-image: url('nen.jpg'); background-size: cover; background-position: center;
-    display: none;
+    background-image: url('nen.jpg'); background-size: cover; background-position: center; display: none;
 }
 .side-left, .side-right {
-    flex: 1; position: relative; display: flex; 
-    justify-content: center; align-items: center; 
+    flex: 1; position: relative; display: flex; justify-content: center; align-items: center; 
 }
 
-/* Aura */
-.white-aura-effect {
-    filter: url('#white-power-aura') drop-shadow(0 0 15px #00e5ff);
-}
-.start-animations .white-aura-effect {
-    animation: powerSurge 2s infinite ease-in-out;
-}
+.white-aura-effect { filter: url('#white-power-aura') drop-shadow(0 0 15px #00e5ff); }
+.start-animations .white-aura-effect { animation: powerSurge 2s infinite ease-in-out; }
 
-/* Cúp */
 .cup-container { position: relative; cursor: pointer; z-index: 20; }
 #world-cup { width: 280px; max-width: 80vw; opacity: 0; }
 .start-animations #world-cup { animation: slideInLeft 1.5s ease-out forwards; }
 .click-hint {
     position: absolute; bottom: -50px; width: 100%; text-align: center;
-    color: #fff; font-weight: bold; opacity: 0;
-    text-shadow: 0 0 10px #00e5ff;
+    color: #fff; font-weight: bold; opacity: 0; text-shadow: 0 0 10px #00e5ff;
 }
 .start-animations .click-hint { animation: blinkText 0.8s infinite alternate 2s; }
 
-/* Gwen */
-.gwen-container { 
-    display: flex; justify-content: center; align-items: center; height: 100%; 
-}
+.gwen-container { display: flex; justify-content: center; align-items: center; height: 100%; }
 #gwen-char { height: 65vh; opacity: 0; }
 .start-animations #gwen-char { animation: slideInRight 1.5s ease-out forwards; }
 
-/* Lời thoại */
 .dialogue-box {
     position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
@@ -88,11 +68,9 @@ body, html {
 .dialogue-box.show { opacity: 1; }
 .highlight { color: #00e5ff; font-weight: bold; }
 
-/* --- BƯỚC 3 & 4: TROLL & VIDEO --- */
 #white-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: white; z-index: 998; opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease;
+    background: white; z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
 }
 #troll-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -102,6 +80,7 @@ body, html {
     font-size: 2.5rem; color: #000; font-weight: bold; text-align: center;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 #content-screen {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 50; background: black;
@@ -109,7 +88,6 @@ body, html {
 .video-container { width: 100%; height: 100%; position: relative; }
 video { width: 100%; height: 100%; object-fit: cover; }
 
-/* Subtitles */
 #video-subtitles {
     position: absolute; bottom: 10%; left: 0; width: 100%;
     text-align: center; color: white;
@@ -117,49 +95,60 @@ video { width: 100%; height: 100%; object-fit: cover; }
     text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     pointer-events: none; z-index: 60;
 }
-.sub-small {
-    display: block; font-size: 1rem; font-style: italic; font-weight: 400; color: #e0e0e0; margin-top: 5px;
-}
+.sub-small { display: block; font-size: 1rem; font-style: italic; font-weight: 400; color: #e0e0e0; margin-top: 5px; }
 
-/* --- BƯỚC 5: MÀN HÌNH KẾT THÚC (HIỆU ỨNG MỚI) --- */
-#end-screen {
+/* --- BƯỚC 5: VIDEO NỔ TUNG (MỚI) --- */
+#explosion-screen {
+    display: none;
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: black; z-index: 9999;
-    display: none; 
-    overflow: hidden; /* Không cho tia bắn ra ngoài tạo thanh cuộn */
+    background: black; z-index: 60;
+}
+#notung-video {
+    width: 100%; height: 100%; object-fit: cover;
 }
 
-/* Tia năng lượng (Spikes) */
-.boom-spike {
+/* --- BƯỚC 6: FINAL SCREEN (MỚI) --- */
+#final-screen {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: black; z-index: 70;
+    overflow: hidden;
+}
+
+.final-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 1;
+}
+
+#kp-img {
     position: absolute;
-    top: 50%; left: 50%;
-    background: linear-gradient(to top, transparent, #d600ff, #fff);
-    transform-origin: bottom center; /* Xoay quanh tâm dưới */
-    opacity: 0;
-    border-radius: 50% 50% 0 0;
+    top: 50%; left: 50%; /* Bắt đầu ở giữa */
+    transform: translate(-50%, -50%);
+    height: 70vh; /* Điều chỉnh kích thước ảnh KP */
+    width: auto;
+    z-index: 10;
+    opacity: 0; /* Mặc định ẩn để fade in */
 }
 
-/* Hạt bụi năng lượng (Particles) */
-.boom-particle {
-    position: absolute;
-    top: 50%; left: 50%;
-    background-color: #d600ff;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #d600ff, 0 0 20px #7b00ff;
-    opacity: 0;
+/* Lớp phủ đen để fade out */
+#final-fade-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: black; z-index: 100;
+    opacity: 1; /* Ban đầu đen thùi lùi */
+    transition: opacity 1.5s ease; /* Hiệu ứng mờ dần trong 1.5s */
 }
 
-/* Animations */
-@keyframes spikeExplode {
-    0% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(0); opacity: 1; }
-    50% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(1); opacity: 1; }
-    100% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(2) translateY(-200px); opacity: 0; }
+/* Class animation chạy sang trái */
+#kp-img.move-left {
+    animation: kpAppearAndMove 4s ease-out forwards;
 }
 
-@keyframes particleFly {
-    0% { transform: translate(-50%, -50%) translate(0, 0); opacity: 1; scale: 1; }
-    100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)); opacity: 0; scale: 0; }
+@keyframes kpAppearAndMove {
+    0% { opacity: 0; transform: translate(-50%, -50%); left: 50%; }
+    20% { opacity: 1; transform: translate(-50%, -50%); left: 50%; }
+    100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; } /* Chạy sang trái (vị trí 25%) */
 }
+
 
 /* --- ANIMATIONS CŨ --- */
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
