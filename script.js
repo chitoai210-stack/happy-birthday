@@ -145,13 +145,13 @@ function handleVideoSubtitles(video) {
     // LƯU Ý: Bạn hãy kiểm tra lại file gojo3.mp4 và chỉnh lại số giây (start/end) ở đây cho khớp nhé!
     const subtitles = [
         { 
-            start: 2.0, 
+            start: 3.5, 
             end: 4.5,   
             text: "Hư Thức, TỬ !" 
         },
         { 
-            start: 5.0, 
-            end: 8.0,   
+            start: 7.5, 
+            end: 10.0,   
             text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" 
         }
     ];
@@ -169,3 +169,4 @@ function handleVideoSubtitles(video) {
         subtitleDiv.innerHTML = activeSubtitle;
     });
 }
+
