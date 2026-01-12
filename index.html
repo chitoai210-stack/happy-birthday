@@ -3,70 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Gift</title>
+    <title>Gwen Birthday - Challenger Style</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <svg style="width: 0; height: 0; position: absolute;">
+    <audio id="sfx-beep" src="beep.mp3"></audio>
+    <audio id="bgm-cute" src="cute.mp3" loop></audio>
+    <audio id="sfx-click" src="click.mp3"></audio>
+
+    <svg style="position: absolute; width: 0; height: 0;">
         <defs>
-            <filter id="white-power-aura" x="-100%" y="-100%" width="300%" height="300%">
-                <feMorphology operator="dilate" radius="15" in="SourceAlpha" result="outerBase"/>
-                <feGaussianBlur stdDeviation="10" in="outerBase" result="outerBlurred"/>
-                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="3" result="outerNoise">
-                    <animate attributeName="baseFrequency" values="0.01 0.02; 0.01 0.04; 0.01 0.02" dur="8s" repeatCount="indefinite"/>
-                </feTurbulence>
-                <feDisplacementMap in="outerBlurred" in2="outerNoise" scale="30" xChannelSelector="R" yChannelSelector="G" result="outerDistorted"/>
-                <feFlood flood-color="#008b8b" flood-opacity="0.6" result="outerColor"/>
-                <feComposite in="outerColor" in2="outerDistorted" operator="in" result="finalOuterAura"/>
-                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="innerBase"/>
-                <feGaussianBlur stdDeviation="3" in="innerBase" result="innerBlurred"/>
-                <feFlood flood-color="#e0ffff" flood-opacity="1.0" result="whiteColor"/>
-                <feComposite in="whiteColor" in2="innerBlurred" operator="in" result="finalWhiteCore"/>
+            <filter id="cyan-power-aura" x="-50%" y="-50%" width="200%" height="200%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+                
+                <feMorphology operator="dilate" radius="4" in="distorted" result="dilated" />
+                <feGaussianBlur in="dilated" stdDeviation="6" result="blurred" />
+                <feFlood flood-color="#00ffea" result="cyanColor" /> <feComposite in="cyanColor" in2="blurred" operator="in" result="coloredGlow" />
+                
                 <feMerge>
-                    <feMergeNode in="finalOuterAura"/>
-                    <feMergeNode in="finalWhiteCore"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="coloredGlow" />
+                    <feMergeNode in="coloredGlow" /> <feMergeNode in="SourceGraphic" />
                 </feMerge>
             </filter>
         </defs>
     </svg>
 
-    <div id="countdown-screen">
-        <div class="countdown-circle">
-            <span id="countdown-number">5</span>
+    <div id="countdown-screen" class="screen">
+        <div id="timer">5</div>
+    </div>
+
+    <div id="intro-screen" class="screen hidden">
+        <img src="nen.jpg" alt="Galaxy Background" class="bg-layer">
+        
+        <div class="intro-content">
+            <div class="item-container left-side">
+                <div id="cup-wrapper" class="aura-target">
+                    <img src="cup.png.png" alt="Cup CKTG" id="cup-img">
+                    <div class="click-hint">ĐỒNG Ý !</div>
+                </div>
+            </div>
+
+            <div class="item-container right-side">
+                <div id="gwen-wrapper" class="aura-target">
+                    <div class="dialogue-box">
+                        <p>Happy Birthday!</p>
+                    </div>
+                    <img src="gwen.png" alt="Gwen" id="gwen-img">
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="intro-screen" style="display: none;">
-        <div class="side-left">
-            <div class="cup-container" onclick="openGift()">
-                <img src="cup.png.png" id="world-cup" class="white-aura-effect" alt="Cup CKTG">
-                <p class="click-hint">ĐỒNG Ý !</p>
-            </div>
-        </div>
-
-        <div class="side-right">
-            <div class="dialogue-box">
-                "Đến và lấy chiếc cúp của bạn đi,<br> 
-                bạn <span class="highlight">Sandwich GM</span> dễ thương!"
-            </div>
-            <div class="gwen-container">
-                <img src="gwen.png" id="gwen-char" class="white-aura-effect" alt="Gwen">
-            </div>
+    <div id="flash-overlay" class="hidden">
+        <div id="troll-text">
+            Muốn lấy à, đâu có dễ vậy ku <span style="font-size: 1.5em;">😒</span>
         </div>
     </div>
 
-    <div id="white-overlay"></div>
-
-    <div id="content-screen">
-        <div class="video-container">
-            <video id="gojo-video" playsinline>
-                <source src="gojo.mp4" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ thẻ video.
-            </video>
-        </div>
+    <div id="video-screen" class="screen hidden">
+        <video id="main-video" playsinline>
+            <source src="gojo.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ video.
+        </video>
     </div>
 
     <script src="script.js"></script>
