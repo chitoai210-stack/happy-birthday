@@ -11,6 +11,7 @@
 
     <audio id="sound-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="sound-cute" src="cute.mp3" loop preload="auto"></audio>
+    <audio id="sound-explosion" src="tiengno.mp3" preload="auto"></audio>
 
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
@@ -70,7 +71,17 @@
         </div>
     </div>
 
-    <div id="end-screen"></div>
+    <div id="explosion-screen" style="display: none;">
+        <video id="notung-video" playsinline>
+            <source src="notung.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div id="final-screen" style="display: none;">
+        <img src="bg-lol.jpg" class="final-bg" alt="Background">
+        <img src="kp.png" id="kp-img" alt="Ket Qua">
+        <div id="final-fade-overlay"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
