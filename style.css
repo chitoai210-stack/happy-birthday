@@ -8,7 +8,7 @@ body, html {
     user-select: none;
 }
 
-/* --- CÁC PHẦN CŨ (GIỮ NGUYÊN) --- */
+/* --- GIỮ NGUYÊN CÁC PHẦN TRƯỚC ĐÓ --- */
 #start-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 9999;
@@ -118,7 +118,7 @@ video {
     width: 100%; height: 100%; object-fit: cover;
 }
 
-/* --- BƯỚC 6: FINAL SCREEN (ĐÃ CHỈNH MÀU NỀN) --- */
+/* --- BƯỚC 6: FINAL SCREEN (CẬP NHẬT MÀU NỀN SÁNG HƠN) --- */
 #final-screen {
     display: none;
     position: fixed; top: 0; left: 0; 
@@ -126,8 +126,16 @@ video {
     z-index: 70;
     overflow: hidden;
     
-    /* MÀU NỀN MỚI: Gradient Vũ Trụ (Tâm Xanh Đậm -> Viền Đen) */
-    background: radial-gradient(circle at center, #0d1b2a 0%, #000000 85%);
+    /* MÀU NỀN MỚI: Tím Hồng pha Xanh (Hợp Gwen hơn và SÁNG HƠN) */
+    background: radial-gradient(circle at center, #3c096c 0%, #240046 40%, #10002b 80%, #000000 100%);
+    
+    /* Hiệu ứng hạt bụi/sao nhẹ (Optional) */
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
 }
 
 #kp-img {
@@ -139,10 +147,9 @@ video {
     z-index: 10;
     opacity: 0; 
 
-    /* HIỆU ỨNG PHÁT SÁNG CHO ẢNH KP */
-    filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.4));
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5); /* Bóng đen nhẹ để tách nền */
-    border-radius: 15px; /* Bo góc nhẹ nếu ảnh vuông */
+    /* Đổ bóng màu Cyan để nổi bật trên nền Tím */
+    filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
+    border-radius: 12px;
 }
 
 #final-fade-overlay {
@@ -152,6 +159,7 @@ video {
     transition: opacity 1.5s ease;
 }
 
+/* Animation KP chạy sang trái */
 #kp-img.move-left {
     animation: kpAppearAndMove 4s ease-out forwards;
 }
