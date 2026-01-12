@@ -8,7 +8,7 @@ body {
     user-select: none;
 }
 
-/* --- BƯỚC 0: START OVERLAY (Đã chỉnh sửa) --- */
+/* --- BƯỚC 0: START OVERLAY --- */
 #start-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 9999;
@@ -17,7 +17,6 @@ body {
 }
 #start-overlay p {
     color: #fff;
-    /* Yêu cầu 1: Font Times New Roman và Kích thước lớn gấp đôi */
     font-family: 'Times New Roman', Times, serif;
     font-size: 3rem; 
     animation: blinkText 1s infinite;
@@ -49,7 +48,6 @@ body {
 }
 .side-left, .side-right {
     flex: 1; position: relative; display: flex; 
-    /* Yêu cầu 3: Căn giữa mọi thứ trong khung bên phải */
     justify-content: center; align-items: center; 
 }
 
@@ -72,39 +70,38 @@ body {
 }
 .start-animations .click-hint { animation: blinkText 0.8s infinite alternate 2s; }
 
-/* Gwen (Đã chỉnh sửa căn giữa) */
+/* Gwen */
 .gwen-container { 
     display: flex; 
-    /* Yêu cầu 3: Căn giữa Gwen */
     justify-content: center; align-items: center; 
     height: 100%; 
 }
 #gwen-char { 
-    /* Tăng nhẹ kích thước để cân đối khi nằm giữa */
     height: 65vh; 
     opacity: 0; 
 }
 .start-animations #gwen-char { animation: slideInRight 1.5s ease-out forwards; }
 
-/* Lời thoại (Đã chỉnh sửa để JS điều khiển) */
+/* Lời thoại (Đã chỉnh sửa vị trí) */
 .dialogue-box {
-    position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+    position: absolute; 
+    /* Đẩy lên cao hơn để tránh đè vào đầu Gwen */
+    top: 5%; 
+    left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; font-size: 1.5rem; font-style: italic; 
     z-index: 100;
-    /* Sử dụng transition thay vì animation để JS điều khiển ẩn/hiện */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
-/* Class này sẽ được JS thêm vào để hiện khung thoại */
 .dialogue-box.show {
     opacity: 1;
 }
 
 .highlight { color: #00e5ff; font-weight: bold; }
 
-/* --- BƯỚC 3 & 4: TROLL & VIDEO (Giữ nguyên) --- */
+/* --- BƯỚC 3 & 4: TROLL & VIDEO --- */
 #white-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: white; z-index: 998; opacity: 0; pointer-events: none;
@@ -131,5 +128,4 @@ video { width: 100%; height: 100%; object-fit: cover; }
 @keyframes powerSurge { 0%, 100% { filter: url('#white-power-aura') brightness(1); } 50% { filter: url('#white-power-aura') brightness(1.3); } }
 @keyframes slideInLeft { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-/* Đã bỏ animation fadeIn cho dialogue-box */
 @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
