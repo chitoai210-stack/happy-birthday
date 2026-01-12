@@ -134,7 +134,20 @@ function openGift() {
     }, 500); 
 }
 
-// --- HÀM XỬ LÝ PHỤ ĐỀ VIDEO9.0,   // Kết thúc ở giây 8
+// --- HÀM XỬ LÝ PHỤ ĐỀ VIDEO (MỚI) ---
+function handleVideoSubtitles(video) {
+    const subtitleDiv = document.getElementById('video-subtitles');
+    
+    // BẠN CẦN CHỈNH SỐ GIÂY Ở ĐÂY CHO KHỚP VỚI VIDEO CỦA BẠN
+    const subtitles = [
+        { 
+            start: 3.5, // Bắt đầu hiện ở giây 3.5
+            end: 4.5,   // Kết thúc ở giây 4.5
+            text: "Hư Thức, TỬ !" 
+        },
+        { 
+            start: 7.5, // Bắt đầu hiện ở giây 7.5
+            end: 8.0,   // Kết thúc ở giây 9
             // Thêm dòng just kidding nhỏ bên dưới
             text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" 
         }
@@ -154,4 +167,3 @@ function openGift() {
         subtitleDiv.innerHTML = activeSubtitle;
     });
 }
-
