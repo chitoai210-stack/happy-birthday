@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Gift</title>
+    <title>Special Gift for Gwen</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -16,28 +16,23 @@
     <svg style="width: 0; height: 0; position: absolute;">
         <defs>
             <filter id="white-power-aura" x="-100%" y="-100%" width="300%" height="300%">
-                <feMorphology operator="dilate" radius="15" in="SourceAlpha" result="outerBase"/>
-                <feGaussianBlur stdDeviation="10" in="outerBase" result="outerBlurred"/>
-                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="3" result="outerNoise">
-                    <animate attributeName="baseFrequency" values="0.01 0.02; 0.01 0.04; 0.01 0.02" dur="8s" repeatCount="indefinite"/>
-                </feTurbulence>
-                <feDisplacementMap in="outerBlurred" in2="outerNoise" scale="30" xChannelSelector="R" yChannelSelector="G" result="outerDistorted"/>
-                <feFlood flood-color="#008b8b" flood-opacity="0.6" result="outerColor"/>
-                <feComposite in="outerColor" in2="outerDistorted" operator="in" result="finalOuterAura"/>
-                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="innerBase"/>
-                <feGaussianBlur stdDeviation="3" in="innerBase" result="innerBlurred"/>
-                <feFlood flood-color="#e0ffff" flood-opacity="1.0" result="whiteColor"/>
-                <feComposite in="whiteColor" in2="innerBlurred" operator="in" result="finalWhiteCore"/>
+                <feMorphology operator="dilate" radius="10" in="SourceAlpha" result="base"/>
+                <feGaussianBlur stdDeviation="5" in="base" result="blurred"/>
+                <feFlood flood-color="#00e5ff" flood-opacity="0.8" result="color"/>
+                <feComposite in="color" in2="blurred" operator="in" result="glow"/>
                 <feMerge>
-                    <feMergeNode in="finalOuterAura"/>
-                    <feMergeNode in="finalWhiteCore"/>
+                    <feMergeNode in="glow"/>
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
         </defs>
     </svg>
 
-    <div id="countdown-screen">
+    <div id="start-overlay">
+        <p>Nhấn vào màn hình để bắt đầu...</p>
+    </div>
+
+    <div id="countdown-screen" style="display: none;">
         <div class="countdown-circle">
             <span id="countdown-number">5</span>
         </div>
