@@ -8,7 +8,7 @@ body, html {
     user-select: none;
 }
 
-/* --- GIỮ NGUYÊN CÁC PHẦN TRƯỚC ĐÓ --- */
+/* --- CÁC PHẦN CŨ (GIỮ NGUYÊN) --- */
 #start-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 9999;
@@ -118,24 +118,23 @@ video {
     width: 100%; height: 100%; object-fit: cover;
 }
 
-/* --- BƯỚC 6: FINAL SCREEN (CẬP NHẬT MÀU NỀN SÁNG HƠN) --- */
+/* --- BƯỚC 6: FINAL SCREEN (ĐÃ CẬP NHẬT HÌNH NỀN) --- */
 #final-screen {
     display: none;
     position: fixed; top: 0; left: 0; 
     width: 100vw; height: 100vh;
     z-index: 70;
     overflow: hidden;
-    
-    /* MÀU NỀN MỚI: Tím Hồng pha Xanh (Hợp Gwen hơn và SÁNG HƠN) */
-    background: radial-gradient(circle at center, #3c096c 0%, #240046 40%, #10002b 80%, #000000 100%);
-    
-    /* Hiệu ứng hạt bụi/sao nhẹ (Optional) */
-    background-image: 
-        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-    background-size: 550px 550px, 350px 350px, 250px 250px;
-    background-position: 0 0, 40px 60px, 130px 270px;
+    background: black; /* Màu nền dự phòng */
+}
+
+/* CSS cho hình nền yourname1.jpg để full màn hình */
+#final-bg-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; /* Quan trọng: lấp đầy màn hình không bị méo */
+    z-index: 1; /* Nằm dưới cùng */
 }
 
 #kp-img {
@@ -144,10 +143,8 @@ video {
     transform: translate(-50%, -50%);
     height: 60vh; 
     width: auto;
-    z-index: 10;
+    z-index: 10; /* Nằm trên hình nền */
     opacity: 0; 
-
-    /* Đổ bóng màu Cyan để nổi bật trên nền Tím */
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 12px;
 }
