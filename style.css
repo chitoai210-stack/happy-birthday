@@ -81,12 +81,26 @@ body, html {
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* --- SỬA LỖI VIDEO GOJO (QUAN TRỌNG) --- */
 #content-screen {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 50; background: black;
+    display: none; 
+    position: fixed; /* Bắt buộc cố định */
+    top: 0; left: 0; 
+    width: 100vw; /* Chiếm toàn bộ chiều rộng viewport */
+    height: 100vh; /* Chiếm toàn bộ chiều cao viewport */
+    z-index: 50; 
+    background: black;
+    padding: 0; margin: 0;
 }
-.video-container { width: 100%; height: 100%; position: relative; }
-video { width: 100%; height: 100%; object-fit: cover; }
+.video-container { 
+    width: 100%; height: 100%; 
+    position: absolute; top: 0; left: 0;
+}
+video { 
+    width: 100%; height: 100%; 
+    object-fit: cover; /* Cắt video để lấp đầy màn hình, không bị viền đen */
+    display: block; /* Xóa khoảng trắng mặc định */
+}
 
 #video-subtitles {
     position: absolute; bottom: 10%; left: 0; width: 100%;
@@ -97,20 +111,22 @@ video { width: 100%; height: 100%; object-fit: cover; }
 }
 .sub-small { display: block; font-size: 1rem; font-style: italic; font-weight: 400; color: #e0e0e0; margin-top: 5px; }
 
-/* --- BƯỚC 5: VIDEO NỔ TUNG (MỚI) --- */
+/* --- BƯỚC 5: VIDEO NỔ TUNG --- */
 #explosion-screen {
     display: none;
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; 
+    width: 100vw; height: 100vh;
     background: black; z-index: 60;
 }
 #notung-video {
     width: 100%; height: 100%; object-fit: cover;
 }
 
-/* --- BƯỚC 6: FINAL SCREEN (MỚI) --- */
+/* --- BƯỚC 6: FINAL SCREEN --- */
 #final-screen {
     display: none;
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; 
+    width: 100vw; height: 100vh;
     background: black; z-index: 70;
     overflow: hidden;
 }
@@ -122,23 +138,23 @@ video { width: 100%; height: 100%; object-fit: cover; }
 
 #kp-img {
     position: absolute;
-    top: 50%; left: 50%; /* Bắt đầu ở giữa */
+    top: 50%; left: 50%; 
     transform: translate(-50%, -50%);
-    height: 70vh; /* Điều chỉnh kích thước ảnh KP */
+    /* Tăng kích thước ảnh để dễ nhìn hơn */
+    height: 60vh; 
     width: auto;
     z-index: 10;
-    opacity: 0; /* Mặc định ẩn để fade in */
+    opacity: 0; 
 }
 
-/* Lớp phủ đen để fade out */
 #final-fade-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 100;
-    opacity: 1; /* Ban đầu đen thùi lùi */
-    transition: opacity 1.5s ease; /* Hiệu ứng mờ dần trong 1.5s */
+    opacity: 1; 
+    transition: opacity 1.5s ease;
 }
 
-/* Class animation chạy sang trái */
+/* Animation KP chạy sang trái */
 #kp-img.move-left {
     animation: kpAppearAndMove 4s ease-out forwards;
 }
@@ -146,9 +162,8 @@ video { width: 100%; height: 100%; object-fit: cover; }
 @keyframes kpAppearAndMove {
     0% { opacity: 0; transform: translate(-50%, -50%); left: 50%; }
     20% { opacity: 1; transform: translate(-50%, -50%); left: 50%; }
-    100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; } /* Chạy sang trái (vị trí 25%) */
+    100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; }
 }
-
 
 /* --- ANIMATIONS CŨ --- */
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
