@@ -109,32 +109,31 @@ function openGift() {
             video.play();
             handleVideoSubtitles(video);
 
-            // --- SỰ KIỆN: KHI GOJO VIDEO KẾT THÚC ---
+            // KHI GOJO VIDEO KẾT THÚC
             video.addEventListener('ended', () => {
                 content.style.display = 'none'; // Ẩn Gojo
                 explosionScreen.style.display = 'block'; // Hiện màn hình nổ
                 
-                // Phát video nổ và âm thanh nổ
+                // Phát nổ
                 notungVideo.currentTime = 0;
                 notungVideo.play();
                 explosionSound.currentTime = 0;
                 explosionSound.play();
 
-                // --- SỰ KIỆN: KHI VIDEO NỔ KẾT THÚC ---
+                // KHI VIDEO NỔ KẾT THÚC
                 notungVideo.addEventListener('ended', () => {
-                    explosionScreen.style.display = 'none'; // Ẩn màn hình nổ
-                    finalScreen.style.display = 'block'; // Hiện màn hình cuối
+                    explosionScreen.style.display = 'none'; 
+                    finalScreen.style.display = 'block'; 
                     
-                    // Hiệu ứng Fade In (Làm mờ lớp phủ đen)
-                    // setTimeout nhỏ để browser kịp render display:block
+                    // Fade In màn hình cuối
                     setTimeout(() => {
-                        fadeOverlay.style.opacity = '0'; // Lớp đen biến mất -> Lộ hình nền
+                        fadeOverlay.style.opacity = '0';
                     }, 50);
 
-                    // Animation KP chạy sang trái
+                    // Chạy ảnh KP
                     setTimeout(() => {
                         kpImg.classList.add('move-left');
-                    }, 500); // Chờ 0.5s sau khi nền hiện rồi mới chạy ảnh
+                    }, 500);
                 }, { once: true });
 
             }, { once: true });
@@ -150,8 +149,8 @@ function openGift() {
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     const subtitles = [
-        { start: 2.0, end: 4.5, text: "Hư Thức, TỬ !" },
-        { start: 5.0, end: 8.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        { start: 3.5, end: 5.0, text: "Hư Thức, TỬ !" },
+        { start: 7.5, end: 9.5, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
