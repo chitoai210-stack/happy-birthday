@@ -1,7 +1,7 @@
 /* --- CẤU HÌNH CHUNG --- */
 body, html {
     margin: 0; padding: 0;
-    width: 100%; height: 100%; /* Đảm bảo body full màn hình */
+    width: 100%; height: 100%;
     overflow: hidden;
     font-family: 'Montserrat', sans-serif;
     background-color: black;
@@ -72,30 +72,20 @@ body, html {
 
 /* Gwen */
 .gwen-container { 
-    display: flex; 
-    justify-content: center; align-items: center; 
-    height: 100%; 
+    display: flex; justify-content: center; align-items: center; height: 100%; 
 }
-#gwen-char { 
-    height: 65vh; 
-    opacity: 0; 
-}
+#gwen-char { height: 65vh; opacity: 0; }
 .start-animations #gwen-char { animation: slideInRight 1.5s ease-out forwards; }
 
 /* Lời thoại */
 .dialogue-box {
-    position: absolute; 
-    top: 5%; 
-    left: 50%; transform: translateX(-50%);
+    position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; font-size: 1.5rem; font-style: italic; 
-    z-index: 100;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
 .dialogue-box.show { opacity: 1; }
-
 .highlight { color: #00e5ff; font-weight: bold; }
 
 /* --- BƯỚC 3 & 4: TROLL & VIDEO --- */
@@ -112,98 +102,63 @@ body, html {
     font-size: 2.5rem; color: #000; font-weight: bold; text-align: center;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-/* --- FIX VIDEO TOÀN MÀN HÌNH --- */
 #content-screen {
-    display: none;
-    position: fixed; /* Sử dụng fixed để đảm bảo phủ kín viewport */
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 50;
-    background: black;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 50; background: black;
 }
-.video-container { 
-    width: 100%; height: 100%; position: relative; 
-}
-video { 
-    width: 100%; height: 100%; 
-    object-fit: cover; /* Quan trọng: ép video phủ kín container */
-}
+.video-container { width: 100%; height: 100%; position: relative; }
+video { width: 100%; height: 100%; object-fit: cover; }
 
-/* --- PHỤ ĐỀ (SUBTITLES) --- */
+/* Subtitles */
 #video-subtitles {
-    position: absolute;
-    bottom: 10%; 
-    left: 0; width: 100%;
-    text-align: center;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
+    position: absolute; bottom: 10%; left: 0; width: 100%;
+    text-align: center; color: white;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 2rem;
     text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    pointer-events: none;
-    z-index: 60;
+    pointer-events: none; z-index: 60;
 }
 .sub-small {
     display: block; font-size: 1rem; font-style: italic; font-weight: 400; color: #e0e0e0; margin-top: 5px;
 }
 
-/* --- BƯỚC 5: MÀN HÌNH KẾT THÚC (HIỆU ỨNG BOM LỬA MỚI) --- */
+/* --- BƯỚC 5: MÀN HÌNH KẾT THÚC (HIỆU ỨNG MỚI) --- */
 #end-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background-color: black; z-index: 9999;
-    display: none; justify-content: center; align-items: center;
-    overflow: hidden;
+    display: none; 
+    overflow: hidden; /* Không cho tia bắn ra ngoài tạo thanh cuộn */
 }
 
-.explosion-container {
-    position: relative; width: 0; height: 0;
+/* Tia năng lượng (Spikes) */
+.boom-spike {
+    position: absolute;
+    top: 50%; left: 50%;
+    background: linear-gradient(to top, transparent, #d600ff, #fff);
+    transform-origin: bottom center; /* Xoay quanh tâm dưới */
+    opacity: 0;
+    border-radius: 50% 50% 0 0;
 }
 
-/* Lõi nổ (trắng -> vàng) */
-.fire-core {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 0; height: 0; border-radius: 50%;
-    background: radial-gradient(circle, #ffffff 0%, #fff700 40%, #ff8c00 100%);
-    box-shadow: 0 0 50px #ffffff, 0 0 100px #fff700;
-    opacity: 0; z-index: 10;
+/* Hạt bụi năng lượng (Particles) */
+.boom-particle {
+    position: absolute;
+    top: 50%; left: 50%;
+    background-color: #d600ff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #d600ff, 0 0 20px #7b00ff;
+    opacity: 0;
 }
 
-/* Các lớp lửa (cam -> đỏ -> tím) */
-.fire-layer {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 0; height: 0; border-radius: 50%; opacity: 0; z-index: 5;
-}
-.layer-1 { background: radial-gradient(circle, transparent 30%, #ff4500 60%, #ff0000 100%); box-shadow: 0 0 150px #ff4500; }
-.layer-2 { background: radial-gradient(circle, transparent 40%, #d600ff 70%, #7b00ff 100%); box-shadow: 0 0 200px #d600ff; }
-.layer-3 { background: radial-gradient(circle, transparent 50%, #4b0082 80%, #2e004f 100%); box-shadow: 0 0 250px #4b0082; }
-
-/* Các lớp khói (tím tối -> đen) */
-.smoke-layer {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 0; height: 0; border-radius: 50%; opacity: 0; z-index: 1;
-    background: radial-gradient(circle, transparent 50%, #330033 80%, #000000 100%);
+/* Animations */
+@keyframes spikeExplode {
+    0% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(0); opacity: 1; }
+    50% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(2) translateY(-200px); opacity: 0; }
 }
 
-/* Kích hoạt animations */
-#end-screen.trigger-explosion .fire-core { animation: coreExplode 2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
-#end-screen.trigger-explosion .layer-1 { animation: fireExpand 2.2s cubic-bezier(0.1, 0.9, 0.2, 1) 0.1s forwards; }
-#end-screen.trigger-explosion .layer-2 { animation: fireExpand 2.4s cubic-bezier(0.1, 0.9, 0.2, 1) 0.2s forwards; }
-#end-screen.trigger-explosion .layer-3 { animation: fireExpand 2.6s cubic-bezier(0.1, 0.9, 0.2, 1) 0.3s forwards; }
-#end-screen.trigger-explosion .smoke-layer { animation: smokeExpand 4s ease-out 0.5s forwards; }
-
-@keyframes coreExplode {
-    0% { width: 0; height: 0; opacity: 1; }
-    20% { width: 50vmax; height: 50vmax; opacity: 1; }
-    100% { width: 150vmax; height: 150vmax; opacity: 0; }
-}
-@keyframes fireExpand {
-    0% { width: 0; height: 0; opacity: 0.8; }
-    100% { width: 200vmax; height: 200vmax; opacity: 0; }
-}
-@keyframes smokeExpand {
-    0% { width: 0; height: 0; opacity: 0.5; }
-    100% { width: 250vmax; height: 250vmax; opacity: 0.8; }
+@keyframes particleFly {
+    0% { transform: translate(-50%, -50%) translate(0, 0); opacity: 1; scale: 1; }
+    100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)); opacity: 0; scale: 0; }
 }
 
 /* --- ANIMATIONS CŨ --- */
