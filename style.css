@@ -17,7 +17,6 @@ body, html {
 }
 #device-warning p {
     color: #fff; 
-    /* CẬP NHẬT: Font Times New Roman + Cỡ chữ lớn hơn */
     font-family: 'Times New Roman', Times, serif; 
     font-size: 2.2rem; 
     text-align: center; line-height: 1.6; font-style: italic;
@@ -58,8 +57,16 @@ body, html {
     overflow: hidden;
 }
 
-.white-aura-effect { filter: url('#white-power-aura') drop-shadow(0 0 15px #00e5ff); }
-.start-animations .white-aura-effect { animation: powerSurge 2s infinite ease-in-out; }
+/* CẬP NHẬT HIỆU ỨNG LỬA CHÁY */
+.white-aura-effect { 
+    /* Kết nối với bộ lọc SVG */
+    filter: url('#white-power-aura'); 
+    /* Giữ nguyên độ sáng cơ bản */
+}
+.start-animations .white-aura-effect { 
+    /* Animation mới: firePulse */
+    animation: firePulse 3s infinite ease-in-out; 
+}
 
 /* Gwen */
 .gwen-wrapper {
@@ -78,14 +85,16 @@ body, html {
 #world-cup { width: 280px; max-width: 40vw; }
 .cup-wrapper.show-cup { opacity: 1; }
 
-/* CẬP NHẬT: Chữ Đồng Ý lớn gấp đôi + Font Times New Roman */
+/* CẬP NHẬT: Chữ Đồng Ý (Nhỏ lại + Viết hoa đầu) */
 .click-hint {
     position: absolute; bottom: -80px; width: 100%; text-align: center;
     color: #fff; 
     font-family: 'Times New Roman', Times, serif; 
     font-weight: bold; 
-    font-size: 3rem; /* Tăng gấp đôi */
-    text-transform: uppercase;
+    /* Giảm size từ 3rem xuống 2.1rem (Khoảng 70%) */
+    font-size: 2.1rem; 
+    /* Bỏ uppercase toàn bộ */
+    text-transform: none; 
     letter-spacing: 2px; opacity: 0;
     text-shadow: 0 0 10px #00e5ff, 0 0 25px #e0ffff;
 }
@@ -140,7 +149,8 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 #final-screen {
     display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 70;
     overflow: hidden;
-    background-image: url('urna.jpg');
+    /* Đã cập nhật theo yêu cầu trước: urname.jpg */
+    background-image: url('urname.jpg');
     background-size: cover; background-position: center center; background-repeat: no-repeat;
 }
 
@@ -168,5 +178,13 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 @keyframes fadeInOut { 0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
 @keyframes pulseCircle { from { transform: scale(1); } to { transform: scale(1.1); } }
-@keyframes powerSurge { 0%, 100% { filter: url('#white-power-aura') brightness(1); } 50% { filter: url('#white-power-aura') brightness(1.3); } }
 @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* KEYFRAME MỚI CHO HIỆU ỨNG LỬA (Thay cho powerSurge cũ) */
+@keyframes firePulse { 
+    0% { filter: url('#white-power-aura') brightness(1); }
+    25% { filter: url('#white-power-aura') brightness(1.2); } 
+    50% { filter: url('#white-power-aura') brightness(1.1); }
+    75% { filter: url('#white-power-aura') brightness(1.3); } 
+    100% { filter: url('#white-power-aura') brightness(1); } 
+}
