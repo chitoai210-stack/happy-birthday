@@ -8,11 +8,55 @@ body, html {
     user-select: none;
 }
 
-/* --- BƯỚC -1: MÀN HÌNH CẢNH BÁO --- */
+/* --- BƯỚC 0: MÀN HÌNH LOGIN (MỚI) --- */
+#login-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: black; z-index: 20000; /* Cao nhất */
+    display: flex; justify-content: center; align-items: center;
+}
+.login-box {
+    width: 300px; text-align: center;
+    border: 2px solid #00e5ff; padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    border-radius: 10px;
+}
+.login-box h2 {
+    color: #00e5ff; font-family: 'Orbitron', sans-serif; margin-bottom: 20px; letter-spacing: 2px;
+}
+.login-box p {
+    color: #fff; font-size: 0.9rem; margin-bottom: 15px; font-family: 'Share Tech Mono', monospace;
+}
+#pass-input {
+    width: 80%; padding: 10px; margin-bottom: 20px;
+    background: #111; border: 1px solid #00e5ff; color: #fff;
+    font-family: 'Orbitron', sans-serif; text-align: center; letter-spacing: 2px;
+    outline: none;
+}
+#pass-input:focus { box-shadow: 0 0 10px #00e5ff; }
+
+.login-box button {
+    padding: 10px 30px; background: #00e5ff; border: none;
+    color: #000; font-weight: bold; font-family: 'Orbitron', sans-serif;
+    cursor: pointer; transition: all 0.3s;
+}
+.login-box button:hover { background: #fff; box-shadow: 0 0 15px #fff; }
+
+#login-message {
+    color: red; height: 20px; margin-top: 10px; font-weight: bold;
+}
+/* Hiệu ứng rung khi sai pass */
+.shake { animation: shake 0.5s; }
+@keyframes shake {
+    0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); }
+}
+
+/* --- BƯỚC 1: MÀN HÌNH CẢNH BÁO --- */
 #device-warning {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 10000;
-    display: flex; justify-content: center; align-items: center;
+    /* Display controlled by JS */
+    justify-content: center; align-items: center;
     padding: 20px; box-sizing: border-box;
 }
 #device-warning p {
@@ -23,7 +67,7 @@ body, html {
     animation: fadeInOut 12s linear forwards;
 }
 
-/* --- BƯỚC 0: START OVERLAY --- */
+/* --- BƯỚC 2: START OVERLAY --- */
 #start-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 9999;
@@ -34,7 +78,7 @@ body, html {
     animation: blinkText 1s infinite;
 }
 
-/* --- BƯỚC 1: ĐẾM NGƯỢC --- */
+/* --- BƯỚC 3: ĐẾM NGƯỢC --- */
 #countdown-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
@@ -50,25 +94,16 @@ body, html {
     font-family: 'Orbitron', sans-serif; font-size: 5rem; color: #ffffff; text-shadow: 0 0 20px #00e5ff;
 }
 
-/* --- BƯỚC 2: INTRO --- */
+/* --- BƯỚC 4: INTRO --- */
 #intro-screen {
     width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 10;
     background-image: url('nen.jpg'); background-size: cover; background-position: center; display: none;
     overflow: hidden;
 }
 
-/* CẬP NHẬT HIỆU ỨNG LỬA CHÁY */
-.white-aura-effect { 
-    /* Kết nối với bộ lọc SVG */
-    filter: url('#white-power-aura'); 
-    /* Giữ nguyên độ sáng cơ bản */
-}
-.start-animations .white-aura-effect { 
-    /* Animation mới: firePulse */
-    animation: firePulse 3s infinite ease-in-out; 
-}
+.white-aura-effect { filter: url('#white-power-aura'); }
+.start-animations .white-aura-effect { animation: firePulse 3s infinite ease-in-out; }
 
-/* Gwen */
 .gwen-wrapper {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
     height: 70vh; transition: all 2s ease-in-out; z-index: 10; opacity: 0;
@@ -77,7 +112,6 @@ body, html {
 #gwen-char { height: 100%; width: auto; }
 .gwen-wrapper.move-left { left: 25%; transform: translateX(-50%); }
 
-/* Cúp */
 .cup-wrapper {
     position: absolute; top: 50%; right: 20%; transform: translateY(-50%);
     cursor: pointer; z-index: 20; opacity: 0; transition: opacity 2s ease-in-out;
@@ -85,22 +119,14 @@ body, html {
 #world-cup { width: 280px; max-width: 40vw; }
 .cup-wrapper.show-cup { opacity: 1; }
 
-/* CẬP NHẬT: Chữ Đồng Ý (Nhỏ lại + Viết hoa đầu) */
 .click-hint {
     position: absolute; bottom: -80px; width: 100%; text-align: center;
-    color: #fff; 
-    font-family: 'Times New Roman', Times, serif; 
-    font-weight: bold; 
-    /* Giảm size từ 3rem xuống 2.1rem (Khoảng 70%) */
-    font-size: 2.1rem; 
-    /* Bỏ uppercase toàn bộ */
-    text-transform: none; 
-    letter-spacing: 2px; opacity: 0;
+    color: #fff; font-family: 'Times New Roman', Times, serif; font-weight: bold; 
+    font-size: 2.1rem; letter-spacing: 2px; opacity: 0;
     text-shadow: 0 0 10px #00e5ff, 0 0 25px #e0ffff;
 }
 .cup-wrapper.show-cup .click-hint { animation: blinkText 0.8s infinite alternate; opacity: 1; }
 
-/* Lời thoại */
 .dialogue-box {
     position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
@@ -130,7 +156,7 @@ body, html {
     z-index: 50; background: black; padding: 0; margin: 0;
 }
 .video-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+video { width: 100vw; height: 100vh; object-fit: cover; display: block; position: absolute; top: 0; left: 0;}
 
 #video-subtitles {
     position: absolute; bottom: 10%; left: 0; width: 100%;
@@ -149,7 +175,6 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 #final-screen {
     display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 70;
     overflow: hidden;
-    /* Đã cập nhật theo yêu cầu trước: urname.jpg */
     background-image: url('urname.jpg');
     background-size: cover; background-position: center center; background-repeat: no-repeat;
 }
@@ -179,8 +204,6 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
 @keyframes pulseCircle { from { transform: scale(1); } to { transform: scale(1.1); } }
 @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-/* KEYFRAME MỚI CHO HIỆU ỨNG LỬA (Thay cho powerSurge cũ) */
 @keyframes firePulse { 
     0% { filter: url('#white-power-aura') brightness(1); }
     25% { filter: url('#white-power-aura') brightness(1.2); } 
