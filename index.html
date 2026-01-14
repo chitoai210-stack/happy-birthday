@@ -2,10 +2,10 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Special Gift for Gwen</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -20,14 +20,11 @@
                 <feGaussianBlur stdDeviation="6" in="thicken" result="blurred"/>
                 <feFlood flood-color="#00e5ff" flood-opacity="0.9" result="glowColor"/>
                 <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow"/>
-
                 <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" result="noise">
                     <animate attributeName="baseFrequency" values="0.03;0.04;0.03" dur="2s" repeatCount="indefinite"/>
                     <animate attributeName="seed" values="1;20;1" dur="10s" repeatCount="indefinite"/>
                 </feTurbulence>
-
                 <feDisplacementMap in="softGlow" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" result="fireGlow"/>
-
                 <feMerge>
                     <feMergeNode in="fireGlow"/>
                     <feMergeNode in="SourceGraphic"/>
@@ -36,7 +33,17 @@
         </defs>
     </svg>
 
-    <div id="device-warning">
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>SECURITY CHECK</h2>
+            <p>Vui lòng nhập mã xác thực để truy cập:</p>
+            <input type="password" id="pass-input" placeholder="ACCESS CODE" maxlength="10">
+            <button onclick="checkPass()">UNLOCK</button>
+            <p id="login-message"></p>
+        </div>
+    </div>
+
+    <div id="device-warning" style="display: none;">
         <p>Hãy đảm bảo thiết bị của bạn đang dùng để xem món quà này là thiết bị tốt nhất<br>
         (do thiết kế trên Laptop, nên nếu dùng Laptop để xem thì sẽ đong đầy cảm xúc nhất ! Thân gửi đến bạn!)</p>
     </div>
@@ -73,16 +80,15 @@
 
     <div id="content-screen">
         <div class="video-container">
-            <video id="gojo-video" playsinline>
+            <video id="gojo-video" playsinline webkit-playsinline preload="auto">
                 <source src="gojo3.mp4" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
             <div id="video-subtitles"></div>
         </div>
     </div>
 
     <div id="explosion-screen" style="display: none;">
-        <video id="notung-video" playsinline>
+        <video id="notung-video" playsinline webkit-playsinline preload="auto">
             <source src="notung.mp4" type="video/mp4">
         </video>
     </div>
