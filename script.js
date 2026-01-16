@@ -14,6 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// --- CÁC BIẾN CẤU HÌNH ÂM THANH (CHỈNH Ở ĐÂY NÈ) ---
+const CONFIG = {
+    // Độ trễ của tiếng nổ so với video nổ (đơn vị mili-giây)
+    // Nếu tiếng nổ sớm hơn hình -> Tăng số này lên (ví dụ 200, 500)
+    // Nếu tiếng nổ trễ hơn hình -> Để số 0 hoặc số nhỏ
+    explosionDelay: 100, 
+
+    // Âm lượng nhạc nền (nhackp.mp3)
+    bgVolumeNormal: 0.8, // Mức bình thường (0.0 đến 1.0)
+    bgVolumeLow: 0.2     // Mức nhỏ khi xem video Gojo (nhỏ đi 80%)
+};
+
 // --- CHỨC NĂNG LOGIN ---
 function checkPass() {
     const input = document.getElementById('pass-input');
@@ -94,7 +106,7 @@ function runCountdownSequence() {
 function transitionToIntro() {
     const countdownScreen = document.getElementById('countdown-screen');
     const introScreen = document.getElementById('intro-screen');
-    const cuteMusic = document.getElementById('sound-cute');
+    const bgMusic = document.getElementById('sound-cute'); // Đây là file nhackp.mp3
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
     const gwenWrapper = document.querySelector('.gwen-wrapper');
@@ -102,7 +114,11 @@ function transitionToIntro() {
 
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
-    cuteMusic.volume = 0.5; cuteMusic.currentTime = 0; cuteMusic.play();
+    
+    // Bắt đầu phát nhạc nền (Nhạc KP)
+    bgMusic.volume = CONFIG.bgVolumeNormal; 
+    bgMusic.currentTime = 0; 
+    bgMusic.play();
 
     setTimeout(() => {
         introScreen.classList.add('start-animations');
@@ -133,8 +149,8 @@ function transitionToIntro() {
 }
 
 function openGift() {
-    const cuteMusic = document.getElementById('sound-cute');
-    cuteMusic.pause();
+    const bgMusic = document.getElementById('sound-cute'); // Nhạc nền
+    // KHÔNG PAUSE NHẠC NỮA
 
     const intro = document.getElementById('intro-screen');
     const content = document.getElementById('content-screen');
@@ -158,40 +174,111 @@ function openGift() {
         setTimeout(() => {
             intro.style.display = 'none';
             trollContainer.style.display = 'none';
-            content.style.display = '1000 
-    }
+            content.style.display = 'flex'; 
+            whiteOverlay.style.opacity = '0';
+            
+            // --- BẮT ĐẦU VIDEO GOJO: GIẢM VOLUME NHẠC NỀN ---
+            bgMusic.volume = CONFIG.bgVolumeLow;
+            
+            video.currentTime = 0;
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    video.muted = true; video.play();
+                });
+            }
+            
+            handleVideoSubtitles(video);
+
+            video.onended = () => {
+                content.style.display = 'none'; 
+                explosionScreen.style.display = 'block'; 
+                
+                // Reset
+                notungVideo.currentTime = 0; 
+                explosionSound.currentTime = 0; 
+
+                // 1. Chạy Video Nổ
+                notungVideo.play();
+                
+                // 2. Chạy Tiếng Nổ (có chỉnh delay)
+                setTimeout(() => {
+                    explosionSound.play().catch(e => console.log("Lỗi play sound nổ"));
+                }, CONFIG.explosionDelay);
+
+                notungVideo.onended = () => {
+                    explosionScreen.style.display = 'none'; 
+                    finalScreen.style.display = 'block'; 
+                    
+                    // --- KẾT THÚC NỔ: TRẢ LẠI VOLUME NHẠC NỀN ---
+                    bgMusic.volume = CONFIG.bgVolumeNormal;
+
+                    setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
+                    setTimeout(() => { 
+                        kpImg.classList.add('move-left');
+                        setTimeout(showFinalMessages, 1000); 
+                    }, 500);
+                };
+            };
+            setTimeout(() => { whiteOverlay.style.display = 'none'; }, 500);
+        }, 3500); 
+    }, 500); 
+}
+
+function handleVideoSubtitles(video) {
+    const subtitleDiv = document.getElementById('video-subtitles');
+    const subtitles = [
+        { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
+        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+    ];
+    video.addEventListener('timeupdate', () => {
+        const currentTime = video.currentTime;
+        let activeSubtitle = "";
+        subtitles.forEach(sub => {
+            if (currentTime >= sub.start && currentTime <= sub.end) activeSubtitle = sub.text;
+        });
+        subtitleDiv.innerHTML = activeSubtitle;
+    });
+}
+
+// --- CẤU HÌNH NỘI DUNG TIN NHẮN CUỐI ---
+const finalMessages = [
+    { text: "- 02/02/2026 -", time: 0 },
+    { text: "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !", time: 1000 },
+    { text: "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?", time: 13000 },
+    { text: "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !", time: 14000 },
+    { text: "Có thể là ngày mai, 1 tháng, 1 năm, 10 năm hay 20 năm nữa, tất cả chúng ta sẽ còn ở bên nhau, có thể không, có thể sẽ quên đi nhau theo dòng thời gian, nhưng với mình, những điều chúng ta đã từng, những kỷ niệm đó sẽ không bị lãng quên và sẽ mãi ở 1 góc của não bộ. (gì chứ tui say đắm trong quá khứ lắm, vui buồn gì cũng nhớ)", time: 18000 },
+    { text: "Nếu sau này không ai chúc mừng sinh nhật bạn nữa, thề với bạn là sẽ luôn có 1 người ghi nhớ điều đó, chỉ cần . 1 cái là sẽ có lời chúc tới ngay và luôn ! (thặc ra là nhớ hết, tại tùy hoàn cảnh có chúc được hay ko thoai)", time: 12000 },
+    { text: "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)", time: 10000 },
+    { text: "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình", time: 5000 },
+    { text: "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3", time: 4000 },
+    { text: "CHỊ PHƯƠNG GỈ MŨI", time: 3000 }
 ];
 
 function showFinalMessages() {
     const container = document.getElementById('message-container');
     container.innerHTML = ''; 
 
-    // Render dòng đầu tiên (Ngày tháng) riêng biệt để nó luôn nằm trên cùng
     const dateMsg = finalMessages[0];
     const dateP = document.createElement('div');
     dateP.classList.add('msg-title'); 
     dateP.textContent = dateMsg.text;
     container.appendChild(dateP);
 
-    // Biến tính tổng thời gian chờ
     let totalWaitTime = 0;
 
-    // Duyệt qua các dòng còn lại (bỏ qua dòng ngày tháng đầu tiên)
     finalMessages.slice(1).forEach((msgObj, index, array) => {
-        // Cộng dồn thời gian của từng dòng
         totalWaitTime += msgObj.time;
 
         setTimeout(() => {
             const p = document.createElement('div');
             p.classList.add('msg-line');
-            
-            // Nếu là dòng cuối cùng thì thêm class highlight
             if (index === array.length - 1) p.classList.add('msg-highlight');
             
             p.innerHTML = msgObj.text; 
             container.appendChild(p);
             
-            void p.offsetWidth; // Force reflow
+            void p.offsetWidth; 
             p.classList.add('msg-show');
 
             container.scrollTop = container.scrollHeight;
@@ -220,4 +307,3 @@ function triggerConfetti() {
         }
     }());
 }
-
