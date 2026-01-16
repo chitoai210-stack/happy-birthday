@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
+        // Gọi hàm warmup, hàm này sẽ tự gọi runCountdownSequence khi đã sẵn sàng
         warmUpVideos(); 
-        runCountdownSequence();
     });
 });
 
@@ -54,28 +54,48 @@ function startMainSequence() {
     }, 12000); 
 }
 
-// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN (SỬA LẠI LOGIC BEEP) ---
+// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN (FIX LỖI MẤT TIẾNG 5,4) ---
 function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
-    const beep = document.getElementById('sound-beep'); // Warmup luôn tiếng beep
+    const beep = document.getElementById('sound-beep'); 
+    const bgMusic = document.getElementById('sound-cute'); // Nhạc nền
 
-    v1.muted = true; v2.muted = true;
-    v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
-    v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
+    // 1. Mute và Play tất cả để 'mồi' trình duyệt (Bypass Autoplay Policy)
+    v1.muted = true; 
+    v2.muted = true;
     
-    // Kích hoạt tiếng beep 1 xíu để nạp vào bộ nhớ
+    // Play video mồi
+    const p1 = v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
+    const p2 = v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
+    
+    // Play beep mồi (âm lượng 0)
     beep.volume = 0; 
-    beep.play().then(() => {
+    const p3 = beep.play().then(() => {
         beep.pause();
         beep.currentTime = 0;
-        beep.volume = 1.0; 
+        beep.volume = 1.0; // Trả lại âm lượng to ngay
     }).catch(e => console.log("Warmup beep skip"));
 
+    // Play nhạc nền mồi
+    bgMusic.volume = 0;
+    const p4 = bgMusic.play().then(() => {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+        bgMusic.volume = CONFIG.bgVolumeNormal;
+    }).catch(e => console.log("Warmup music skip"));
+
+    // 2. Đợi một chút cho việc 'mồi' hoàn tất rồi mới bắt đầu đếm ngược
+    // Tăng thời gian chờ lên 300ms để đảm bảo trình duyệt xử lý xong
     setTimeout(() => {
-        v1.muted = false; v2.muted = false;
-        v1.currentTime = 0; v2.currentTime = 0;
-    }, 100);
+        v1.muted = false; 
+        v2.muted = false;
+        v1.currentTime = 0; 
+        v2.currentTime = 0;
+        
+        // BẮT ĐẦU ĐẾM NGƯỢC TẠI ĐÂY để đảm bảo đồng bộ
+        runCountdownSequence();
+    }, 300);
 }
 
 function runCountdownSequence() {
@@ -86,28 +106,37 @@ function runCountdownSequence() {
     beepSound.volume = 1.0;
     countdownScreen.style.display = 'flex';
 
-    // Hàm phát tiếng beep ngay lập tức
+    // Hàm phát tiếng beep an toàn
     const playTick = () => {
         beepSound.pause(); 
         beepSound.currentTime = 0;
-        beepSound.play().catch(e => console.error("Lỗi âm thanh:", e));
+        // Buộc play lại
+        const promise = beepSound.play();
+        if (promise !== undefined) {
+            promise.catch(e => console.error("Beep error:", e));
+        }
     };
 
     let count = 5;
     countdownElement.textContent = count;
-    playTick(); // Phát số 5
+    
+    // Phát tiếng beep số 5 ngay lập tức
+    playTick(); 
 
-    // Sử dụng interval chuẩn để tránh lệch nhịp
     const interval = setInterval(() => {
         count--;
         if (count > 0) {
             countdownElement.textContent = count;
             playTick(); 
         } else {
-            // Khi về 0 thì dừng ngay
-            countdownElement.textContent = count; // Hiện số 0 hoặc ẩn tùy ý, ở đây để số 0
+            // KHI VỀ 0: DỪNG NGAY LẬP TỨC
+            countdownElement.textContent = count; 
             clearInterval(interval);
-            // Chuyển cảnh ngay lập tức sau 1s ở số 0
+            
+            // Ép dừng tiếng beep nếu nó đang chạy dở
+            beepSound.pause();
+            beepSound.currentTime = 0;
+            
             setTimeout(() => { transitionToIntro(); }, 1000);
         }
     }, 1000);
@@ -116,7 +145,7 @@ function runCountdownSequence() {
 function transitionToIntro() {
     const countdownScreen = document.getElementById('countdown-screen');
     const introScreen = document.getElementById('intro-screen');
-    const bgMusic = document.getElementById('sound-cute'); // File nhackp.mp3
+    const bgMusic = document.getElementById('sound-cute'); 
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
     const gwenWrapper = document.querySelector('.gwen-wrapper');
@@ -185,7 +214,7 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
-            // --- BẮT ĐẦU VIDEO GOJO: GIẢM VOLUME ---
+            // --- VIDEO GOJO: GIẢM VOLUME ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -205,10 +234,8 @@ function openGift() {
                 notungVideo.currentTime = 0; 
                 explosionSound.currentTime = 0; 
 
-                // 1. Chạy Video Nổ
                 notungVideo.play();
                 
-                // 2. Chạy Tiếng Nổ (có delay chỉnh trong CONFIG)
                 setTimeout(() => {
                     explosionSound.play().catch(e => console.log("Lỗi play sound nổ"));
                 }, CONFIG.explosionDelay);
@@ -248,7 +275,7 @@ function handleVideoSubtitles(video) {
     });
 }
 
-// --- CẤU HÌNH TIN NHẮN CUỐI (BẠN CHỈNH THỜI GIAN Ở ĐÂY) ---
+// --- CẤU HÌNH TIN NHẮN CUỐI ---
 const finalMessages = [
     { text: "- 02/02/2026 -", time: 0 },
     { text: "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !", time: 1000 },
