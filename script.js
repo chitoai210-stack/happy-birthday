@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Chỉ lắng nghe sự kiện Enter ở ô nhập pass
     const passInput = document.getElementById('pass-input');
     passInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
@@ -15,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- CHỨC NĂNG LOGIN MỚI ---
+// --- CHỨC NĂNG LOGIN ---
 function checkPass() {
     const input = document.getElementById('pass-input');
     const msg = document.getElementById('login-message');
@@ -25,54 +24,39 @@ function checkPass() {
     if (input.value === "CT011002") {
         msg.style.color = "#00e5ff";
         msg.textContent = "ACCESS GRANTED";
-        
-        // Ẩn màn hình login sau 0.5s
         setTimeout(() => {
             loginScreen.style.display = 'none';
-            startMainSequence(); // Bắt đầu chạy phần Cảnh báo thiết bị
+            startMainSequence(); 
         }, 500);
     } else {
         msg.style.color = "red";
         msg.textContent = "WRONG PASSWORD!";
         input.value = "";
-        
-        // Hiệu ứng rung
         loginBox.classList.add('shake');
         setTimeout(() => { loginBox.classList.remove('shake'); }, 500);
     }
 }
 
-// Hàm này chứa logic cũ: Hiện cảnh báo 12s rồi hiện nút Start
 function startMainSequence() {
     const deviceWarning = document.getElementById('device-warning');
     const startOverlay = document.getElementById('start-overlay');
-    
-    // Hiện cảnh báo
     deviceWarning.style.display = 'flex';
-
-    // Đợi 12 giây đọc thông báo
     setTimeout(() => {
         deviceWarning.style.display = 'none';
         startOverlay.style.display = 'flex';
     }, 12000); 
 }
 
-// --- CÁC HÀM CŨ GIỮ NGUYÊN ---
+// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN ---
 function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
-    
-    v1.muted = true;
-    v2.muted = true;
-    
+    v1.muted = true; v2.muted = true;
     v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
     v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
-    
     setTimeout(() => {
-        v1.muted = false;
-        v2.muted = false;
-        v1.currentTime = 0;
-        v2.currentTime = 0;
+        v1.muted = false; v2.muted = false;
+        v1.currentTime = 0; v2.currentTime = 0;
     }, 100);
 }
 
@@ -85,8 +69,7 @@ function runCountdownSequence() {
     countdownScreen.style.display = 'flex';
 
     const playTick = () => {
-        beepSound.pause();
-        beepSound.currentTime = 0;
+        beepSound.pause(); beepSound.currentTime = 0;
         beepSound.play().catch(e => console.error("Lỗi âm thanh:", e));
     };
 
@@ -101,8 +84,7 @@ function runCountdownSequence() {
             playTick(); 
         } else if (count === 0) {
             countdownElement.textContent = count;
-            beepSound.pause(); 
-            beepSound.currentTime = 0;
+            beepSound.pause(); beepSound.currentTime = 0;
             clearInterval(interval);
             setTimeout(() => { transitionToIntro(); }, 1000);
         }
@@ -115,7 +97,6 @@ function transitionToIntro() {
     const cuteMusic = document.getElementById('sound-cute');
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
-    
     const gwenWrapper = document.querySelector('.gwen-wrapper');
     const cupWrapper = document.querySelector('.cup-wrapper');
 
@@ -125,7 +106,6 @@ function transitionToIntro() {
 
     setTimeout(() => {
         introScreen.classList.add('start-animations');
-        
         const dialogueSequence = [
             { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
             { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
@@ -138,11 +118,8 @@ function transitionToIntro() {
             setTimeout(() => {
                 dialogueText.innerHTML = item.text;
                 dialogueBox.classList.add('show');
-                
                 if (index < dialogueSequence.length - 1) {
-                    setTimeout(() => {
-                        dialogueBox.classList.remove('show');
-                    }, item.delay - 500);
+                    setTimeout(() => { dialogueBox.classList.remove('show'); }, item.delay - 500);
                 } else {
                     setTimeout(() => {
                         gwenWrapper.classList.add('move-left');
@@ -152,7 +129,6 @@ function transitionToIntro() {
             }, currentDelay);
             currentDelay += item.delay;
         });
-
     }, 100);
 }
 
@@ -176,9 +152,7 @@ function openGift() {
 
     setTimeout(() => {
         trollContainer.style.display = 'flex';
-        
-        video.load(); 
-        notungVideo.load();
+        video.load(); notungVideo.load();
 
         setTimeout(() => {
             intro.style.display = 'none';
@@ -190,9 +164,7 @@ function openGift() {
             const playPromise = video.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    console.log("Auto-play bị chặn, thử lại:", error);
-                    video.muted = true; 
-                    video.play();
+                    video.muted = true; video.play();
                 });
             }
             
@@ -202,18 +174,20 @@ function openGift() {
                 content.style.display = 'none'; 
                 explosionScreen.style.display = 'block'; 
                 
-                notungVideo.currentTime = 0; 
-                notungVideo.play();
+                notungVideo.currentTime = 0; notungVideo.play();
                 explosionSound.currentTime = 0; explosionSound.play();
 
                 notungVideo.onended = () => {
                     explosionScreen.style.display = 'none'; 
                     finalScreen.style.display = 'block'; 
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
-                    setTimeout(() => { kpImg.classList.add('move-left'); }, 500);
+                    setTimeout(() => { 
+                        kpImg.classList.add('move-left');
+                        // Bắt đầu hiện tin nhắn sau khi ảnh bắt đầu trượt
+                        setTimeout(showFinalMessages, 1500); 
+                    }, 500);
                 };
             };
-
             setTimeout(() => { whiteOverlay.style.display = 'none'; }, 500);
         }, 3500); 
     }, 500); 
@@ -229,10 +203,81 @@ function handleVideoSubtitles(video) {
         const currentTime = video.currentTime;
         let activeSubtitle = "";
         subtitles.forEach(sub => {
-            if (currentTime >= sub.start && currentTime <= sub.end) {
-                activeSubtitle = sub.text;
-            }
+            if (currentTime >= sub.start && currentTime <= sub.end) activeSubtitle = sub.text;
         });
         subtitleDiv.innerHTML = activeSubtitle;
     });
+}
+
+// --- LOGIC TIN NHẮN CUỐI & PHÁO HOA ---
+const finalMessages = [
+    "- 02/02/2026 -",
+    "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !",
+    "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?",
+    "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !",
+    "Có thể là ngày mai, 1 tháng, 1 năm, 10 năm hay 20 năm nữa, tất cả chúng ta sẽ còn ở bên nhau, có thể không, có thể sẽ quên đi nhau theo dòng thời gian, nhưng với mình, những điều chúng ta đã từng, những kỷ niệm đó sẽ không bị lãng quên và sẽ mãi ở 1 góc của não bộ. (gì chứ tui say đắm trong quá khứ lắm, vui buồn gì cũng nhớ)",
+    "Nếu sau này không ai chúc mừng sinh nhật bạn nữa, thề với bạn là sẽ luôn có 1 người ghi nhớ điều đó, chỉ cần . 1 cái là sẽ có lời chúc tới ngay và luôn ! (thặc ra là nhớ hết, tại tùy hoàn cảnh có chúc được hay ko thoai)",
+    "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)",
+    "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình",
+    "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3",
+    "CHỊ PHƯƠNG GỈ MŨI"
+];
+
+function showFinalMessages() {
+    const container = document.getElementById('message-container');
+    let delay = 0;
+
+    finalMessages.forEach((msg, index) => {
+        // Tính toán thời gian đọc dựa trên độ dài (ước lượng 50ms mỗi ký tự) + buffer
+        const readTime = Math.max(1500, msg.length * 30); 
+        
+        setTimeout(() => {
+            const p = document.createElement('div');
+            p.classList.add('msg-line');
+            if (index === 0) p.classList.add('msg-title'); // Dòng ngày tháng
+            if (index === finalMessages.length - 1) p.classList.add('msg-highlight'); // Dòng ký tên
+            
+            p.textContent = msg;
+            container.appendChild(p);
+            
+            // Trigger reflow để animation chạy
+            void p.offsetWidth; 
+            p.classList.add('visible');
+
+            // Tự động cuộn xuống dưới cùng nếu dài quá
+            container.scrollTop = container.scrollHeight;
+
+            // Nếu là dòng cuối cùng -> Bắn pháo hoa
+            if (index === finalMessages.length - 1) {
+                triggerConfetti();
+            }
+        }, delay);
+
+        delay += 2500; // Mỗi đoạn cách nhau 2.5s để người đọc kịp load
+    });
+}
+
+function triggerConfetti() {
+    // Bắn pháo hoa tưng bừng từ 2 bên
+    const duration = 5 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 }
+        });
+        confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 }
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
 }
