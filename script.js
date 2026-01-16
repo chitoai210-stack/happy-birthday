@@ -152,7 +152,6 @@ function openGift() {
 
     setTimeout(() => {
         trollContainer.style.display = 'flex';
-        // Preload kỹ hơn
         video.load(); 
         notungVideo.load();
 
@@ -172,16 +171,13 @@ function openGift() {
             
             handleVideoSubtitles(video);
 
-            // Xử lý khi video Gojo kết thúc
             video.onended = () => {
                 content.style.display = 'none'; 
                 explosionScreen.style.display = 'block'; 
                 
-                // Reset thời gian về 0 để chắc chắn
                 notungVideo.currentTime = 0; 
                 explosionSound.currentTime = 0; 
 
-                // Cố gắng chạy cả 2 cùng lúc bằng Promise.all để giảm delay
                 Promise.all([
                     notungVideo.play(),
                     explosionSound.play()
@@ -193,7 +189,6 @@ function openGift() {
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
                     setTimeout(() => { 
                         kpImg.classList.add('move-left');
-                        // Bắt đầu hiện tin nhắn sau khi ảnh bắt đầu trượt 1 chút
                         setTimeout(showFinalMessages, 1000); 
                     }, 500);
                 };
@@ -203,14 +198,11 @@ function openGift() {
     }, 500); 
 }
 
-// --- ĐÃ CHỈNH SỬA THỜI GIAN SUBTITLE ---
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     const subtitles = [
-        // Start 3.5s đến 4.5s
         { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
-        // Start 7.5s đến 9s
-        { start: 7.5, end: 9.55, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
@@ -222,79 +214,103 @@ function handleVideoSubtitles(video) {
     });
 }
 
-// --- LOGIC TIN NHẮN CUỐI & PHÁO HOA (ĐÃ CHỈNH SỬA) ---
+// --- CẤU HÌNH TIN NHẮN VÀ THỜI GIAN (BẠN CHỈNH Ở ĐÂY) ---
+// text: Nội dung
+// time: Thời gian chờ để hiện dòng này (tính từ lúc dòng trước hiện xong)
 const finalMessages = [
-    "- 02/02/2026 -", // Dòng 0: Ngày tháng (sẽ xử lý riêng)
-    "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !",
-    "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?",
-    "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !",
-    "Có thể là ngày mai, 1 tháng, 1 năm, 10 năm hay 20 năm nữa, tất cả chúng ta sẽ còn ở bên nhau, có thể không, có thể sẽ quên đi nhau theo dòng thời gian, nhưng với mình, những điều chúng ta đã từng, những kỷ niệm đó sẽ không bị lãng quên và sẽ mãi ở 1 góc của não bộ. (gì chứ tui say đắm trong quá khứ lắm, vui buồn gì cũng nhớ)",
-    "Nếu sau này không ai chúc mừng sinh nhật bạn nữa, thề với bạn là sẽ luôn có 1 người ghi nhớ điều đó, chỉ cần . 1 cái là sẽ có lời chúc tới ngay và luôn ! (thặc ra là nhớ hết, tại tùy hoàn cảnh có chúc được hay ko thoai)",
-    "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)",
-    "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình",
-    "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3",
-    "CHỊ PHƯƠNG GỈ MŨI" // Dòng cuối: Ký tên
+    { 
+        text: "- 02/02/2026 -", 
+        time: 0 // Dòng đầu hiện ngay lập tức
+    },
+    { 
+        text: "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !", 
+        time: 1000 // Hiện sau ngày tháng 1 giây
+    },
+    { 
+        text: "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?", 
+        time: 12000 // Đọc đoạn trên khoảng 12s rồi mới hiện đoạn này
+    },
+    { 
+        text: "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !", 
+        time: 12000 // Chờ 12s
+    },
+    { 
+        text: "Có thể là ngày mai, 1 tháng, 1 năm, 10 năm hay 20 năm nữa, tất cả chúng ta sẽ còn ở bên nhau, có thể không, có thể sẽ quên đi nhau theo dòng thời gian, nhưng với mình, những điều chúng ta đã từng, những kỷ niệm đó sẽ không bị lãng quên và sẽ mãi ở 1 góc của não bộ. (gì chứ tui say đắm trong quá khứ lắm, vui buồn gì cũng nhớ)", 
+        time: 15000 // Đoạn này dài, chờ 15s
+    },
+    { 
+        text: "Nếu sau này không ai chúc mừng sinh nhật bạn nữa, thề với bạn là sẽ luôn có 1 người ghi nhớ điều đó, chỉ cần . 1 cái là sẽ có lời chúc tới ngay và luôn ! (thặc ra là nhớ hết, tại tùy hoàn cảnh có chúc được hay ko thoai)", 
+        time: 12000 
+    },
+    { 
+        text: "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)", 
+        time: 10000 
+    },
+    { 
+        text: "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình", 
+        time: 8000 
+    },
+    { 
+        text: "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3", 
+        time: 5000 
+    },
+    { 
+        text: "CHỊ PHƯƠNG GỈ MŨI", 
+        time: 3000 
+    }
 ];
 
 function showFinalMessages() {
     const container = document.getElementById('message-container');
-    container.innerHTML = ''; // Xóa sạch nội dung cũ nếu có
+    container.innerHTML = ''; 
 
-    // 1. Xử lý dòng Ngày tháng (luôn hiện đầu tiên, không delay)
+    // Render dòng đầu tiên (Ngày tháng) riêng biệt để nó luôn nằm trên cùng
     const dateMsg = finalMessages[0];
     const dateP = document.createElement('div');
-    dateP.classList.add('msg-title'); // Class riêng cho ngày tháng
-    dateP.textContent = dateMsg;
+    dateP.classList.add('msg-title'); 
+    dateP.textContent = dateMsg.text;
     container.appendChild(dateP);
 
-    // 2. Xử lý các dòng còn lại (hiện lần lượt mỗi 10s)
-    let cumulativeDelay = 1000; // Bắt đầu hiện dòng tiếp theo sau 1s
+    // Biến tính tổng thời gian chờ
+    let totalWaitTime = 0;
 
-    // Cắt bỏ dòng đầu tiên (ngày tháng) khỏi mảng để duyệt
-    finalMessages.slice(1).forEach((msg, index, array) => {
+    // Duyệt qua các dòng còn lại (bỏ qua dòng ngày tháng đầu tiên)
+    finalMessages.slice(1).forEach((msgObj, index, array) => {
+        // Cộng dồn thời gian của từng dòng
+        totalWaitTime += msgObj.time;
+
         setTimeout(() => {
             const p = document.createElement('div');
             p.classList.add('msg-line');
-            // Kiểm tra nếu là dòng cuối cùng (Ký tên) thì thêm class highlight
+            
+            // Nếu là dòng cuối cùng thì thêm class highlight
             if (index === array.length - 1) p.classList.add('msg-highlight');
             
-            p.innerHTML = msg; // Dùng innerHTML để có thể chứa thẻ html con nếu cần
+            p.innerHTML = msgObj.text; 
             container.appendChild(p);
             
-            // Kích hoạt animation hiện chữ
             void p.offsetWidth; // Force reflow
             p.classList.add('msg-show');
 
-            // Tự động cuộn xuống dưới cùng khi có tin nhắn mới
             container.scrollTop = container.scrollHeight;
 
-            // Nếu là dòng cuối cùng -> Bắn pháo hoa sau khi hiện xong
             if (index === array.length - 1) {
                 setTimeout(triggerConfetti, 1000);
             }
-        }, cumulativeDelay);
-
-        cumulativeDelay += 10000; // Mỗi dòng cách nhau 10 giây
+        }, totalWaitTime);
     });
 }
 
 function triggerConfetti() {
-    // Bắn pháo hoa tưng bừng từ 2 bên
     const duration = 5 * 1000;
     const end = Date.now() + duration;
 
     (function frame() {
         confetti({
-            particleCount: 5,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 }
+            particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }
         });
         confetti({
-            particleCount: 5,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 }
+            particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }
         });
 
         if (Date.now() < end) {
@@ -302,4 +318,3 @@ function triggerConfetti() {
         }
     }());
 }
-
