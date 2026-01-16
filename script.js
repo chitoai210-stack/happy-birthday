@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
-        // Gọi hàm warmup, hàm này sẽ tự gọi runCountdownSequence khi đã sẵn sàng
-        warmUpVideos(); 
+        warmUpVideos(); // Chỉ warm up video, nhạc đã chạy từ bước login
     });
 });
 
@@ -21,16 +20,22 @@ const CONFIG = {
     bgVolumeLow: 0.2     
 };
 
-// --- CHỨC NĂNG LOGIN ---
+// --- CHỨC NĂNG LOGIN (ĐÃ SỬA: PHÁT NHẠC LUÔN) ---
 function checkPass() {
     const input = document.getElementById('pass-input');
     const msg = document.getElementById('login-message');
     const loginScreen = document.getElementById('login-screen');
     const loginBox = document.querySelector('.login-box');
+    const bgMusic = document.getElementById('sound-cute'); // File nhackp1.mp3
 
     if (input.value === "CT011002") {
         msg.style.color = "#00e5ff";
         msg.textContent = "ACCESS GRANTED";
+        
+        // --- PHÁT NHẠC NỀN NGAY LẬP TỨC ---
+        bgMusic.volume = CONFIG.bgVolumeNormal;
+        bgMusic.play().catch(e => console.log("Lỗi phát nhạc nền:", e));
+
         setTimeout(() => {
             loginScreen.style.display = 'none';
             startMainSequence(); 
@@ -54,46 +59,25 @@ function startMainSequence() {
     }, 12000); 
 }
 
-// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN (FIX LỖI MẤT TIẾNG 5,4) ---
+// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN (ĐÃ XÓA BEEP) ---
 function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
-    const beep = document.getElementById('sound-beep'); 
-    const bgMusic = document.getElementById('sound-cute'); // Nhạc nền
 
-    // 1. Mute và Play tất cả để 'mồi' trình duyệt (Bypass Autoplay Policy)
+    // Mute và Play video để 'mồi' trình duyệt
     v1.muted = true; 
     v2.muted = true;
     
-    // Play video mồi
-    const p1 = v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
-    const p2 = v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
+    v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
+    v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
     
-    // Play beep mồi (âm lượng 0)
-    beep.volume = 0; 
-    const p3 = beep.play().then(() => {
-        beep.pause();
-        beep.currentTime = 0;
-        beep.volume = 1.0; // Trả lại âm lượng to ngay
-    }).catch(e => console.log("Warmup beep skip"));
-
-    // Play nhạc nền mồi
-    bgMusic.volume = 0;
-    const p4 = bgMusic.play().then(() => {
-        bgMusic.pause();
-        bgMusic.currentTime = 0;
-        bgMusic.volume = CONFIG.bgVolumeNormal;
-    }).catch(e => console.log("Warmup music skip"));
-
-    // 2. Đợi một chút cho việc 'mồi' hoàn tất rồi mới bắt đầu đếm ngược
-    // Tăng thời gian chờ lên 300ms để đảm bảo trình duyệt xử lý xong
+    // Đợi 300ms rồi đếm ngược
     setTimeout(() => {
         v1.muted = false; 
         v2.muted = false;
         v1.currentTime = 0; 
         v2.currentTime = 0;
         
-        // BẮT ĐẦU ĐẾM NGƯỢC TẠI ĐÂY để đảm bảo đồng bộ
         runCountdownSequence();
     }, 300);
 }
@@ -101,42 +85,20 @@ function warmUpVideos() {
 function runCountdownSequence() {
     const countdownScreen = document.getElementById('countdown-screen');
     const countdownElement = document.getElementById('countdown-number');
-    const beepSound = document.getElementById('sound-beep');
     
-    beepSound.volume = 1.0;
     countdownScreen.style.display = 'flex';
-
-    // Hàm phát tiếng beep an toàn
-    const playTick = () => {
-        beepSound.pause(); 
-        beepSound.currentTime = 0;
-        // Buộc play lại
-        const promise = beepSound.play();
-        if (promise !== undefined) {
-            promise.catch(e => console.error("Beep error:", e));
-        }
-    };
 
     let count = 5;
     countdownElement.textContent = count;
-    
-    // Phát tiếng beep số 5 ngay lập tức
-    playTick(); 
 
     const interval = setInterval(() => {
         count--;
         if (count > 0) {
             countdownElement.textContent = count;
-            playTick(); 
         } else {
-            // KHI VỀ 0: DỪNG NGAY LẬP TỨC
+            // Khi về 0
             countdownElement.textContent = count; 
             clearInterval(interval);
-            
-            // Ép dừng tiếng beep nếu nó đang chạy dở
-            beepSound.pause();
-            beepSound.currentTime = 0;
-            
             setTimeout(() => { transitionToIntro(); }, 1000);
         }
     }, 1000);
@@ -145,7 +107,6 @@ function runCountdownSequence() {
 function transitionToIntro() {
     const countdownScreen = document.getElementById('countdown-screen');
     const introScreen = document.getElementById('intro-screen');
-    const bgMusic = document.getElementById('sound-cute'); 
     const dialogueBox = document.querySelector('.dialogue-box');
     const dialogueText = document.getElementById('dialogue-text');
     const gwenWrapper = document.querySelector('.gwen-wrapper');
@@ -154,9 +115,7 @@ function transitionToIntro() {
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
     
-    bgMusic.volume = CONFIG.bgVolumeNormal; 
-    bgMusic.currentTime = 0; 
-    bgMusic.play();
+    // Không cần play nhạc ở đây nữa vì đã play ở login
 
     setTimeout(() => {
         introScreen.classList.add('start-animations');
