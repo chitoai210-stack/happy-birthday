@@ -210,7 +210,7 @@ function handleVideoSubtitles(video) {
         // Start 3.5s đến 4.5s
         { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
         // Start 7.5s đến 9s
-        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        { start: 7.5, end: 9.55, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
@@ -302,3 +302,4 @@ function triggerConfetti() {
         }
     }());
 }
+
