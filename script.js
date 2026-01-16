@@ -152,7 +152,9 @@ function openGift() {
 
     setTimeout(() => {
         trollContainer.style.display = 'flex';
-        video.load(); notungVideo.load();
+        // Preload kỹ hơn
+        video.load(); 
+        notungVideo.load();
 
         setTimeout(() => {
             intro.style.display = 'none';
@@ -170,12 +172,20 @@ function openGift() {
             
             handleVideoSubtitles(video);
 
+            // Xử lý khi video Gojo kết thúc
             video.onended = () => {
                 content.style.display = 'none'; 
                 explosionScreen.style.display = 'block'; 
                 
-                notungVideo.currentTime = 0; notungVideo.play();
-                explosionSound.currentTime = 0; explosionSound.play();
+                // Reset thời gian về 0 để chắc chắn
+                notungVideo.currentTime = 0; 
+                explosionSound.currentTime = 0; 
+
+                // Cố gắng chạy cả 2 cùng lúc bằng Promise.all để giảm delay
+                Promise.all([
+                    notungVideo.play(),
+                    explosionSound.play()
+                ]).catch(e => console.log("Lỗi sync âm thanh nổ:", e));
 
                 notungVideo.onended = () => {
                     explosionScreen.style.display = 'none'; 
@@ -183,8 +193,8 @@ function openGift() {
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
                     setTimeout(() => { 
                         kpImg.classList.add('move-left');
-                        // Bắt đầu hiện tin nhắn sau khi ảnh bắt đầu trượt
-                        setTimeout(showFinalMessages, 1500); 
+                        // Bắt đầu hiện tin nhắn sau khi ảnh bắt đầu trượt 1 chút
+                        setTimeout(showFinalMessages, 1000); 
                     }, 500);
                 };
             };
@@ -193,11 +203,14 @@ function openGift() {
     }, 500); 
 }
 
+// --- ĐÃ CHỈNH SỬA THỜI GIAN SUBTITLE ---
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     const subtitles = [
-        { start: 2.0, end: 4.5, text: "Hư Thức, TỬ !" },
-        { start: 5.0, end: 8.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        // Start 3.5s đến 4.5s
+        { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
+        // Start 7.5s đến 9s
+        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
@@ -209,9 +222,9 @@ function handleVideoSubtitles(video) {
     });
 }
 
-// --- LOGIC TIN NHẮN CUỐI & PHÁO HOA ---
+// --- LOGIC TIN NHẮN CUỐI & PHÁO HOA (ĐÃ CHỈNH SỬA) ---
 const finalMessages = [
-    "- 02/02/2026 -",
+    "- 02/02/2026 -", // Dòng 0: Ngày tháng (sẽ xử lý riêng)
     "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !",
     "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?",
     "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !",
@@ -220,40 +233,48 @@ const finalMessages = [
     "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)",
     "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình",
     "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3",
-    "CHỊ PHƯƠNG GỈ MŨI"
+    "CHỊ PHƯƠNG GỈ MŨI" // Dòng cuối: Ký tên
 ];
 
 function showFinalMessages() {
     const container = document.getElementById('message-container');
-    let delay = 0;
+    container.innerHTML = ''; // Xóa sạch nội dung cũ nếu có
 
-    finalMessages.forEach((msg, index) => {
-        // Tính toán thời gian đọc dựa trên độ dài (ước lượng 50ms mỗi ký tự) + buffer
-        const readTime = Math.max(1500, msg.length * 30); 
-        
+    // 1. Xử lý dòng Ngày tháng (luôn hiện đầu tiên, không delay)
+    const dateMsg = finalMessages[0];
+    const dateP = document.createElement('div');
+    dateP.classList.add('msg-title'); // Class riêng cho ngày tháng
+    dateP.textContent = dateMsg;
+    container.appendChild(dateP);
+
+    // 2. Xử lý các dòng còn lại (hiện lần lượt mỗi 10s)
+    let cumulativeDelay = 1000; // Bắt đầu hiện dòng tiếp theo sau 1s
+
+    // Cắt bỏ dòng đầu tiên (ngày tháng) khỏi mảng để duyệt
+    finalMessages.slice(1).forEach((msg, index, array) => {
         setTimeout(() => {
             const p = document.createElement('div');
             p.classList.add('msg-line');
-            if (index === 0) p.classList.add('msg-title'); // Dòng ngày tháng
-            if (index === finalMessages.length - 1) p.classList.add('msg-highlight'); // Dòng ký tên
+            // Kiểm tra nếu là dòng cuối cùng (Ký tên) thì thêm class highlight
+            if (index === array.length - 1) p.classList.add('msg-highlight');
             
-            p.textContent = msg;
+            p.innerHTML = msg; // Dùng innerHTML để có thể chứa thẻ html con nếu cần
             container.appendChild(p);
             
-            // Trigger reflow để animation chạy
-            void p.offsetWidth; 
-            p.classList.add('visible');
+            // Kích hoạt animation hiện chữ
+            void p.offsetWidth; // Force reflow
+            p.classList.add('msg-show');
 
-            // Tự động cuộn xuống dưới cùng nếu dài quá
+            // Tự động cuộn xuống dưới cùng khi có tin nhắn mới
             container.scrollTop = container.scrollHeight;
 
-            // Nếu là dòng cuối cùng -> Bắn pháo hoa
-            if (index === finalMessages.length - 1) {
-                triggerConfetti();
+            // Nếu là dòng cuối cùng -> Bắn pháo hoa sau khi hiện xong
+            if (index === array.length - 1) {
+                setTimeout(triggerConfetti, 1000);
             }
-        }, delay);
+        }, cumulativeDelay);
 
-        delay += 2500; // Mỗi đoạn cách nhau 2.5s để người đọc kịp load
+        cumulativeDelay += 10000; // Mỗi dòng cách nhau 10 giây
     });
 }
 
