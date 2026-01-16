@@ -158,105 +158,7 @@ function openGift() {
         setTimeout(() => {
             intro.style.display = 'none';
             trollContainer.style.display = 'none';
-            content.style.display = 'flex'; 
-            whiteOverlay.style.opacity = '0';
-            
-            video.currentTime = 0;
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    video.muted = true; video.play();
-                });
-            }
-            
-            handleVideoSubtitles(video);
-
-            video.onended = () => {
-                content.style.display = 'none'; 
-                explosionScreen.style.display = 'block'; 
-                
-                notungVideo.currentTime = 0; 
-                explosionSound.currentTime = 0; 
-
-                Promise.all([
-                    notungVideo.play(),
-                    explosionSound.play()
-                ]).catch(e => console.log("Lỗi sync âm thanh nổ:", e));
-
-                notungVideo.onended = () => {
-                    explosionScreen.style.display = 'none'; 
-                    finalScreen.style.display = 'block'; 
-                    setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
-                    setTimeout(() => { 
-                        kpImg.classList.add('move-left');
-                        setTimeout(showFinalMessages, 1000); 
-                    }, 500);
-                };
-            };
-            setTimeout(() => { whiteOverlay.style.display = 'none'; }, 500);
-        }, 3500); 
-    }, 500); 
-}
-
-function handleVideoSubtitles(video) {
-    const subtitleDiv = document.getElementById('video-subtitles');
-    const subtitles = [
-        { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
-        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
-    ];
-    video.addEventListener('timeupdate', () => {
-        const currentTime = video.currentTime;
-        let activeSubtitle = "";
-        subtitles.forEach(sub => {
-            if (currentTime >= sub.start && currentTime <= sub.end) activeSubtitle = sub.text;
-        });
-        subtitleDiv.innerHTML = activeSubtitle;
-    });
-}
-
-// --- CẤU HÌNH TIN NHẮN VÀ THỜI GIAN (BẠN CHỈNH Ở ĐÂY) ---
-// text: Nội dung
-// time: Thời gian chờ để hiện dòng này (tính từ lúc dòng trước hiện xong)
-const finalMessages = [
-    { 
-        text: "- 02/02/2026 -", 
-        time: 0 // Dòng đầu hiện ngay lập tức
-    },
-    { 
-        text: "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !", 
-        time: 1000 // Hiện sau ngày tháng 1 giây
-    },
-    { 
-        text: "Không biết ngày hôm nay của bạn như thế nào, sẽ có chuyện vui, chuyện buồn, tức dzận, hay chỉ là 1 ngày bình thường như bao ngày ? Có nhận được những lời chúc mừng từ những người mình yêu thương và trân trọng ?", 
-        time: 12000 // Đọc đoạn trên khoảng 12s rồi mới hiện đoạn này
-    },
-    { 
-        text: "Dù có chuyện gì đi nữa, sau tất cả, đến thời điểm hiện tại, bạn hãy thật vui vẻ và hạnh phúc nhé ! Vì những điều đã trải qua, vì khi đọc những dòng này, bạn vẫn có thể mỉm cười, có thể khóc, có thể ở bên những người mình yêu quý và chia sẻ những cảm xúc ấy !", 
-        time: 12000 // Chờ 12s
-    },
-    { 
-        text: "Có thể là ngày mai, 1 tháng, 1 năm, 10 năm hay 20 năm nữa, tất cả chúng ta sẽ còn ở bên nhau, có thể không, có thể sẽ quên đi nhau theo dòng thời gian, nhưng với mình, những điều chúng ta đã từng, những kỷ niệm đó sẽ không bị lãng quên và sẽ mãi ở 1 góc của não bộ. (gì chứ tui say đắm trong quá khứ lắm, vui buồn gì cũng nhớ)", 
-        time: 15000 // Đoạn này dài, chờ 15s
-    },
-    { 
-        text: "Nếu sau này không ai chúc mừng sinh nhật bạn nữa, thề với bạn là sẽ luôn có 1 người ghi nhớ điều đó, chỉ cần . 1 cái là sẽ có lời chúc tới ngay và luôn ! (thặc ra là nhớ hết, tại tùy hoàn cảnh có chúc được hay ko thoai)", 
-        time: 12000 
-    },
-    { 
-        text: "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)", 
-        time: 10000 
-    },
-    { 
-        text: "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình", 
-        time: 8000 
-    },
-    { 
-        text: "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3", 
-        time: 5000 
-    },
-    { 
-        text: "CHỊ PHƯƠNG GỈ MŨI", 
-        time: 3000 
+            content.style.display = '1000 
     }
 ];
 
@@ -318,3 +220,4 @@ function triggerConfetti() {
         }
     }());
 }
+
