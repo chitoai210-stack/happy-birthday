@@ -199,23 +199,23 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; }
 }
 
-/* --- KHUNG TIN NHẮN CUỐI CÙNG --- */
+/* --- KHUNG TIN NHẮN CUỐI CÙNG (ĐÃ CHỈNH SỬA) --- */
 #message-container {
     position: absolute;
-    top: 50%; right: 5%; 
+    top: 50%; right: 2%; /* Dời sát lề phải hơn chút */
     transform: translateY(-50%);
-    width: 45%; 
-    height: 85vh;
+    width: 48%; /* Rộng hơn chút để chứa chữ to */
+    height: 90vh;
     overflow-y: auto;
     color: white;
     font-family: 'Montserrat', sans-serif;
-    text-shadow: 1px 1px 2px black;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8); /* Tăng shadow để dễ đọc trên nền sáng */
     z-index: 80;
-    padding-right: 10px;
+    padding: 20px 10px; /* Thêm padding */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 15px; /* Khoảng cách giữa các đoạn */
+    gap: 20px; /* Tăng khoảng cách giữa các đoạn */
 }
 
 /* Thanh cuộn nhỏ cho đẹp */
@@ -223,20 +223,35 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 #message-container::-webkit-scrollbar-thumb { background: #00e5ff; border-radius: 5px; }
 
 .msg-line {
-    opacity: 0;
+    opacity: 0; /* Mặc định ẩn */
     transform: translateY(20px);
-    transition: all 0.8s ease-out;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 10px;
-    border-radius: 8px;
-    border-left: 3px solid #00e5ff;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    transition: all 1s ease-out; /* Thời gian hiện chậm hơn chút cho mượt */
+    background: rgba(0, 0, 0, 0.5); /* Nền tối hơn chút */
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #00e5ff;
+    font-size: 1.1rem; /* Chữ to hơn */
+    line-height: 1.6;
 }
 
-.msg-line.visible { opacity: 1; transform: translateY(0); }
+/* Class để kích hoạt hiện chữ */
+.msg-show { opacity: 1; transform: translateY(0); }
+
 .msg-highlight { color: #00e5ff; font-weight: bold; font-family: 'Orbitron', sans-serif; }
-.msg-title { text-align: center; font-weight: bold; font-size: 1.2rem; color: #ff00de; border: none; background: none;}
+
+/* Style riêng cho dòng Ngày tháng */
+.msg-title { 
+    text-align: center; 
+    font-weight: 800; 
+    font-size: 1.8rem; /* Rất to */
+    color: #00e5ff; /* Màu xanh neon nổi bật */
+    border: none; 
+    background: none;
+    opacity: 1; /* Luôn hiện */
+    transform: translateY(0);
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    margin-bottom: 10px;
+}
 
 @keyframes fadeInOut { 0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
