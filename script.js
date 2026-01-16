@@ -19,7 +19,7 @@ const CONFIG = {
     // Độ trễ của tiếng nổ so với video nổ (đơn vị mili-giây)
     // Nếu tiếng nổ sớm hơn hình -> Tăng số này lên (ví dụ 200, 500)
     // Nếu tiếng nổ trễ hơn hình -> Để số 0 hoặc số nhỏ
-    explosionDelay: 100, 
+    explosionDelay: 50, 
 
     // Âm lượng nhạc nền (nhackp.mp3)
     bgVolumeNormal: 0.8, // Mức bình thường (0.0 đến 1.0)
@@ -228,8 +228,8 @@ function openGift() {
 function handleVideoSubtitles(video) {
     const subtitleDiv = document.getElementById('video-subtitles');
     const subtitles = [
-        { start: 3.5, end: 4.5, text: "Hư Thức, TỬ !" },
-        { start: 7.5, end: 9.0, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
+        { start: 3.5, end: 5.0, text: "Hư Thức, TỬ !" },
+        { start: 7.7, end: 9.5, text: "Bắn dô cái mỏ mày <span class='sub-small'>*just kidding*</span>" }
     ];
     video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
@@ -307,3 +307,4 @@ function triggerConfetti() {
         }
     }());
 }
+
