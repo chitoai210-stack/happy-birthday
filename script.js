@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const CONFIG = {
     explosionDelay: 100, // Độ trễ tiếng nổ (ms)
     bgVolumeNormal: 0.8, 
-    bgVolumeLow: 0.2     
+    bgVolumeLow: 0.1     // Đã giảm xuống 10%
 };
 
 // --- CHỨC NĂNG LOGIN ---
@@ -117,7 +117,6 @@ function transitionToIntro() {
             { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
             { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
             { text: "thì hôm nay vẫn là ngày tuyệt vời của bạn", delay: 3000 },
-            // --- ĐÃ SỬA LỜI THOẠI NGẮN GỌN ---
             { text: "Hãy đến nhận lấy chiếc cúp của mình đi nào!", delay: 3500 }
         ];
 
@@ -168,6 +167,7 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
+            // --- VIDEO GOJO: GIẢM VOLUME CÒN 10% ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -270,36 +270,39 @@ function showFinalMessages() {
             container.scrollTop = container.scrollHeight;
 
             if (index === array.length - 1) {
-                // Kích hoạt pháo hoa ban đầu
                 setTimeout(triggerConfetti, 1000);
-                
-                // --- KÍCH HOẠT HIỆU ỨNG KẾT THÚC (GRAND FINALE) SAU 3s ---
+                // Đợi thêm 3s rồi mới bắt đầu kịch bản kết thúc
                 setTimeout(triggerGrandFinale, 3000);
             }
         }, totalWaitTime);
     });
 }
 
-// Hàm mới: Xử lý hiệu ứng kết thúc hoành tráng
+// HÀM XỬ LÝ KẾT THÚC (GRAND FINALE) ĐÃ CHỈNH SỬA
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
 
-    // 1. Ẩn chữ đi
+    // 1. Ẩn chữ đi trước
     container.classList.add('fade-out-text');
 
-    // 2. Đưa ảnh về giữa, zoom lên và lắc lắc
-    kpImg.classList.remove('move-left'); // Xóa class cũ để tránh xung đột
-    kpImg.classList.add('final-center-stage');
+    // 2. Đợi 2.5 giây cho chữ mờ hẳn, rồi mới cho hình di chuyển
+    setTimeout(() => {
+        kpImg.classList.add('final-center-stage');
+        
+        // 3. Đợi thêm 5 giây (thời gian hình trôi từ từ) rồi mới lắc
+        setTimeout(() => {
+            kpImg.classList.add('shake-animation');
+        }, 5000);
 
-    // 3. Bắn pháo hoa liên tục (Loop)
+    }, 2500);
+
+    // Bắn pháo hoa liên tục
     setInterval(() => {
         confetti({
-            particleCount: 15,
-            spread: 60,
-            origin: { x: Math.random(), y: 0.6 } // Bắn ngẫu nhiên từ dưới lên
+            particleCount: 15, spread: 60, origin: { x: Math.random(), y: 0.6 }
         });
-    }, 800); // Cứ 0.8 giây bắn 1 lần
+    }, 800);
 }
 
 function triggerConfetti() {
