@@ -182,10 +182,12 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     position: absolute;
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     height: 85vh; width: auto;
-    z-index: 10; opacity: 0; /* Mặc định ẩn */
+    z-index: 10; opacity: 0; 
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
-    transition: all 3s ease-in-out;
+    
+    /* QUAN TRỌNG: Tăng thời gian lên 5s để chuyển động siêu chậm */
+    transition: all 5s ease-in-out; 
 }
 
 #final-fade-overlay {
@@ -194,13 +196,16 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 }
 #kp-img.move-left { animation: kpAppearAndMove 4s ease-out forwards; }
 
-/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI CÙNG (ĐÃ FIX: THÊM OPACITY: 1) --- */
+/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI (ĐÃ FIX GIẬT) --- */
 #kp-img.final-center-stage {
-    left: 50% !important; /* Về giữa */
-    transform: translate(-50%, -50%) scale(1.1) !important; /* Zoom to */
-    animation: finalShake 3s infinite ease-in-out !important; /* Lắc */
-    opacity: 1 !important; /* QUAN TRỌNG: ÉP ẢNH HIỆN LÊN */
+    left: 50% !important; /* Đích đến là giữa màn hình */
+    transform: translate(-50%, -50%) scale(1.1); /* Zoom to */
+    opacity: 1 !important; 
     z-index: 100;
+}
+/* Hiệu ứng lắc được thêm vào bằng JS sau khi ảnh đã ra giữa để tránh xung đột chuyển động */
+.shake-animation {
+    animation: finalShake 3s infinite ease-in-out;
 }
 
 @keyframes kpAppearAndMove {
@@ -234,10 +239,10 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     flex-direction: column;
     justify-content: flex-start;
     gap: 20px; 
-    transition: opacity 2s ease-out; /* Hiệu ứng mờ dần */
+    /* Thời gian fade out chữ là 2s */
+    transition: opacity 2s ease-out; 
 }
 
-/* Class để ẩn toàn bộ tin nhắn */
 .fade-out-text {
     opacity: 0 !important;
     pointer-events: none;
