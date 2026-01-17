@@ -129,7 +129,12 @@ body, html {
     position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
-    font-family: 'Times New Roman', Times, serif; font-size: 1.5rem; font-style: italic; 
+    font-family: 'Times New Roman', Times, serif; 
+    
+    /* --- ĐÃ CHỈNH SỬA: Cỡ 19px ~ Size 14 Word --- */
+    font-size: 19px; 
+    
+    font-style: italic; 
     z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
 .dialogue-box.show { opacity: 1; }
@@ -186,7 +191,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     
-    /* QUAN TRỌNG: Tăng thời gian lên 5s để chuyển động siêu chậm */
+    /* Thời gian chuyển động chậm 5s */
     transition: all 5s ease-in-out; 
 }
 
@@ -196,14 +201,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 }
 #kp-img.move-left { animation: kpAppearAndMove 4s ease-out forwards; }
 
-/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI (ĐÃ FIX GIẬT) --- */
+/* --- STYLE HIỆU ỨNG CUỐI --- */
 #kp-img.final-center-stage {
     left: 50% !important; /* Đích đến là giữa màn hình */
     transform: translate(-50%, -50%) scale(1.1); /* Zoom to */
     opacity: 1 !important; 
     z-index: 100;
 }
-/* Hiệu ứng lắc được thêm vào bằng JS sau khi ảnh đã ra giữa để tránh xung đột chuyển động */
 .shake-animation {
     animation: finalShake 3s infinite ease-in-out;
 }
@@ -239,7 +243,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     flex-direction: column;
     justify-content: flex-start;
     gap: 20px; 
-    /* Thời gian fade out chữ là 2s */
     transition: opacity 2s ease-out; 
 }
 
