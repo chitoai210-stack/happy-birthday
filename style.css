@@ -185,6 +185,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     z-index: 10; opacity: 0; 
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
+    transition: all 3s ease-in-out; /* Thêm transition để di chuyển mượt */
 }
 
 #final-fade-overlay {
@@ -193,13 +194,29 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 }
 #kp-img.move-left { animation: kpAppearAndMove 4s ease-out forwards; }
 
+/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI CÙNG (LẮC + VỀ GIỮA) --- */
+#kp-img.final-center-stage {
+    left: 50% !important; /* Về giữa */
+    transform: translate(-50%, -50%) scale(1.1) !important; /* Zoom to */
+    animation: finalShake 3s infinite ease-in-out !important; /* Lắc */
+    z-index: 100;
+}
+
 @keyframes kpAppearAndMove {
     0% { opacity: 0; transform: translate(-50%, -50%); left: 50%; }
     20% { opacity: 1; transform: translate(-50%, -50%); left: 50%; }
     100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; }
 }
 
-/* --- KHUNG TIN NHẮN CUỐI CÙNG (CẬP NHẬT FONT & SIZE) --- */
+@keyframes finalShake {
+    0% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
+    25% { transform: translate(-50%, -50%) scale(1.1) rotate(2deg); }
+    50% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
+    75% { transform: translate(-50%, -50%) scale(1.1) rotate(-2deg); }
+    100% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
+}
+
+/* --- KHUNG TIN NHẮN CUỐI CÙNG --- */
 #message-container {
     position: absolute;
     top: 50%; right: 2%; 
@@ -208,7 +225,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     height: 90vh;
     overflow-y: auto;
     color: white;
-    /* Font chung chuyển thành Times New Roman */
     font-family: 'Times New Roman', Times, serif; 
     text-shadow: 1px 1px 3px rgba(0,0,0,0.8); 
     z-index: 80;
@@ -217,6 +233,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     flex-direction: column;
     justify-content: flex-start;
     gap: 20px; 
+    transition: opacity 2s ease-out; /* Hiệu ứng mờ dần */
+}
+
+/* Class để ẩn toàn bộ tin nhắn */
+.fade-out-text {
+    opacity: 0 !important;
+    pointer-events: none;
 }
 
 #message-container::-webkit-scrollbar { width: 5px; }
@@ -230,8 +253,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     padding: 15px;
     border-radius: 10px;
     border-left: 4px solid #00e5ff;
-    
-    /* Chỉnh Size chữ to lên 20% so với bản cũ */
     font-size: 1.35rem; 
     line-height: 1.6;
     font-weight: 500;
@@ -239,17 +260,10 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 
 .msg-show { opacity: 1; transform: translateY(0); }
 
-/* Highlight chữ ký */
-.msg-highlight { 
-    color: #00e5ff; 
-    font-weight: bold; 
-    font-size: 1.5rem; /* Chữ ký to hơn nữa */
-}
-
+.msg-highlight { color: #00e5ff; font-weight: bold; font-size: 1.5rem; }
 .msg-title { 
     text-align: center; 
     font-weight: 800; 
-    /* Dòng ngày tháng cũng to lên */
     font-size: 2.2rem; 
     color: #00e5ff; 
     border: none; 
