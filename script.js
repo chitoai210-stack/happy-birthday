@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- CÁC BIẾN CẤU HÌNH ÂM THANH ---
+// --- CẤU HÌNH ÂM THANH (CHỈNH VỀ 10%) ---
 const CONFIG = {
     explosionDelay: 100, // Độ trễ tiếng nổ (ms)
     bgVolumeNormal: 0.8, 
-    bgVolumeLow: 0.1     // Đã giảm xuống 10%
+    bgVolumeLow: 0.1     // 10%
 };
 
 // --- CHỨC NĂNG LOGIN ---
@@ -167,7 +167,7 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
-            // --- VIDEO GOJO: GIẢM VOLUME CÒN 10% ---
+            // --- VIDEO GOJO: GIẢM VOLUME 10% ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -271,33 +271,31 @@ function showFinalMessages() {
 
             if (index === array.length - 1) {
                 setTimeout(triggerConfetti, 1000);
-                // Đợi thêm 3s rồi mới bắt đầu kịch bản kết thúc
                 setTimeout(triggerGrandFinale, 3000);
             }
         }, totalWaitTime);
     });
 }
 
-// HÀM XỬ LÝ KẾT THÚC (GRAND FINALE) ĐÃ CHỈNH SỬA
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
 
-    // 1. Ẩn chữ đi trước
+    // 1. Ẩn chữ đi
     container.classList.add('fade-out-text');
 
-    // 2. Đợi 2.5 giây cho chữ mờ hẳn, rồi mới cho hình di chuyển
+    // 2. Đợi 3.5s (cho chữ tắt hết) mới bắt đầu di chuyển
     setTimeout(() => {
+        // QUAN TRỌNG: Không xóa class move-left để tránh bị giật
         kpImg.classList.add('final-center-stage');
         
-        // 3. Đợi thêm 5 giây (thời gian hình trôi từ từ) rồi mới lắc
+        // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc
         setTimeout(() => {
             kpImg.classList.add('shake-animation');
         }, 5000);
 
-    }, 2500);
+    }, 3500); // Tăng thời gian chờ lên 3.5s
 
-    // Bắn pháo hoa liên tục
     setInterval(() => {
         confetti({
             particleCount: 15, spread: 60, origin: { x: Math.random(), y: 0.6 }
