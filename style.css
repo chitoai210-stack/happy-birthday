@@ -130,7 +130,7 @@ body, html {
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; 
-    font-size: 19px; /* Cỡ chữ ~14pt */
+    font-size: 19px; 
     font-style: italic; 
     z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
@@ -180,40 +180,55 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     background-size: cover; background-position: center center; background-repeat: no-repeat;
 }
 
+/* CẤU HÌNH ẢNH KP MỚI (FIX LỖI GIẬT) 
+   Chúng ta dùng transition thay vì animation để đảm bảo mượt mà 
+*/
 #kp-img {
     position: absolute;
+    /* Vị trí xuất phát (ở giữa) */
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     height: 85vh; width: auto;
-    z-index: 10; opacity: 0; 
+    z-index: 10; 
+    
+    /* Mặc định ẩn */
+    opacity: 0; 
+    
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     
-    /* Chuyển động chậm 5s cho mọi thuộc tính */
-    transition: all 5s ease-in-out; 
+    /* Transition mặc định cho mọi thay đổi là 4s */
+    transition: all 4s ease-out;
 }
 
 #final-fade-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 100; opacity: 1; transition: opacity 1.5s ease;
 }
-#kp-img.move-left { animation: kpAppearAndMove 4s ease-out forwards; }
 
-/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI --- */
+/* CLASS 1: TRƯỢT SANG TRÁI 
+   Khi thêm class này, transition sẽ tự động làm nó trượt mượt mà
+*/
+#kp-img.move-left { 
+    opacity: 1; 
+    left: 25%; /* Đích đến bên trái */
+}
+
+/* CLASS 2: TRỞ VỀ GIỮA (GRAND FINALE)
+   Ghi đè thuộc tính left về 50%, transition sẽ tự làm nó trôi lại
+*/
 #kp-img.final-center-stage {
-    left: 50% !important; /* Đè lên vị trí cũ */
-    transform: translate(-50%, -50%) scale(1.1);
+    left: 50% !important; /* Về giữa */
+    transform: translate(-50%, -50%) scale(1.1); /* Zoom to */
     opacity: 1 !important; 
     z-index: 100;
+    transition: all 5s ease-in-out; /* Tăng thời gian lên 5s cho chậm */
 }
+
 .shake-animation {
     animation: finalShake 3s infinite ease-in-out;
 }
 
-@keyframes kpAppearAndMove {
-    0% { opacity: 0; transform: translate(-50%, -50%); left: 50%; }
-    20% { opacity: 1; transform: translate(-50%, -50%); left: 50%; }
-    100% { opacity: 1; transform: translate(-50%, -50%); left: 25%; }
-}
+/* Đã xóa @keyframes kpAppearAndMove vì không cần nữa */
 
 @keyframes finalShake {
     0% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
