@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- CẤU HÌNH ÂM THANH (CHỈNH VỀ 10%) ---
+// --- CẤU HÌNH ÂM THANH ---
 const CONFIG = {
     explosionDelay: 100, // Độ trễ tiếng nổ (ms)
     bgVolumeNormal: 0.8, 
@@ -167,7 +167,6 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
-            // --- VIDEO GOJO: GIẢM VOLUME 10% ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -286,7 +285,6 @@ function triggerGrandFinale() {
 
     // 2. Đợi 3.5s (cho chữ tắt hết) mới bắt đầu di chuyển
     setTimeout(() => {
-        // QUAN TRỌNG: Không xóa class move-left để tránh bị giật
         kpImg.classList.add('final-center-stage');
         
         // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc
@@ -294,7 +292,7 @@ function triggerGrandFinale() {
             kpImg.classList.add('shake-animation');
         }, 5000);
 
-    }, 3500); // Tăng thời gian chờ lên 3.5s
+    }, 3500); 
 
     setInterval(() => {
         confetti({
