@@ -130,7 +130,10 @@ body, html {
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; 
-    font-size: 19px; 
+    
+    /* --- ĐÃ CHỈNH SỬA: Size 25px ~ Word 18 --- */
+    font-size: 25px; 
+    
     font-style: italic; 
     z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
@@ -180,23 +183,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     background-size: cover; background-position: center center; background-repeat: no-repeat;
 }
 
-/* CẤU HÌNH ẢNH KP MỚI (FIX LỖI GIẬT) 
-   Chúng ta dùng transition thay vì animation để đảm bảo mượt mà 
-*/
 #kp-img {
     position: absolute;
-    /* Vị trí xuất phát (ở giữa) */
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     height: 85vh; width: auto;
-    z-index: 10; 
-    
-    /* Mặc định ẩn */
-    opacity: 0; 
-    
+    z-index: 10; opacity: 0; 
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
-    
-    /* Transition mặc định cho mọi thay đổi là 4s */
     transition: all 4s ease-out;
 }
 
@@ -205,30 +198,24 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     background: black; z-index: 100; opacity: 1; transition: opacity 1.5s ease;
 }
 
-/* CLASS 1: TRƯỢT SANG TRÁI 
-   Khi thêm class này, transition sẽ tự động làm nó trượt mượt mà
-*/
+/* CLASS: TRƯỢT SANG TRÁI */
 #kp-img.move-left { 
     opacity: 1; 
-    left: 25%; /* Đích đến bên trái */
+    left: 25%; 
 }
 
-/* CLASS 2: TRỞ VỀ GIỮA (GRAND FINALE)
-   Ghi đè thuộc tính left về 50%, transition sẽ tự làm nó trôi lại
-*/
+/* CLASS: TRỞ VỀ GIỮA (GRAND FINALE) */
 #kp-img.final-center-stage {
-    left: 50% !important; /* Về giữa */
-    transform: translate(-50%, -50%) scale(1.1); /* Zoom to */
+    left: 50% !important; 
+    transform: translate(-50%, -50%) scale(1.1); 
     opacity: 1 !important; 
     z-index: 100;
-    transition: all 5s ease-in-out; /* Tăng thời gian lên 5s cho chậm */
+    transition: all 5s ease-in-out; 
 }
 
 .shake-animation {
     animation: finalShake 3s infinite ease-in-out;
 }
-
-/* Đã xóa @keyframes kpAppearAndMove vì không cần nữa */
 
 @keyframes finalShake {
     0% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
@@ -293,16 +280,4 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     transform: translateY(0);
     text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
     margin-bottom: 10px;
-}
-
-@keyframes fadeInOut { 0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 1; } }
-@keyframes blinkText { from { opacity: 1; } to { opacity: 0.5; } }
-@keyframes pulseCircle { from { transform: scale(1); } to { transform: scale(1.1); } }
-@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes firePulse { 
-    0% { filter: url('#white-power-aura') brightness(1); }
-    25% { filter: url('#white-power-aura') brightness(1.2); } 
-    50% { filter: url('#white-power-aura') brightness(1.1); }
-    75% { filter: url('#white-power-aura') brightness(1.3); } 
-    100% { filter: url('#white-power-aura') brightness(1); } 
 }
