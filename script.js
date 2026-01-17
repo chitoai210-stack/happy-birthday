@@ -239,7 +239,7 @@ const finalMessages = [
     { text: "Nãy giờ nói cũng hơi nhiều, nhưng chúc thì cũng như mọi lần. Cầu mong cho bạn luôn được bình an và khỏe mạnh (à thì sức khỏe thôi chứ tiền tài học hành tự thân lo nhóe, ngắn gọn cho nó linh)", time: 10000 },
     { text: "Bonus: thật ra tụi mình ko có hình nào đẹp hết, nên mò trên trang cá nhân mới có hình", time: 8000 },
     { text: "Hết rồi đó. SINH NHỰT ZUI ZẺ NHE <3", time: 5000 },
-    { text: "CHỊ PHƯƠNG GỈ MŨI", time: 3000 }
+    { text: "CHỊ PHƯƠNG GỈ MŨI cuti cuti =))))", time: 4000 }
 ];
 
 function showFinalMessages() {
@@ -323,3 +323,4 @@ function triggerConfetti() {
         }
     }());
 }
+
