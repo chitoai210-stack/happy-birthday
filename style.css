@@ -130,10 +130,7 @@ body, html {
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; 
-    
-    /* --- ĐÃ CHỈNH SỬA: Cỡ 19px ~ Size 14 Word --- */
-    font-size: 19px; 
-    
+    font-size: 19px; /* Cỡ chữ ~14pt */
     font-style: italic; 
     z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
@@ -191,7 +188,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     
-    /* Thời gian chuyển động chậm 5s */
+    /* Chuyển động chậm 5s cho mọi thuộc tính */
     transition: all 5s ease-in-out; 
 }
 
@@ -201,10 +198,10 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 }
 #kp-img.move-left { animation: kpAppearAndMove 4s ease-out forwards; }
 
-/* --- STYLE HIỆU ỨNG CUỐI --- */
+/* --- STYLE MỚI CHO HIỆU ỨNG CUỐI --- */
 #kp-img.final-center-stage {
-    left: 50% !important; /* Đích đến là giữa màn hình */
-    transform: translate(-50%, -50%) scale(1.1); /* Zoom to */
+    left: 50% !important; /* Đè lên vị trí cũ */
+    transform: translate(-50%, -50%) scale(1.1);
     opacity: 1 !important; 
     z-index: 100;
 }
