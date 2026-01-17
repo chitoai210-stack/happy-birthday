@@ -28,7 +28,8 @@ function checkPass() {
     const loginBox = document.querySelector('.login-box');
     const bgMusic = document.getElementById('sound-cute'); 
 
-    if (input.value === "CT011002") {
+    // --- ĐÃ ĐỔI PASS MỚI ---
+    if (input.value === "KP020203") {
         msg.style.color = "#00e5ff";
         msg.textContent = "ACCESS GRANTED";
         
@@ -167,6 +168,7 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
+            // --- VIDEO GOJO: GIẢM VOLUME 10% ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -294,11 +296,14 @@ function triggerGrandFinale() {
 
     }, 3500); 
 
+    // --- TĂNG GẤP ĐÔI LƯỢNG PHÁO HOA ---
     setInterval(() => {
         confetti({
-            particleCount: 15, spread: 60, origin: { x: Math.random(), y: 0.6 }
+            particleCount: 40, // Tăng lên 40 hạt
+            spread: 80, // Tăng độ xòe
+            origin: { x: Math.random(), y: 0.6 }
         });
-    }, 800);
+    }, 500); // Bắn nhanh hơn (0.5s/lần)
 }
 
 function triggerConfetti() {
