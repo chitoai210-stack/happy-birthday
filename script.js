@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
     startOverlay.addEventListener('click', () => {
         startOverlay.style.display = 'none';
-        warmUpVideos(); // Chỉ warm up video, nhạc đã chạy từ bước login
+        warmUpVideos(); 
     });
 });
 
@@ -20,19 +20,18 @@ const CONFIG = {
     bgVolumeLow: 0.2     
 };
 
-// --- CHỨC NĂNG LOGIN (ĐÃ SỬA: PHÁT NHẠC LUÔN) ---
+// --- CHỨC NĂNG LOGIN ---
 function checkPass() {
     const input = document.getElementById('pass-input');
     const msg = document.getElementById('login-message');
     const loginScreen = document.getElementById('login-screen');
     const loginBox = document.querySelector('.login-box');
-    const bgMusic = document.getElementById('sound-cute'); // File nhackp1.mp3
+    const bgMusic = document.getElementById('sound-cute'); 
 
     if (input.value === "CT011002") {
         msg.style.color = "#00e5ff";
         msg.textContent = "ACCESS GRANTED";
         
-        // --- PHÁT NHẠC NỀN NGAY LẬP TỨC ---
         bgMusic.volume = CONFIG.bgVolumeNormal;
         bgMusic.play().catch(e => console.log("Lỗi phát nhạc nền:", e));
 
@@ -59,19 +58,17 @@ function startMainSequence() {
     }, 12000); 
 }
 
-// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN (ĐÃ XÓA BEEP) ---
+// --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN ---
 function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
 
-    // Mute và Play video để 'mồi' trình duyệt
     v1.muted = true; 
     v2.muted = true;
     
     v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
     v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
     
-    // Đợi 300ms rồi đếm ngược
     setTimeout(() => {
         v1.muted = false; 
         v2.muted = false;
@@ -96,7 +93,6 @@ function runCountdownSequence() {
         if (count > 0) {
             countdownElement.textContent = count;
         } else {
-            // Khi về 0
             countdownElement.textContent = count; 
             clearInterval(interval);
             setTimeout(() => { transitionToIntro(); }, 1000);
@@ -115,15 +111,14 @@ function transitionToIntro() {
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
     
-    // Không cần play nhạc ở đây nữa vì đã play ở login
-
     setTimeout(() => {
         introScreen.classList.add('start-animations');
         const dialogueSequence = [
             { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
             { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
             { text: "thì hôm nay vẫn là ngày tuyệt vời của bạn", delay: 3000 },
-            { text: "Hãy đến nhận lấy chiếc cúp của mình đi nào,<br>bạn <span class='highlight'>Sandwich GM</span> dễ thương ơi!", delay: 3500 }
+            // --- ĐÃ SỬA LỜI THOẠI NGẮN GỌN ---
+            { text: "Hãy đến nhận lấy chiếc cúp của mình đi nào!", delay: 3500 }
         ];
 
         let currentDelay = 0;
@@ -173,7 +168,6 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
-            // --- VIDEO GOJO: GIẢM VOLUME ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
@@ -203,7 +197,6 @@ function openGift() {
                     explosionScreen.style.display = 'none'; 
                     finalScreen.style.display = 'block'; 
                     
-                    // --- KẾT THÚC NỔ: TRẢ LẠI VOLUME ---
                     bgMusic.volume = CONFIG.bgVolumeNormal;
 
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
@@ -277,14 +270,40 @@ function showFinalMessages() {
             container.scrollTop = container.scrollHeight;
 
             if (index === array.length - 1) {
+                // Kích hoạt pháo hoa ban đầu
                 setTimeout(triggerConfetti, 1000);
+                
+                // --- KÍCH HOẠT HIỆU ỨNG KẾT THÚC (GRAND FINALE) SAU 3s ---
+                setTimeout(triggerGrandFinale, 3000);
             }
         }, totalWaitTime);
     });
 }
 
+// Hàm mới: Xử lý hiệu ứng kết thúc hoành tráng
+function triggerGrandFinale() {
+    const container = document.getElementById('message-container');
+    const kpImg = document.getElementById('kp-img');
+
+    // 1. Ẩn chữ đi
+    container.classList.add('fade-out-text');
+
+    // 2. Đưa ảnh về giữa, zoom lên và lắc lắc
+    kpImg.classList.remove('move-left'); // Xóa class cũ để tránh xung đột
+    kpImg.classList.add('final-center-stage');
+
+    // 3. Bắn pháo hoa liên tục (Loop)
+    setInterval(() => {
+        confetti({
+            particleCount: 15,
+            spread: 60,
+            origin: { x: Math.random(), y: 0.6 } // Bắn ngẫu nhiên từ dưới lên
+        });
+    }, 800); // Cứ 0.8 giây bắn 1 lần
+}
+
 function triggerConfetti() {
-    const duration = 5 * 1000;
+    const duration = 3 * 1000;
     const end = Date.now() + duration;
 
     (function frame() {
