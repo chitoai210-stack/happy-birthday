@@ -3,7 +3,7 @@
 let currentPhase = 'idle'; 
 let activeTimer = null;      // Lưu timer của setTimeout
 let activeInterval = null;   // Lưu timer của setInterval (cho countdown)
-let isSecondWarningShown = false; // Kiểm tra xem đã hiện dòng chữ thứ 2 ở đoạn cảnh báo chưa
+let isSecondWarningShown = false; 
 
 document.addEventListener('DOMContentLoaded', () => {
     // Xử lý Input mật khẩu
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Xử lý Overlay bắt đầu (Nút tròn đếm ngược xong hoặc click bỏ qua cảnh báo)
+    // Xử lý Overlay bắt đầu
     const startOverlay = document.getElementById('start-overlay');
     if (startOverlay) {
         startOverlay.addEventListener('click', () => {
@@ -26,10 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- TÍNH NĂNG: CLICK ĐỂ CHUYỂN TIẾP (SKIP/NEXT) ---
-    // Áp dụng cho cả Click chuột và Chạm màn hình
     const handleInteraction = (e) => {
-        // Không xử lý nếu đang click vào ô input, nút, hoặc khung login
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('.login-box')) return;
+        // Không xử lý nếu đang click vào textarea, input, button
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('.login-box')) return;
         handleGlobalClick();
     };
 
@@ -37,17 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', handleInteraction, {passive: true});
 
 
-    // --- XỬ LÝ FEEDBACK & LƯU TRỮ ---
+    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE ---
     const feedbackInput = document.getElementById('user-feedback-input');
     if (feedbackInput) {
+        // Hàm tự động giãn chiều cao
+        const autoResize = (el) => {
+            el.style.height = 'auto'; // Reset height
+            el.style.height = el.scrollHeight + 'px'; // Set height bằng nội dung
+        };
+
         const savedFeedback = localStorage.getItem('gwen_gift_feedback_content');
         if (savedFeedback) {
             feedbackInput.value = savedFeedback;
             feedbackInput.classList.add('saved-mode');
+            // Cần delay xíu để render xong mới resize được đúng
+            setTimeout(() => autoResize(feedbackInput), 0);
         }
+
+        feedbackInput.addEventListener('input', function() {
+            autoResize(this);
+        });
 
         feedbackInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                // Ngăn xuống dòng mặc định của textarea khi nhấn Enter (nếu bạn muốn Enter là Save)
+                e.preventDefault(); 
+                
                 this.classList.add('saved-mode');
                 this.blur(); 
                 localStorage.setItem('gwen_gift_feedback_content', this.value);
@@ -57,50 +71,39 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackInput.addEventListener('click', function() {
             if (this.classList.contains('saved-mode')) {
                 this.classList.remove('saved-mode');
+                autoResize(this);
             }
         });
     }
 });
 
-// --- LOGIC XỬ LÝ CLICK TOÀN CỤC (QUAN TRỌNG) ---
+// --- LOGIC XỬ LÝ CLICK TOÀN CỤC ---
 function handleGlobalClick() {
-    // 1. Giai đoạn CẢNH BÁO (Device Warning)
     if (currentPhase === 'warning') {
-        if (activeTimer) clearTimeout(activeTimer); // Hủy chờ tự động
-        
+        if (activeTimer) clearTimeout(activeTimer);
         if (!isSecondWarningShown) {
-            // Nếu chưa hiện dòng chữ thứ 2 -> Hiện ngay
             showSecondWarningText();
         } else {
-            // Nếu đã hiện dòng 2 -> Chuyển sang nút Start ngay
             finishWarningPhase();
         }
     }
-
-    // 2. Giai đoạn ĐẾM NGƯỢC (Countdown)
     else if (currentPhase === 'countdown') {
-        if (activeInterval) clearInterval(activeInterval); // Hủy đếm ngược
-        transitionToIntro(); // Vào intro luôn
+        if (activeInterval) clearInterval(activeInterval);
+        transitionToIntro();
     }
-
-    // 3. Giai đoạn INTRO (Gwen nói chuyện)
     else if (currentPhase === 'intro') {
         if (activeTimer) clearTimeout(activeTimer);
-        playNextDialogue(); // Chạy câu thoại tiếp theo ngay
+        playNextDialogue();
     }
-    
-    // 4. Giai đoạn VIDEO (Gojo)
     else if (currentPhase === 'video') {
         const v1 = document.getElementById('gojo-video');
         if (v1 && !v1.paused && v1.currentTime < v1.duration - 0.5) {
-            v1.currentTime = v1.duration - 0.1; // Nhảy đến cuối video
+            v1.currentTime = v1.duration - 0.1; 
         }
     }
-
-    // 5. Giai đoạn FINAL MESSAGES (Lời chúc)
     else if (currentPhase === 'final') {
         if (activeTimer) clearTimeout(activeTimer);
-        renderNextMessage(); // Hiện tin nhắn tiếp theo
+        renderNextMessage(); 
     }
 }
 
@@ -140,16 +143,14 @@ function checkPass() {
     }
 }
 
-// --- LOGIC CẢNH BÁO (WARNING PHASE) ---
+// --- LOGIC CẢNH BÁO ---
 function startMainSequence() {
     const deviceWarning = document.getElementById('device-warning');
     
-    // Bắt đầu giai đoạn cảnh báo
     deviceWarning.style.display = 'flex';
     currentPhase = 'warning';
     isSecondWarningShown = false;
     
-    // Đặt lịch tự động chuyển text sau 8s
     activeTimer = setTimeout(() => {
         showSecondWarningText();
     }, 8000);
@@ -157,11 +158,9 @@ function startMainSequence() {
 
 function showSecondWarningText() {
     const warningText = document.getElementById('warning-text');
-    // Thay đổi nội dung theo yêu cầu
     if(warningText) warningText.innerHTML = "Có thể click vào màn hình để nhanh hơn !";
     isSecondWarningShown = true;
 
-    // Đặt lịch tự động tắt sau 6s nữa (Tổng 14s)
     activeTimer = setTimeout(() => {
         finishWarningPhase();
     }, 6000);
@@ -173,7 +172,7 @@ function finishWarningPhase() {
     
     deviceWarning.style.display = 'none';
     startOverlay.style.display = 'flex';
-    currentPhase = 'idle'; // Chờ người dùng click nút Start
+    currentPhase = 'idle'; 
 }
 
 // --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN ---
@@ -196,7 +195,7 @@ function runCountdownSequence() {
     const countdownElement = document.getElementById('countdown-number');
     
     countdownScreen.style.display = 'flex';
-    currentPhase = 'countdown'; // Cho phép click skip
+    currentPhase = 'countdown'; 
 
     let count = 5;
     countdownElement.textContent = count;
@@ -213,7 +212,7 @@ function runCountdownSequence() {
     }, 1000);
 }
 
-// --- LOGIC PHẦN INTRO (GWEN) ---
+// --- LOGIC PHẦN INTRO ---
 const dialogueSequence = [
     { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
     { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
@@ -231,7 +230,7 @@ function transitionToIntro() {
     
     setTimeout(() => {
         introScreen.classList.add('start-animations');
-        currentPhase = 'intro'; // Cho phép click skip thoại
+        currentPhase = 'intro'; 
         playNextDialogue();
     }, 100);
 }
@@ -243,11 +242,10 @@ function playNextDialogue() {
     const cupWrapper = document.querySelector('.cup-wrapper');
 
     if (dialogueIndex >= dialogueSequence.length) {
-        // Hết thoại
         dialogueBox.classList.remove('show');
         gwenWrapper.classList.add('move-left');
         cupWrapper.classList.add('show-cup');
-        currentPhase = 'intro-wait-click'; // Chờ click cúp
+        currentPhase = 'intro-wait-click'; 
         return;
     }
 
@@ -305,7 +303,7 @@ function openGift() {
             }
             
             handleVideoSubtitles(video);
-            currentPhase = 'video'; // Cho phép click skip video
+            currentPhase = 'video'; 
 
             video.onended = () => {
                 content.style.display = 'none'; 
@@ -326,7 +324,7 @@ function openGift() {
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
                     setTimeout(() => { 
                         kpImg.classList.add('move-left');
-                        currentPhase = 'final'; // Cho phép click skip tin nhắn
+                        currentPhase = 'final'; 
                         setTimeout(renderNextMessage, 1000); 
                     }, 500);
                 };
@@ -372,7 +370,6 @@ function renderNextMessage() {
     const container = document.getElementById('message-container');
 
     if (msgIndex >= finalMessages.length) {
-        // Hết tin nhắn
         currentPhase = 'done';
         setTimeout(triggerConfetti, 500);
         setTimeout(triggerGrandFinale, 2000);
