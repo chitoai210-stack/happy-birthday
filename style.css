@@ -204,34 +204,47 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     position: absolute;
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     height: 85vh; width: auto;
-    z-index: 10; opacity: 0; 
+    z-index: 100; /* Ảnh ở dưới text */
+    opacity: 0; 
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     transition: all 4s ease-out;
 }
 
-/* --- STYLE SIDEBAR BÊN PHẢI CHO FEEDBACK --- */
+/* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA --- */
 #right-sidebar {
     position: absolute;
     top: 50%; 
-    left: 75%; /* Nằm hẳn về phía bên phải màn hình */
-    transform: translate(-50%, -50%);
-    width: 350px;
+    /* Thay đổi quan trọng: Neo vào bên phải, bỏ left */
+    right: 5%; 
+    left: auto; 
+    
+    transform: translateY(-50%); /* Chỉ căn giữa dọc */
+    width: 300px; /* Độ rộng cố định */
+    
     display: flex;
     flex-direction: column;
     gap: 15px;
-    z-index: 101;
-    pointer-events: none; /* Mặc định không click đc cho đến khi hiện ra */
+    z-index: 101; /* Nằm trên ảnh */
+    pointer-events: none;
+    
+    /* Căn lề phải cho đẹp mắt */
+    text-align: right; 
+    align-items: flex-end; 
 }
 
 .feedback-label {
-    color: rgba(255, 255, 255, 0.8);
+    /* Đổi màu chữ trắng sáng + Viền đen để nổi trên mọi nền */
+    color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-style: italic;
     line-height: 1.5;
-    text-shadow: 0 0 5px #00e5ff;
-    opacity: 0; /* Ẩn ban đầu */
+    
+    /* Text shadow: Đen (để đọc được) + Xanh Neon (để đẹp) */
+    text-shadow: 2px 2px 4px #000000, 0 0 10px #00e5ff;
+    
+    opacity: 0;
     transition: opacity 2s ease-in;
 }
 
@@ -258,19 +271,19 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
 }
 
-/* Khi đã enter xong, class này sẽ biến input thành dạng text tĩnh */
 #user-feedback-input.saved-mode {
     background: transparent;
     border: 1px solid transparent;
     box-shadow: none;
     font-weight: bold;
     color: #00e5ff;
-    text-align: left;
-    padding-left: 0;
+    text-align: right; /* Khi save xong thì căn phải cho đẹp */
+    padding-right: 0;
     cursor: text;
+    text-shadow: 1px 1px 2px #000000;
 }
 #user-feedback-input.saved-mode:hover {
-    border: 1px dashed rgba(0, 229, 255, 0.3); /* Gợi ý là vẫn sửa được */
+    border: 1px dashed rgba(0, 229, 255, 0.3); 
 }
 
 
