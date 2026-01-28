@@ -205,7 +205,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     height: 85vh; 
     width: auto;
-    /* UPDATE: Giới hạn chiều rộng tối đa là 50% màn hình để chừa chỗ cho text */
     max-width: 50vw; 
     object-fit: contain;
     
@@ -216,19 +215,18 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     transition: all 4s ease-out;
 }
 
-/* --- STYLE SIDEBAR ĐÃ ĐƯỢC CẬP NHẬT --- */
+/* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA VỊ TRÍ --- */
 #right-sidebar {
     position: absolute;
-    top: 50%; 
-    right: 15px; /* Sát lề phải hơn */
+    /* CHỈNH LẠI VỊ TRÍ TẠI ĐÂY */
+    top: 10%;   /* Nằm gần sát mép trên (vùng trời hồng) */
+    right: 5%;  /* Cách lề phải 5% */
     
-    transform: translateY(-50%);
-    width: 250px; /* Thu nhỏ lại chút cho gọn */
-    
+    width: 300px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    z-index: 200; /* Đảm bảo luôn nằm trên ảnh */
+    z-index: 200;
     pointer-events: none;
     
     text-align: right; 
@@ -236,14 +234,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 }
 
 .feedback-label {
-    /* Chữ trắng, viền đen dày để nổi trên mọi nền trời */
     color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
     font-size: 1.1rem;
     font-style: italic;
     line-height: 1.5;
     
-    /* Text shadow dày hơn */
+    /* Text shadow dày để nổi trên nền trời */
     text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 10px #00e5ff;
     
     opacity: 0;
