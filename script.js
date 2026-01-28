@@ -1,30 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Xử lý Input mật khẩu
     const passInput = document.getElementById('pass-input');
-    passInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            checkPass();
-        }
-    });
+    if (passInput) {
+        passInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPass();
+            }
+        });
+    }
 
+    // Xử lý Overlay bắt đầu
     const startOverlay = document.getElementById('start-overlay');
-    startOverlay.addEventListener('click', () => {
-        startOverlay.style.display = 'none';
-        warmUpVideos(); 
-    });
+    if (startOverlay) {
+        startOverlay.addEventListener('click', () => {
+            startOverlay.style.display = 'none';
+            warmUpVideos(); 
+        });
+    }
 
-    // Lắng nghe sự kiện Enter ở ô feedback cuối cùng
+    // --- TÍNH NĂNG MỚI: XỬ LÝ FEEDBACK & LƯU TRỮ ---
     const feedbackInput = document.getElementById('user-feedback-input');
+    
     if (feedbackInput) {
+        // 1. Kiểm tra xem đã có nội dung lưu trước đó chưa
+        const savedFeedback = localStorage.getItem('gwen_gift_feedback_content');
+        
+        if (savedFeedback) {
+            // Nếu có, điền sẵn vào ô và chuyển sang chế độ "đã lưu"
+            feedbackInput.value = savedFeedback;
+            feedbackInput.classList.add('saved-mode');
+        }
+
+        // 2. Lắng nghe sự kiện Enter để lưu
         feedbackInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                // Khi nhấn Enter, chuyển class sang chế độ "saved" (bỏ border, nhìn như text)
+                // Chuyển giao diện sang chế độ text tĩnh
                 this.classList.add('saved-mode');
-                // Bỏ focus để ẩn bàn phím ảo trên đt (nếu có)
-                this.blur();
+                this.blur(); // Ẩn bàn phím ảo
+
+                // Lưu nội dung vào bộ nhớ trình duyệt
+                localStorage.setItem('gwen_gift_feedback_content', this.value);
+                
+                // (Tuỳ chọn) Thông báo nhỏ hoặc log
+                console.log("Đã lưu feedback:", this.value);
             }
         });
 
-        // Khi click lại vào ô đã save, cho phép sửa (bỏ class saved)
+        // 3. Cho phép sửa lại khi click vào
         feedbackInput.addEventListener('click', function() {
             if (this.classList.contains('saved-mode')) {
                 this.classList.remove('saved-mode');
@@ -80,7 +102,7 @@ function startMainSequence() {
     // Logic thay đổi chữ:
     // 1. Sau 8 giây thì đổi nội dung
     setTimeout(() => {
-        warningText.innerHTML = "Để lại feedback ở cuối nhá =)))";
+        if(warningText) warningText.innerHTML = "Để lại feedback ở cuối nhá =)))";
     }, 8000);
 
     // 2. Sau 14 giây (tổng cộng) thì tắt cảnh báo, hiện nút bắt đầu
@@ -95,17 +117,18 @@ function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
 
-    v1.muted = true; 
-    v2.muted = true;
-    
-    v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
-    v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
+    if(v1) {
+        v1.muted = true; 
+        v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
+    }
+    if(v2) {
+        v2.muted = true;
+        v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
+    }
     
     setTimeout(() => {
-        v1.muted = false; 
-        v2.muted = false;
-        v1.currentTime = 0; 
-        v2.currentTime = 0;
+        if(v1) { v1.muted = false; v1.currentTime = 0; }
+        if(v2) { v2.muted = false; v2.currentTime = 0; }
         
         runCountdownSequence();
     }, 300);
@@ -312,7 +335,9 @@ function showFinalMessages() {
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
-    const sidebar = document.getElementById('right-sidebar'); // Container bên phải
+    
+    // Thêm kiểm tra null để tránh lỗi nếu không tìm thấy element
+    const sidebar = document.getElementById('right-sidebar'); 
     const feedbackLabel = document.querySelector('.feedback-label');
     const feedbackWrapper = document.getElementById('feedback-wrapper');
 
@@ -328,15 +353,17 @@ function triggerGrandFinale() {
             kpImg.classList.add('shake-animation');
             
             // Kích hoạt sidebar nhận sự kiện click
-            sidebar.style.pointerEvents = 'auto';
+            if(sidebar) sidebar.style.pointerEvents = 'auto';
             
             // Hiện dòng text "Còn gà..."
-            feedbackLabel.classList.add('show');
+            if(feedbackLabel) feedbackLabel.classList.add('show');
 
             // 4. Sau 1.5s nữa thì hiện ô input
             setTimeout(() => {
-                feedbackWrapper.style.transition = "opacity 2s ease";
-                feedbackWrapper.style.opacity = "1";
+                if(feedbackWrapper) {
+                    feedbackWrapper.style.transition = "opacity 2s ease";
+                    feedbackWrapper.style.opacity = "1";
+                }
             }, 1500);
 
         }, 5000);
