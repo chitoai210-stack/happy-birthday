@@ -11,6 +11,26 @@ document.addEventListener('DOMContentLoaded', () => {
         startOverlay.style.display = 'none';
         warmUpVideos(); 
     });
+
+    // Lắng nghe sự kiện Enter ở ô feedback cuối cùng
+    const feedbackInput = document.getElementById('user-feedback-input');
+    if (feedbackInput) {
+        feedbackInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                // Khi nhấn Enter, chuyển class sang chế độ "saved" (bỏ border, nhìn như text)
+                this.classList.add('saved-mode');
+                // Bỏ focus để ẩn bàn phím ảo trên đt (nếu có)
+                this.blur();
+            }
+        });
+
+        // Khi click lại vào ô đã save, cho phép sửa (bỏ class saved)
+        feedbackInput.addEventListener('click', function() {
+            if (this.classList.contains('saved-mode')) {
+                this.classList.remove('saved-mode');
+            }
+        });
+    }
 });
 
 // --- CẤU HÌNH ÂM THANH ---
@@ -292,7 +312,9 @@ function showFinalMessages() {
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
-    const feedbackText = document.getElementById('final-feedback-text'); // Lấy element feedback
+    const sidebar = document.getElementById('right-sidebar'); // Container bên phải
+    const feedbackLabel = document.querySelector('.feedback-label');
+    const feedbackWrapper = document.getElementById('feedback-wrapper');
 
     // 1. Ẩn chữ đi
     container.classList.add('fade-out-text');
@@ -304,8 +326,19 @@ function triggerGrandFinale() {
         // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc và hiện feedback
         setTimeout(() => {
             kpImg.classList.add('shake-animation');
-            // Hiện dòng feedback lúc này
-            feedbackText.classList.add('show');
+            
+            // Kích hoạt sidebar nhận sự kiện click
+            sidebar.style.pointerEvents = 'auto';
+            
+            // Hiện dòng text "Còn gà..."
+            feedbackLabel.classList.add('show');
+
+            // 4. Sau 1.5s nữa thì hiện ô input
+            setTimeout(() => {
+                feedbackWrapper.style.transition = "opacity 2s ease";
+                feedbackWrapper.style.opacity = "1";
+            }, 1500);
+
         }, 5000);
 
     }, 3500); 
