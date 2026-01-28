@@ -62,7 +62,12 @@ body, html {
     font-family: 'Times New Roman', Times, serif; 
     font-size: 2.2rem; 
     text-align: center; line-height: 1.6; font-style: italic;
-    animation: fadeInOut 12s linear forwards;
+    /* Đã tăng thời gian lên 14s để phù hợp kịch bản mới */
+    animation: fadeInOut 14s linear forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; }
 }
 
 /* --- BƯỚC 2: START OVERLAY --- */
@@ -74,6 +79,9 @@ body, html {
 #start-overlay p {
     color: #fff; font-family: 'Times New Roman', Times, serif; font-size: 3rem; 
     animation: blinkText 1s infinite;
+}
+@keyframes blinkText {
+    0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; }
 }
 
 /* --- BƯỚC 3: ĐẾM NGƯỢC --- */
@@ -88,6 +96,11 @@ body, html {
     box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
     animation: pulseCircle 0.5s infinite alternate;
 }
+@keyframes pulseCircle {
+    from { transform: scale(1); box-shadow: 0 0 30px rgba(0, 229, 255, 0.5); }
+    to { transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 229, 255, 0.8); }
+}
+
 #countdown-number {
     font-family: 'Orbitron', sans-serif; font-size: 5rem; color: #ffffff; text-shadow: 0 0 20px #00e5ff;
 }
@@ -101,6 +114,11 @@ body, html {
 
 .white-aura-effect { filter: url('#white-power-aura'); }
 .start-animations .white-aura-effect { animation: firePulse 3s infinite ease-in-out; }
+@keyframes firePulse {
+    0% { filter: drop-shadow(0 0 10px #00e5ff); }
+    50% { filter: drop-shadow(0 0 30px #e0ffff); }
+    100% { filter: drop-shadow(0 0 10px #00e5ff); }
+}
 
 .gwen-wrapper {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -130,10 +148,7 @@ body, html {
     width: 350px; background: rgba(0, 20, 40, 0.85); border: 2px solid #00e5ff;
     padding: 20px; border-radius: 15px; text-align: center; color: #fff;
     font-family: 'Times New Roman', Times, serif; 
-    
-    /* --- ĐÃ CHỈNH SỬA: Size 25px ~ Word 18 --- */
     font-size: 25px; 
-    
     font-style: italic; 
     z-index: 100; opacity: 0; transition: opacity 0.5s ease-in-out;
 }
@@ -152,6 +167,9 @@ body, html {
 .troll-text {
     font-size: 2.5rem; color: #000; font-weight: bold; text-align: center;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; }
 }
 
 #content-screen {
@@ -191,6 +209,26 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     transition: all 4s ease-out;
+}
+
+/* --- STYLE MỚI CHO FEEDBACK TEXT --- */
+#final-feedback-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    /* Dịch sang phải 60% so với tâm để nằm cạnh hình ảnh */
+    transform: translate(60%, -50%); 
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    font-style: italic;
+    width: 200px;
+    opacity: 0; /* Ẩn ban đầu */
+    transition: opacity 2s ease-in;
+    z-index: 101; /* Nằm trên hình ảnh */
+    text-shadow: 0 0 5px #00e5ff;
+}
+#final-feedback-text.show {
+    opacity: 1;
 }
 
 #final-fade-overlay {
