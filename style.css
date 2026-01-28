@@ -62,7 +62,6 @@ body, html {
     font-family: 'Times New Roman', Times, serif; 
     font-size: 2.2rem; 
     text-align: center; line-height: 1.6; font-style: italic;
-    /* Đã tăng thời gian lên 14s để phù hợp kịch bản mới */
     animation: fadeInOut 14s linear forwards;
 }
 
@@ -211,25 +210,69 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     transition: all 4s ease-out;
 }
 
-/* --- STYLE MỚI CHO FEEDBACK TEXT --- */
-#final-feedback-text {
+/* --- STYLE SIDEBAR BÊN PHẢI CHO FEEDBACK --- */
+#right-sidebar {
     position: absolute;
-    top: 50%; left: 50%;
-    /* Dịch sang phải 60% so với tâm để nằm cạnh hình ảnh */
-    transform: translate(60%, -50%); 
-    color: rgba(255, 255, 255, 0.6);
+    top: 50%; 
+    left: 75%; /* Nằm hẳn về phía bên phải màn hình */
+    transform: translate(-50%, -50%);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 101;
+    pointer-events: none; /* Mặc định không click đc cho đến khi hiện ra */
+}
+
+.feedback-label {
+    color: rgba(255, 255, 255, 0.8);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-style: italic;
-    width: 200px;
+    line-height: 1.5;
+    text-shadow: 0 0 5px #00e5ff;
     opacity: 0; /* Ẩn ban đầu */
     transition: opacity 2s ease-in;
-    z-index: 101; /* Nằm trên hình ảnh */
-    text-shadow: 0 0 5px #00e5ff;
 }
-#final-feedback-text.show {
+
+.feedback-label.show {
     opacity: 1;
 }
+
+/* STYLE CHO Ô INPUT VÀ TRẠNG THÁI HIỂN THỊ SAU KHI ENTER */
+#user-feedback-input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #00e5ff;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+#user-feedback-input:focus {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+}
+
+/* Khi đã enter xong, class này sẽ biến input thành dạng text tĩnh */
+#user-feedback-input.saved-mode {
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    font-weight: bold;
+    color: #00e5ff;
+    text-align: left;
+    padding-left: 0;
+    cursor: text;
+}
+#user-feedback-input.saved-mode:hover {
+    border: 1px dashed rgba(0, 229, 255, 0.3); /* Gợi ý là vẫn sửa được */
+}
+
 
 #final-fade-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
