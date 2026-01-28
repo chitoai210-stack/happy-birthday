@@ -1,3 +1,7 @@
+// --- QUẢN LÝ TRẠNG THÁI (STATE MANAGEMENT) ---
+let currentPhase = 'idle'; // idle, intro, video, final, done
+let activeTimer = null;    // Dùng để lưu timer đang chạy, giúp clear khi click
+
 document.addEventListener('DOMContentLoaded', () => {
     // Xử lý Input mật khẩu
     const passInput = document.getElementById('pass-input');
@@ -18,35 +22,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- TÍNH NĂNG MỚI: XỬ LÝ FEEDBACK & LƯU TRỮ ---
+    // --- TÍNH NĂNG MỚI: CLICK ĐỂ CHUYỂN TIẾP (SKIP/NEXT) ---
+    document.addEventListener('click', (e) => {
+        // Không xử lý click nếu đang click vào ô input hoặc nút login
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('.login-box')) return;
+
+        handleGlobalClick();
+    });
+
+    document.addEventListener('touchstart', (e) => {
+        // Tương tự cho cảm ứng
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('.login-box')) return;
+        handleGlobalClick();
+    }, {passive: true});
+
+
+    // --- XỬ LÝ FEEDBACK & LƯU TRỮ ---
     const feedbackInput = document.getElementById('user-feedback-input');
-    
     if (feedbackInput) {
-        // 1. Kiểm tra xem đã có nội dung lưu trước đó chưa
         const savedFeedback = localStorage.getItem('gwen_gift_feedback_content');
-        
         if (savedFeedback) {
-            // Nếu có, điền sẵn vào ô và chuyển sang chế độ "đã lưu"
             feedbackInput.value = savedFeedback;
             feedbackInput.classList.add('saved-mode');
         }
 
-        // 2. Lắng nghe sự kiện Enter để lưu
         feedbackInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                // Chuyển giao diện sang chế độ text tĩnh
                 this.classList.add('saved-mode');
-                this.blur(); // Ẩn bàn phím ảo
-
-                // Lưu nội dung vào bộ nhớ trình duyệt
+                this.blur(); 
                 localStorage.setItem('gwen_gift_feedback_content', this.value);
-                
-                // (Tuỳ chọn) Thông báo nhỏ hoặc log
-                console.log("Đã lưu feedback:", this.value);
             }
         });
 
-        // 3. Cho phép sửa lại khi click vào
         feedbackInput.addEventListener('click', function() {
             if (this.classList.contains('saved-mode')) {
                 this.classList.remove('saved-mode');
@@ -55,11 +62,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// --- LOGIC XỬ LÝ CLICK TOÀN CỤC ---
+function handleGlobalClick() {
+    // 1. Giai đoạn INTRO (Gwen nói chuyện)
+    if (currentPhase === 'intro') {
+        if (activeTimer) clearTimeout(activeTimer); // Hủy chờ
+        playNextDialogue(); // Chạy câu thoại tiếp theo ngay
+    }
+    
+    // 2. Giai đoạn VIDEO (Gojo)
+    else if (currentPhase === 'video') {
+        const v1 = document.getElementById('gojo-video');
+        if (v1 && !v1.paused && v1.currentTime < v1.duration - 0.5) {
+            v1.currentTime = v1.duration - 0.1; // Nhảy đến cuối video ngay lập tức
+        }
+    }
+
+    // 3. Giai đoạn FINAL MESSAGES (Lời chúc)
+    else if (currentPhase === 'final') {
+        if (activeTimer) clearTimeout(activeTimer); // Hủy chờ
+        renderNextMessage(); // Hiện tin nhắn tiếp theo ngay
+    }
+}
+
+
 // --- CẤU HÌNH ÂM THANH ---
 const CONFIG = {
-    explosionDelay: 100, // Độ trễ tiếng nổ (ms)
+    explosionDelay: 100, 
     bgVolumeNormal: 0.8, 
-    bgVolumeLow: 0.1     // 10%
+    bgVolumeLow: 0.1     
 };
 
 // --- CHỨC NĂNG LOGIN ---
@@ -70,7 +101,6 @@ function checkPass() {
     const loginBox = document.querySelector('.login-box');
     const bgMusic = document.getElementById('sound-cute'); 
 
-    // --- ĐÃ ĐỔI PASS MỚI ---
     if (input.value === "KP020203") {
         msg.style.color = "#00e5ff";
         msg.textContent = "ACCESS GRANTED";
@@ -96,16 +126,12 @@ function startMainSequence() {
     const warningText = document.getElementById('warning-text');
     const startOverlay = document.getElementById('start-overlay');
     
-    // Hiển thị màn hình cảnh báo
     deviceWarning.style.display = 'flex';
     
-    // Logic thay đổi chữ:
-    // 1. Sau 8 giây thì đổi nội dung
     setTimeout(() => {
         if(warningText) warningText.innerHTML = "Để lại feedback ở cuối nhá =)))";
     }, 8000);
 
-    // 2. Sau 14 giây (tổng cộng) thì tắt cảnh báo, hiện nút bắt đầu
     setTimeout(() => {
         deviceWarning.style.display = 'none';
         startOverlay.style.display = 'flex';
@@ -117,19 +143,12 @@ function warmUpVideos() {
     const v1 = document.getElementById('gojo-video');
     const v2 = document.getElementById('notung-video');
 
-    if(v1) {
-        v1.muted = true; 
-        v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip"));
-    }
-    if(v2) {
-        v2.muted = true;
-        v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip"));
-    }
+    if(v1) { v1.muted = true; v1.play().then(() => v1.pause()).catch(e => console.log("Warmup v1 skip")); }
+    if(v2) { v2.muted = true; v2.play().then(() => v2.pause()).catch(e => console.log("Warmup v2 skip")); }
     
     setTimeout(() => {
         if(v1) { v1.muted = false; v1.currentTime = 0; }
         if(v2) { v2.muted = false; v2.currentTime = 0; }
-        
         runCountdownSequence();
     }, 300);
 }
@@ -139,7 +158,6 @@ function runCountdownSequence() {
     const countdownElement = document.getElementById('countdown-number');
     
     countdownScreen.style.display = 'flex';
-
     let count = 5;
     countdownElement.textContent = count;
 
@@ -155,48 +173,69 @@ function runCountdownSequence() {
     }, 1000);
 }
 
+// --- LOGIC MỚI CHO PHẦN INTRO (GWEN) ---
+const dialogueSequence = [
+    { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
+    { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
+    { text: "thì hôm nay vẫn là ngày tuyệt vời của bạn", delay: 3000 },
+    { text: "Hãy đến nhận lấy chiếc cúp của mình đi nào!", delay: 3500 }
+];
+let dialogueIndex = 0;
+
 function transitionToIntro() {
     const countdownScreen = document.getElementById('countdown-screen');
     const introScreen = document.getElementById('intro-screen');
-    const dialogueBox = document.querySelector('.dialogue-box');
-    const dialogueText = document.getElementById('dialogue-text');
-    const gwenWrapper = document.querySelector('.gwen-wrapper');
-    const cupWrapper = document.querySelector('.cup-wrapper');
-
+    
     countdownScreen.style.display = 'none';
     introScreen.style.display = 'flex';
     
     setTimeout(() => {
         introScreen.classList.add('start-animations');
-        const dialogueSequence = [
-            { text: "Chào Sandwich GM, mình là Gwen!", delay: 3000 },
-            { text: "Dẫu cho có nhiều chuyện vui buồn", delay: 3000 },
-            { text: "thì hôm nay vẫn là ngày tuyệt vời của bạn", delay: 3000 },
-            { text: "Hãy đến nhận lấy chiếc cúp của mình đi nào!", delay: 3500 }
-        ];
-
-        let currentDelay = 0;
-        dialogueSequence.forEach((item, index) => {
-            setTimeout(() => {
-                dialogueText.innerHTML = item.text;
-                dialogueBox.classList.add('show');
-                if (index < dialogueSequence.length - 1) {
-                    setTimeout(() => { dialogueBox.classList.remove('show'); }, item.delay - 500);
-                } else {
-                    setTimeout(() => {
-                        gwenWrapper.classList.add('move-left');
-                        cupWrapper.classList.add('show-cup');
-                    }, 1000);
-                }
-            }, currentDelay);
-            currentDelay += item.delay;
-        });
+        currentPhase = 'intro'; // Kích hoạt chế độ click cho intro
+        playNextDialogue();
     }, 100);
 }
 
-function openGift() {
-    const bgMusic = document.getElementById('sound-cute'); 
+function playNextDialogue() {
+    const dialogueBox = document.querySelector('.dialogue-box');
+    const dialogueText = document.getElementById('dialogue-text');
+    const gwenWrapper = document.querySelector('.gwen-wrapper');
+    const cupWrapper = document.querySelector('.cup-wrapper');
 
+    if (dialogueIndex >= dialogueSequence.length) {
+        // Hết thoại, hiện Cúp
+        dialogueBox.classList.remove('show');
+        gwenWrapper.classList.add('move-left');
+        cupWrapper.classList.add('show-cup');
+        currentPhase = 'intro-wait-click'; // Chuyển trạng thái chờ click cúp
+        return;
+    }
+
+    const item = dialogueSequence[dialogueIndex];
+    dialogueText.innerHTML = item.text;
+    dialogueBox.classList.add('show');
+    
+    dialogueIndex++; // Tăng index cho lần sau
+
+    // Lên lịch tự động ẩn và chuyển câu tiếp theo nếu không click
+    // 1. Sau (delay - 500) thì ẩn box
+    activeTimer = setTimeout(() => {
+        dialogueBox.classList.remove('show');
+        
+        // 2. Sau thêm 500ms thì hiện câu tiếp
+        activeTimer = setTimeout(() => {
+            playNextDialogue();
+        }, 500);
+
+    }, item.delay - 500);
+}
+
+
+function openGift() {
+    // Chỉ cho phép click cúp khi đã hết thoại
+    if (currentPhase !== 'intro-wait-click') return;
+
+    const bgMusic = document.getElementById('sound-cute'); 
     const intro = document.getElementById('intro-screen');
     const content = document.getElementById('content-screen');
     const whiteOverlay = document.getElementById('white-overlay');
@@ -209,6 +248,7 @@ function openGift() {
     const kpImg = document.getElementById('kp-img');
     const fadeOverlay = document.getElementById('final-fade-overlay');
 
+    currentPhase = 'transition'; // Khóa click lung tung
     whiteOverlay.style.opacity = '1';
 
     setTimeout(() => {
@@ -222,42 +262,41 @@ function openGift() {
             content.style.display = 'flex'; 
             whiteOverlay.style.opacity = '0';
             
-            // --- VIDEO GOJO: GIẢM VOLUME 10% ---
             bgMusic.volume = CONFIG.bgVolumeLow;
             
             video.currentTime = 0;
             const playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    video.muted = true; video.play();
-                });
+                playPromise.catch(error => { video.muted = true; video.play(); });
             }
             
             handleVideoSubtitles(video);
+            currentPhase = 'video'; // Kích hoạt chế độ click skip video
 
             video.onended = () => {
                 content.style.display = 'none'; 
                 explosionScreen.style.display = 'block'; 
+                currentPhase = 'explosion'; // Nổ thì ko cần skip
                 
                 notungVideo.currentTime = 0; 
                 explosionSound.currentTime = 0; 
-
                 notungVideo.play();
                 
-                setTimeout(() => {
-                    explosionSound.play().catch(e => console.log("Lỗi play sound nổ"));
-                }, CONFIG.explosionDelay);
+                setTimeout(() => { explosionSound.play().catch(e => console.log("Lỗi sound")); }, CONFIG.explosionDelay);
 
                 notungVideo.onended = () => {
                     explosionScreen.style.display = 'none'; 
                     finalScreen.style.display = 'block'; 
-                    
                     bgMusic.volume = CONFIG.bgVolumeNormal;
 
                     setTimeout(() => { fadeOverlay.style.opacity = '0'; }, 50);
                     setTimeout(() => { 
                         kpImg.classList.add('move-left');
-                        setTimeout(showFinalMessages, 1000); 
+                        
+                        // Bắt đầu chuỗi tin nhắn cuối
+                        currentPhase = 'final'; 
+                        setTimeout(renderNextMessage, 1000); 
+
                     }, 500);
                 };
             };
@@ -282,7 +321,7 @@ function handleVideoSubtitles(video) {
     });
 }
 
-// --- CẤU HÌNH TIN NHẮN CUỐI ---
+// --- LOGIC MỚI CHO PHẦN MESSAGES (LỜI CHÚC) ---
 const finalMessages = [
     { text: "- 02/02/2026 -", time: 0 },
     { text: "Mong là có người giữ lời, đến ngày mới mở ra xem, nhưng nếu có mở trước thì thoai z biết sao giờ =)))). Oke thì là, hãy xem đây là 1 món quà tinh thần, của 1 ai đó trên thế giới này, not me !", time: 1000 },
@@ -296,69 +335,75 @@ const finalMessages = [
     { text: "CHỊ PHƯƠNG GỈ MŨI cuti cuti =))))", time: 4000 }
 ];
 
-function showFinalMessages() {
+let msgIndex = 0;
+
+function renderNextMessage() {
     const container = document.getElementById('message-container');
-    container.innerHTML = ''; 
 
-    const dateMsg = finalMessages[0];
-    const dateP = document.createElement('div');
-    dateP.classList.add('msg-title'); 
-    dateP.textContent = dateMsg.text;
-    container.appendChild(dateP);
+    if (msgIndex >= finalMessages.length) {
+        // Hết tin nhắn, kích hoạt Finale
+        currentPhase = 'done';
+        setTimeout(triggerConfetti, 500);
+        setTimeout(triggerGrandFinale, 2000);
+        return;
+    }
 
-    let totalWaitTime = 0;
+    const msgObj = finalMessages[msgIndex];
 
-    finalMessages.slice(1).forEach((msgObj, index, array) => {
-        totalWaitTime += msgObj.time;
+    // Tạo element tin nhắn
+    const p = document.createElement('div');
+    if (msgIndex === 0) {
+        p.classList.add('msg-title');
+    } else {
+        p.classList.add('msg-line');
+        if (msgIndex === finalMessages.length - 1) p.classList.add('msg-highlight');
+    }
+    
+    p.innerHTML = msgObj.text; 
+    container.appendChild(p);
+    
+    // Hiển thị (reflow để kích hoạt transition)
+    void p.offsetWidth; 
+    if (msgIndex === 0) {
+        // Title hiện luôn
+    } else {
+        p.classList.add('msg-show');
+    }
+    
+    container.scrollTop = container.scrollHeight;
 
-        setTimeout(() => {
-            const p = document.createElement('div');
-            p.classList.add('msg-line');
-            if (index === array.length - 1) p.classList.add('msg-highlight');
-            
-            p.innerHTML = msgObj.text; 
-            container.appendChild(p);
-            
-            void p.offsetWidth; 
-            p.classList.add('msg-show');
+    // Chuẩn bị cho tin nhắn tiếp theo
+    msgIndex++; 
 
-            container.scrollTop = container.scrollHeight;
-
-            if (index === array.length - 1) {
-                setTimeout(triggerConfetti, 1000);
-                setTimeout(triggerGrandFinale, 3000);
-            }
-        }, totalWaitTime);
-    });
+    // Nếu còn tin nhắn, đặt lịch chạy tiếp theo
+    if (msgIndex < finalMessages.length) {
+        // Lấy thời gian chờ của tin nhắn KẾ TIẾP để set timeout
+        const nextDelay = finalMessages[msgIndex].time; 
+        activeTimer = setTimeout(renderNextMessage, nextDelay);
+    } else {
+        // Nếu vừa in xong dòng cuối, đợi xíu rồi chốt
+        activeTimer = setTimeout(renderNextMessage, 5000);
+    }
 }
 
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
-    
-    // Thêm kiểm tra null để tránh lỗi nếu không tìm thấy element
     const sidebar = document.getElementById('right-sidebar'); 
     const feedbackLabel = document.querySelector('.feedback-label');
     const feedbackWrapper = document.getElementById('feedback-wrapper');
 
-    // 1. Ẩn chữ đi
     container.classList.add('fade-out-text');
 
-    // 2. Đợi 3.5s (cho chữ tắt hết) mới bắt đầu di chuyển
     setTimeout(() => {
         kpImg.classList.add('final-center-stage');
         
-        // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc và hiện feedback
         setTimeout(() => {
             kpImg.classList.add('shake-animation');
             
-            // Kích hoạt sidebar nhận sự kiện click
             if(sidebar) sidebar.style.pointerEvents = 'auto';
-            
-            // Hiện dòng text "Còn gà..."
             if(feedbackLabel) feedbackLabel.classList.add('show');
 
-            // 4. Sau 1.5s nữa thì hiện ô input
             setTimeout(() => {
                 if(feedbackWrapper) {
                     feedbackWrapper.style.transition = "opacity 2s ease";
@@ -370,30 +415,19 @@ function triggerGrandFinale() {
 
     }, 3500); 
 
-    // --- TĂNG GẤP ĐÔI LƯỢNG PHÁO HOA ---
     setInterval(() => {
         confetti({
-            particleCount: 40, // Tăng lên 40 hạt
-            spread: 80, // Tăng độ xòe
-            origin: { x: Math.random(), y: 0.6 }
+            particleCount: 40, spread: 80, origin: { x: Math.random(), y: 0.6 }
         });
-    }, 500); // Bắn nhanh hơn (0.5s/lần)
+    }, 500); 
 }
 
 function triggerConfetti() {
     const duration = 3 * 1000;
     const end = Date.now() + duration;
-
     (function frame() {
-        confetti({
-            particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }
-        });
-        confetti({
-            particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }
-        });
-
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+        if (Date.now() < end) requestAnimationFrame(frame);
     }());
 }
