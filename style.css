@@ -203,46 +203,48 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 #kp-img {
     position: absolute;
     top: 50%; left: 50%; transform: translate(-50%, -50%);
-    height: 85vh; width: auto;
-    z-index: 100; /* Ảnh ở dưới text */
+    height: 85vh; 
+    width: auto;
+    /* UPDATE: Giới hạn chiều rộng tối đa là 50% màn hình để chừa chỗ cho text */
+    max-width: 50vw; 
+    object-fit: contain;
+    
+    z-index: 100;
     opacity: 0; 
     filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.6));
     border-radius: 15px;
     transition: all 4s ease-out;
 }
 
-/* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA --- */
+/* --- STYLE SIDEBAR ĐÃ ĐƯỢC CẬP NHẬT --- */
 #right-sidebar {
     position: absolute;
     top: 50%; 
-    /* Thay đổi quan trọng: Neo vào bên phải, bỏ left */
-    right: 5%; 
-    left: auto; 
+    right: 15px; /* Sát lề phải hơn */
     
-    transform: translateY(-50%); /* Chỉ căn giữa dọc */
-    width: 300px; /* Độ rộng cố định */
+    transform: translateY(-50%);
+    width: 250px; /* Thu nhỏ lại chút cho gọn */
     
     display: flex;
     flex-direction: column;
     gap: 15px;
-    z-index: 101; /* Nằm trên ảnh */
+    z-index: 200; /* Đảm bảo luôn nằm trên ảnh */
     pointer-events: none;
     
-    /* Căn lề phải cho đẹp mắt */
     text-align: right; 
     align-items: flex-end; 
 }
 
 .feedback-label {
-    /* Đổi màu chữ trắng sáng + Viền đen để nổi trên mọi nền */
+    /* Chữ trắng, viền đen dày để nổi trên mọi nền trời */
     color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-style: italic;
     line-height: 1.5;
     
-    /* Text shadow: Đen (để đọc được) + Xanh Neon (để đẹp) */
-    text-shadow: 2px 2px 4px #000000, 0 0 10px #00e5ff;
+    /* Text shadow dày hơn */
+    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 10px #00e5ff;
     
     opacity: 0;
     transition: opacity 2s ease-in;
@@ -252,7 +254,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     opacity: 1;
 }
 
-/* STYLE CHO Ô INPUT VÀ TRẠNG THÁI HIỂN THỊ SAU KHI ENTER */
 #user-feedback-input {
     width: 100%;
     padding: 10px;
@@ -277,7 +278,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     box-shadow: none;
     font-weight: bold;
     color: #00e5ff;
-    text-align: right; /* Khi save xong thì căn phải cho đẹp */
+    text-align: right; 
     padding-right: 0;
     cursor: text;
     text-shadow: 1px 1px 2px #000000;
@@ -286,19 +287,16 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     border: 1px dashed rgba(0, 229, 255, 0.3); 
 }
 
-
 #final-fade-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: black; z-index: 100; opacity: 1; transition: opacity 1.5s ease;
 }
 
-/* CLASS: TRƯỢT SANG TRÁI */
 #kp-img.move-left { 
     opacity: 1; 
     left: 25%; 
 }
 
-/* CLASS: TRỞ VỀ GIỮA (GRAND FINALE) */
 #kp-img.final-center-stage {
     left: 50% !important; 
     transform: translate(-50%, -50%) scale(1.1); 
@@ -319,7 +317,6 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     100% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); }
 }
 
-/* --- KHUNG TIN NHẮN CUỐI CÙNG --- */
 #message-container {
     position: absolute;
     top: 50%; right: 2%; 
@@ -338,40 +335,16 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     gap: 20px; 
     transition: opacity 2s ease-out; 
 }
-
-.fade-out-text {
-    opacity: 0 !important;
-    pointer-events: none;
-}
-
+.fade-out-text { opacity: 0 !important; pointer-events: none; }
 #message-container::-webkit-scrollbar { width: 5px; }
 #message-container::-webkit-scrollbar-thumb { background: #00e5ff; border-radius: 5px; }
-
 .msg-line {
-    opacity: 0; 
-    transform: translateY(20px);
-    transition: all 1s ease-out; 
-    background: rgba(0, 0, 0, 0.5); 
-    padding: 15px;
-    border-radius: 10px;
-    border-left: 4px solid #00e5ff;
-    font-size: 1.35rem; 
-    line-height: 1.6;
-    font-weight: 500;
+    opacity: 0; transform: translateY(20px); transition: all 1s ease-out; background: rgba(0, 0, 0, 0.5); 
+    padding: 15px; border-radius: 10px; border-left: 4px solid #00e5ff; font-size: 1.35rem; line-height: 1.6; font-weight: 500;
 }
-
 .msg-show { opacity: 1; transform: translateY(0); }
-
 .msg-highlight { color: #00e5ff; font-weight: bold; font-size: 1.5rem; }
 .msg-title { 
-    text-align: center; 
-    font-weight: 800; 
-    font-size: 2.2rem; 
-    color: #00e5ff; 
-    border: none; 
-    background: none;
-    opacity: 1; 
-    transform: translateY(0);
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-    margin-bottom: 10px;
+    text-align: center; font-weight: 800; font-size: 2.2rem; color: #00e5ff; border: none; background: none;
+    opacity: 1; transform: translateY(0); text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 10px;
 }
