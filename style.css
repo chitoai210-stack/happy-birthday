@@ -215,16 +215,16 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     transition: all 4s ease-out;
 }
 
-/* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA VỊ TRÍ --- */
+/* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA --- */
 #right-sidebar {
     position: absolute;
-    top: 10%;   /* Nằm gần sát mép trên */
-    right: 5%;  /* Cách lề phải 5% */
+    top: 10%;
+    right: 5%;
     
     width: 300px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     z-index: 200;
     pointer-events: none;
     
@@ -236,13 +236,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
     
-    /* ĐÃ TĂNG SIZE CHỮ LÊN 50% (Từ 1.1 lên 1.7rem) */
-    font-size: 1.7rem; 
+    /* ĐÃ TĂNG SIZE CHỮ LÊN THÊM 50% NỮA (2.6rem) */
+    font-size: 2.6rem; 
     
     font-style: italic;
-    line-height: 1.5;
+    line-height: 1.2;
     
-    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 10px #00e5ff;
+    text-shadow: 3px 3px 0 #000, 0 0 15px #00e5ff;
     
     opacity: 0;
     transition: opacity 2s ease-in;
@@ -252,6 +252,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     opacity: 1;
 }
 
+/* CẬP NHẬT TEXTAREA */
 #user-feedback-input {
     width: 100%;
     padding: 10px;
@@ -264,6 +265,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     outline: none;
     box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
     transition: all 0.3s ease;
+    
+    /* Các thuộc tính quan trọng để xuống dòng */
+    resize: none; /* Không cho kéo dãn thủ công */
+    overflow-y: hidden; /* Ẩn thanh cuộn để tự động giãn bằng JS */
+    min-height: 40px;
+    line-height: 1.5;
+    white-space: pre-wrap; /* Cho phép xuống dòng */
 }
 
 #user-feedback-input:focus {
@@ -280,6 +288,8 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     padding-right: 0;
     cursor: text;
     text-shadow: 1px 1px 2px #000000;
+    
+    /* Vẫn giữ height auto để hiện đủ nội dung */
 }
 #user-feedback-input.saved-mode:hover {
     border: 1px dashed rgba(0, 229, 255, 0.3); 
