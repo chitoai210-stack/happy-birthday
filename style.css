@@ -218,8 +218,7 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 /* --- STYLE SIDEBAR ĐÃ CHỈNH SỬA VỊ TRÍ --- */
 #right-sidebar {
     position: absolute;
-    /* CHỈNH LẠI VỊ TRÍ TẠI ĐÂY */
-    top: 10%;   /* Nằm gần sát mép trên (vùng trời hồng) */
+    top: 10%;   /* Nằm gần sát mép trên */
     right: 5%;  /* Cách lề phải 5% */
     
     width: 300px;
@@ -236,11 +235,13 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 .feedback-label {
     color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 1.1rem;
+    
+    /* ĐÃ TĂNG SIZE CHỮ LÊN 50% (Từ 1.1 lên 1.7rem) */
+    font-size: 1.7rem; 
+    
     font-style: italic;
     line-height: 1.5;
     
-    /* Text shadow dày để nổi trên nền trời */
     text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 10px #00e5ff;
     
     opacity: 0;
