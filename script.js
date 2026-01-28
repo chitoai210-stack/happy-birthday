@@ -51,12 +51,23 @@ function checkPass() {
 
 function startMainSequence() {
     const deviceWarning = document.getElementById('device-warning');
+    const warningText = document.getElementById('warning-text');
     const startOverlay = document.getElementById('start-overlay');
+    
+    // Hiển thị màn hình cảnh báo
     deviceWarning.style.display = 'flex';
+    
+    // Logic thay đổi chữ:
+    // 1. Sau 8 giây thì đổi nội dung
+    setTimeout(() => {
+        warningText.innerHTML = "Để lại feedback ở cuối nhá =)))";
+    }, 8000);
+
+    // 2. Sau 14 giây (tổng cộng) thì tắt cảnh báo, hiện nút bắt đầu
     setTimeout(() => {
         deviceWarning.style.display = 'none';
         startOverlay.style.display = 'flex';
-    }, 12000); 
+    }, 14000); 
 }
 
 // --- CÁC HÀM XỬ LÝ VIDEO & COUNTDOWN ---
@@ -281,6 +292,7 @@ function showFinalMessages() {
 function triggerGrandFinale() {
     const container = document.getElementById('message-container');
     const kpImg = document.getElementById('kp-img');
+    const feedbackText = document.getElementById('final-feedback-text'); // Lấy element feedback
 
     // 1. Ẩn chữ đi
     container.classList.add('fade-out-text');
@@ -289,9 +301,11 @@ function triggerGrandFinale() {
     setTimeout(() => {
         kpImg.classList.add('final-center-stage');
         
-        // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc
+        // 3. Đợi 5s sau (hình trôi xong) mới bắt đầu lắc và hiện feedback
         setTimeout(() => {
             kpImg.classList.add('shake-animation');
+            // Hiện dòng feedback lúc này
+            feedbackText.classList.add('show');
         }, 5000);
 
     }, 3500); 
@@ -323,4 +337,3 @@ function triggerConfetti() {
         }
     }());
 }
-
