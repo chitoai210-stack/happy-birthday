@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', handleInteraction, {passive: true});
 
 
-    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE (CẬP NHẬT) ---
+    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE (ĐÃ SỬA LỖI XÓA) ---
     const feedbackInput = document.getElementById('user-feedback-input');
     
     if (feedbackInput) {
@@ -55,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         feedbackInput.addEventListener('input', function() {
             autoResize(this);
+            // Nếu người dùng xóa hết chữ khi đang gõ, bỏ class saved-mode ngay
+            if (this.value.trim() === "") {
+                this.classList.remove('saved-mode');
+            }
         });
 
         // 1. Khi nhấn ENTER
@@ -66,11 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 2. Khi Click ra ngoài (BLUR) - Yêu cầu mới
+        // 2. Khi Click ra ngoài (BLUR) - ĐÃ SỬA LOGIC Ở ĐÂY
         feedbackInput.addEventListener('blur', function() {
-             if (this.value.trim() !== "") {
+            const val = this.value.trim();
+            
+            if (val !== "") {
+                // Trường hợp 1: Có nội dung -> LƯU
                 this.classList.add('saved-mode');
                 localStorage.setItem('gwen_gift_feedback_content', this.value);
+            } else {
+                // Trường hợp 2: Nội dung rỗng -> XÓA khỏi bộ nhớ
+                this.classList.remove('saved-mode');
+                localStorage.removeItem('gwen_gift_feedback_content');
             }
         });
 
