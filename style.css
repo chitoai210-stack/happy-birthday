@@ -235,15 +235,10 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
 .feedback-label {
     color: #ffffff;
     font-family: 'Share Tech Mono', monospace;
-    
-    /* ĐÃ TĂNG SIZE CHỮ LÊN THÊM 50% NỮA (2.6rem) */
     font-size: 2.6rem; 
-    
     font-style: italic;
     line-height: 1.2;
-    
     text-shadow: 3px 3px 0 #000, 0 0 15px #00e5ff;
-    
     opacity: 0;
     transition: opacity 2s ease-in;
 }
@@ -252,32 +247,40 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     opacity: 1;
 }
 
-/* CẬP NHẬT TEXTAREA */
+/* CẬP NHẬT TEXTAREA ĐỂ RÕ RÀNG HƠN */
 #user-feedback-input {
     width: 100%;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    /* Đậm hơn để rõ ô input */
+    background: rgba(0, 0, 0, 0.7); 
     border: 1px solid #00e5ff;
     border-radius: 8px;
     color: #fff;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem; /* Chữ to hơn xíu */
     outline: none;
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
     transition: all 0.3s ease;
     
-    /* Các thuộc tính quan trọng để xuống dòng */
-    resize: none; /* Không cho kéo dãn thủ công */
-    overflow-y: hidden; /* Ẩn thanh cuộn để tự động giãn bằng JS */
-    min-height: 40px;
+    resize: none; 
+    overflow-y: hidden;
+    min-height: 50px;
     line-height: 1.5;
-    white-space: pre-wrap; /* Cho phép xuống dòng */
+    white-space: pre-wrap; 
+}
+
+#user-feedback-input::placeholder {
+    color: #ccc;
+    font-style: italic;
 }
 
 #user-feedback-input:focus {
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+    border-color: #fff;
 }
 
+/* Chế độ đã lưu: Ẩn nền đi cho đẹp như văn bản */
 #user-feedback-input.saved-mode {
     background: transparent;
     border: 1px solid transparent;
@@ -288,11 +291,10 @@ video { width: 100vw; height: 100vh; object-fit: cover; display: block; position
     padding-right: 0;
     cursor: text;
     text-shadow: 1px 1px 2px #000000;
-    
-    /* Vẫn giữ height auto để hiện đủ nội dung */
 }
 #user-feedback-input.saved-mode:hover {
     border: 1px dashed rgba(0, 229, 255, 0.3); 
+    background: rgba(0,0,0,0.3);
 }
 
 #final-fade-overlay {
