@@ -36,20 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', handleInteraction, {passive: true});
 
 
-    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE ---
+    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE (CẬP NHẬT) ---
     const feedbackInput = document.getElementById('user-feedback-input');
+    
     if (feedbackInput) {
         // Hàm tự động giãn chiều cao
         const autoResize = (el) => {
-            el.style.height = 'auto'; // Reset height
-            el.style.height = el.scrollHeight + 'px'; // Set height bằng nội dung
+            el.style.height = 'auto'; 
+            el.style.height = el.scrollHeight + 'px'; 
         };
 
         const savedFeedback = localStorage.getItem('gwen_gift_feedback_content');
         if (savedFeedback) {
             feedbackInput.value = savedFeedback;
             feedbackInput.classList.add('saved-mode');
-            // Cần delay xíu để render xong mới resize được đúng
             setTimeout(() => autoResize(feedbackInput), 0);
         }
 
@@ -57,17 +57,24 @@ document.addEventListener('DOMContentLoaded', () => {
             autoResize(this);
         });
 
-        feedbackInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                // Ngăn xuống dòng mặc định của textarea khi nhấn Enter (nếu bạn muốn Enter là Save)
+        // 1. Khi nhấn ENTER
+        feedbackInput.addEventListener('keydown', function(e) {
+            // Nếu nhấn Enter (không giữ Shift) -> Lưu và thoát focus
+            if (e.key === 'Enter' && !e.shiftKey) { 
                 e.preventDefault(); 
-                
+                this.blur(); // Gọi sự kiện blur để xử lý lưu
+            }
+        });
+
+        // 2. Khi Click ra ngoài (BLUR) - Yêu cầu mới
+        feedbackInput.addEventListener('blur', function() {
+             if (this.value.trim() !== "") {
                 this.classList.add('saved-mode');
-                this.blur(); 
                 localStorage.setItem('gwen_gift_feedback_content', this.value);
             }
         });
 
+        // 3. Khi click vào để sửa
         feedbackInput.addEventListener('click', function() {
             if (this.classList.contains('saved-mode')) {
                 this.classList.remove('saved-mode');
