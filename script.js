@@ -36,8 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', handleInteraction, {passive: true});
 
 
-    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE (ĐÃ SỬA LỖI XÓA) ---
+    // --- XỬ LÝ FEEDBACK & LƯU TRỮ & AUTO RESIZE (FIX TRIỆT ĐỂ) ---
     const feedbackInput = document.getElementById('user-feedback-input');
+    const STORAGE_KEY = 'gwen_gift_feedback_content'; // Khai báo key cố định
     
     if (feedbackInput) {
         // Hàm tự động giãn chiều cao
@@ -46,46 +47,46 @@ document.addEventListener('DOMContentLoaded', () => {
             el.style.height = el.scrollHeight + 'px'; 
         };
 
-        const savedFeedback = localStorage.getItem('gwen_gift_feedback_content');
+        // 1. Load dữ liệu khi vào trang
+        const savedFeedback = localStorage.getItem(STORAGE_KEY);
         if (savedFeedback) {
             feedbackInput.value = savedFeedback;
             feedbackInput.classList.add('saved-mode');
             setTimeout(() => autoResize(feedbackInput), 0);
         }
 
+        // 2. Xử lý ngay khi GÕ hoặc XÓA (Sự kiện input) -> Lưu/Xóa ngay lập tức
         feedbackInput.addEventListener('input', function() {
             autoResize(this);
-            // Nếu người dùng xóa hết chữ khi đang gõ, bỏ class saved-mode ngay
-            if (this.value.trim() === "") {
+            
+            const val = this.value; // Lấy giá trị hiện tại
+            
+            if (val.trim() === "") {
+                // Nếu rỗng -> XÓA NGAY trong bộ nhớ
+                localStorage.removeItem(STORAGE_KEY);
                 this.classList.remove('saved-mode');
+            } else {
+                // Nếu có chữ -> LƯU NGAY vào bộ nhớ
+                localStorage.setItem(STORAGE_KEY, val);
             }
         });
 
-        // 1. Khi nhấn ENTER
+        // 3. Khi nhấn ENTER (xuống dòng thì ko sao, Enter ko shift thì thoát)
         feedbackInput.addEventListener('keydown', function(e) {
-            // Nếu nhấn Enter (không giữ Shift) -> Lưu và thoát focus
             if (e.key === 'Enter' && !e.shiftKey) { 
                 e.preventDefault(); 
-                this.blur(); // Gọi sự kiện blur để xử lý lưu
+                this.blur(); 
             }
         });
 
-        // 2. Khi Click ra ngoài (BLUR) - ĐÃ SỬA LOGIC Ở ĐÂY
+        // 4. Khi Click ra ngoài (Blur) -> Chỉ để hiển thị giao diện "Đã lưu" cho đẹp
         feedbackInput.addEventListener('blur', function() {
-            const val = this.value.trim();
-            
-            if (val !== "") {
-                // Trường hợp 1: Có nội dung -> LƯU
+            if (this.value.trim() !== "") {
                 this.classList.add('saved-mode');
-                localStorage.setItem('gwen_gift_feedback_content', this.value);
-            } else {
-                // Trường hợp 2: Nội dung rỗng -> XÓA khỏi bộ nhớ
-                this.classList.remove('saved-mode');
-                localStorage.removeItem('gwen_gift_feedback_content');
             }
         });
 
-        // 3. Khi click vào để sửa
+        // 5. Khi click vào -> Cho phép sửa
         feedbackInput.addEventListener('click', function() {
             if (this.classList.contains('saved-mode')) {
                 this.classList.remove('saved-mode');
